@@ -1,11 +1,11 @@
 ###############################################################################
 ##
 ## Script to know the data I am using and clean pres-abs df
-## Annotations from 7:30 to 17:00 for 2 cameras 6 days/ sites 2 sites 
+## Annotations from 7:30 to 17:00 for 2 cameras 6 days/ sites 2 sites
 ##
 ## 1_Clean_raw_data_and_sp_richn.R
 ##
-## 01/08/2022 
+## 01/08/2022
 ##
 ## Camille Magneville
 ##
@@ -80,7 +80,7 @@ sort(sp_nm_all)
 
 # get species nb:
 length(sp_nm_all)
-# 164 but Chromis_NA, hortulanus_hortulanus (?) and ... 
+# 164 but Chromis_NA, hortulanus_hortulanus (?) and ...
 # ... Ac_Cten_dark = A. nigrofuscus + C. striatus + C. binotatus ...
 # ... so only 160 species and 149 fish species (Chelonia mydas)
 
@@ -122,6 +122,9 @@ sort(sp_nm_B)
 # ... Chlorurus spilurus: delete column as Pacific species (annot error) ...
 # ... Neotrygon kuhlii: delete column (raie pastenague)
 # ... Rename Halichoeres lamarii into Halichoeres marginatus (new name) ...
+# ... Rename Coris variegata into Coris batuensis because variegata is endemic from red sea
+# ... Add Pomacentrus similis and P. caeruleus as P. similis does not belong in Mayotte and ...
+# ... data checked on WAVE
 
 
 
@@ -135,7 +138,7 @@ presabs_03_A1$Ac_Cten_dark <- presabs_03_A1$Ac_Cten_dark + presabs_03_A1$Ctenoch
 presabs_03_A1$Ac_Cten_dark[which(presabs_03_A1$Ac_Cten_dark > 1)] <- 1
 presabs_03_A1 <- presabs_03_A1[, which(! colnames(presabs_03_A1) %in% c("Ctenochaetus_striatus"))]
 
-presabs_03_A1$Chlorurus_sordidus <- presabs_03_A1$Chlorurus_sordidus + 
+presabs_03_A1$Chlorurus_sordidus <- presabs_03_A1$Chlorurus_sordidus +
                                             presabs_03_A1$Scarus_sordidus
 presabs_03_A1$Chlorurus_sordidus[which(presabs_03_A1$Chlorurus_sordidus > 1)] <- 1
 presabs_03_A1 <- presabs_03_A1[, which(! colnames(presabs_03_A1) %in% c("Scarus_sordidus"))]
@@ -159,8 +162,9 @@ presabs_04_A1 <- presabs_04_A1[, which(! colnames(presabs_04_A1) %in% c("Cheloni
 sort(colnames(presabs_04_C2))
 presabs_04_C2 <- presabs_04_C2[, which(! colnames(presabs_04_C2) %in% c("Chelonia_mydas"))]
 presabs_04_C2 <- presabs_04_C2[, which(! colnames(presabs_04_C2) %in% c("Chromis_NA"))]
+presabs_04_C2 <- dplyr::rename(presabs_04_C2, "Coris_batuensis" = "Coris_variegata")
 
-presabs_04_C2$Ac_Cten_dark <- presabs_04_C2$Ac_Cten_dark + 
+presabs_04_C2$Ac_Cten_dark <- presabs_04_C2$Ac_Cten_dark +
                                   presabs_04_C2$Ctenochaetus_striatus +
                                   presabs_04_C2$Acanthurus_nigrofuscus +
                                   presabs_04_C2$Ctenochaetus_binotatus
@@ -174,23 +178,26 @@ presabs_04_C2 <- presabs_04_C2[, which(! colnames(presabs_04_C2) %in% c("Ctenoch
 # Acanthurus tristis has been wrongly annontated (video BI fr 219): ...
 # ... it's in fact A.nigricauda so I add the two columns and remove ...
 # ... A. tristis one:
+# ... and P. similis wrongly annotated -> P. caeruleus (similis not in Mayotte):
 
 sort(colnames(presabs_05_A1))
 presabs_05_A1 <- presabs_05_A1[, which(! colnames(presabs_05_A1) %in% c("Chelonia_mydas"))]
 presabs_05_A1 <- presabs_05_A1[, which(! colnames(presabs_05_A1) %in% c("hortulanus_hortulanus"))]
 
-presabs_05_A1$Ac_Cten_dark <- presabs_05_A1$Ac_Cten_dark + 
+presabs_05_A1 <- dplyr::rename(presabs_05_A1, "Pomacentrus_caeruleus" = "Pomacentrus_similis")
+
+presabs_05_A1$Ac_Cten_dark <- presabs_05_A1$Ac_Cten_dark +
   presabs_05_A1$Acanthurus_nigrofuscus +
   presabs_05_A1$Ctenochaetus_binotatus
 presabs_05_A1$Ac_Cten_dark[which(presabs_05_A1$Ac_Cten_dark > 1)] <- 1
 presabs_05_A1 <- presabs_05_A1[, which(! colnames(presabs_05_A1) %in% c("Acanthurus_nigrofuscus",
                                                                         "Ctenochaetus_binotatus"))]
-presabs_05_A1$Chlorurus_sordidus <- presabs_05_A1$Chlorurus_sordidus + 
+presabs_05_A1$Chlorurus_sordidus <- presabs_05_A1$Chlorurus_sordidus +
   presabs_05_A1$Scarus_sordidus
 presabs_05_A1$Chlorurus_sordidus[which(presabs_05_A1$Chlorurus_sordidus > 1)] <- 1
 presabs_05_A1 <- presabs_05_A1[, which(! colnames(presabs_05_A1) %in% c("Scarus_sordidus"))]
 
-presabs_05_A1$Acanthurus_nigricauda <- presabs_05_A1$Acanthurus_nigricauda + 
+presabs_05_A1$Acanthurus_nigricauda <- presabs_05_A1$Acanthurus_nigricauda +
   presabs_05_A1$Acanthurus_tristis
 presabs_05_A1$Acanthurus_nigricauda[which(presabs_05_A1$Acanthurus_nigricauda > 1)] <- 1
 presabs_05_A1 <- presabs_05_A1[, which(! colnames(presabs_05_A1) %in% c("Acanthurus_tristis"))]
@@ -203,8 +210,8 @@ presabs_05_C2 <- presabs_05_C2[, which(! colnames(presabs_05_C2) %in% c("Cheloni
 presabs_05_C2 <- presabs_05_C2[, which(! colnames(presabs_05_C2) %in% c("Chlorurus_spilurus"))]
 
 
-presabs_05_C2$Ac_Cten_dark <- presabs_05_C2$Ac_Cten_dark + 
-                                   presabs_05_C2$Ctenochaetus_striatus 
+presabs_05_C2$Ac_Cten_dark <- presabs_05_C2$Ac_Cten_dark +
+                                   presabs_05_C2$Ctenochaetus_striatus
 presabs_05_C2$Ac_Cten_dark[which(presabs_05_C2$Ac_Cten_dark > 1)] <- 1
 presabs_05_C2 <- presabs_05_C2[, which(! colnames(presabs_05_C2) %in% c("Ctenochaetus_striatus"))]
 
@@ -212,7 +219,7 @@ presabs_05_C2 <- presabs_05_C2[, which(! colnames(presabs_05_C2) %in% c("Ctenoch
 # 06 - A1
 
 sort(colnames(presabs_06_A1))
-presabs_06_A1$Chlorurus_sordidus <- presabs_06_A1$Chlorurus_sordidus + 
+presabs_06_A1$Chlorurus_sordidus <- presabs_06_A1$Chlorurus_sordidus +
   presabs_06_A1$Scarus_sordidus
 presabs_06_A1$Chlorurus_sordidus[which(presabs_06_A1$Chlorurus_sordidus > 1)] <- 1
 presabs_06_A1 <- presabs_06_A1[, which(! colnames(presabs_06_A1) %in% c("Scarus_sordidus"))]
@@ -254,7 +261,7 @@ presabs_09_A1 <- presabs_09_A1[, which(! colnames(presabs_09_A1) %in% c("Octopus
 presabs_09_A1 <- presabs_09_A1[, which(! colnames(presabs_09_A1) %in% c("Neotrygon_kuhlii"))]
 
 
-presabs_09_A1$Ac_Cten_dark <- presabs_09_A1$Ac_Cten_dark + 
+presabs_09_A1$Ac_Cten_dark <- presabs_09_A1$Ac_Cten_dark +
                                  presabs_09_A1$Acanthurus_nigrofuscus +
                                  presabs_09_A1$Ctenochaetus_striatus
 presabs_09_A1$Ac_Cten_dark[which(presabs_09_A1$Ac_Cten_dark > 1)] <- 1
@@ -273,8 +280,9 @@ presabs_09_C2 <- presabs_09_C2[, which(! colnames(presabs_09_C2) %in% c("Octopus
 presabs_09_C2 <- presabs_09_C2[, which(! colnames(presabs_09_C2) %in% c("Neotrygon_kuhlii"))]
 
 presabs_09_C2 <- dplyr::rename(presabs_09_C2, Halichoeres_marginatus = Halichoeres_lamarii)
+presabs_09_C2 <- dplyr::rename(presabs_09_C2, "Coris_batuensis" = "Coris_variegata")
 
-presabs_09_C2$Ac_Cten_dark <- presabs_09_C2$Ac_Cten_dark + 
+presabs_09_C2$Ac_Cten_dark <- presabs_09_C2$Ac_Cten_dark +
   presabs_09_C2$Acanthurus_nigrofuscus +
   presabs_09_C2$Ctenochaetus_binotatus +
   presabs_09_C2$Ctenochaetus_striatus
@@ -332,7 +340,7 @@ sort(sp_nm_NG)
 
 # get species number: 129 species in MPA (Octopus cyanea only seen in NG)
 # (Chelonia mydas seen on both sites)
-length(sp_nm_NG) 
+length(sp_nm_NG)
 
 
 ## Fished Area - Boueni: (raie pastenague vue le 09 a Boueni, pas comprise dans les 113 sp)
