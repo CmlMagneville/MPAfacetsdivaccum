@@ -4,7 +4,7 @@
 ##
 ## 3_Phylogenetic_data.R
 ##
-## 02/08/2022 
+## 02/08/2022
 ##
 ## Camille Magneville
 ##
@@ -89,8 +89,8 @@ sp_nm_all <- sp_nm_all[which(sp_nm_all != "Scarus_falcipinnis")]
 # Tylosurus crocodilus -> Tylosurus crocodilus crocodilus
 # Chlorurus strongylocephalus -> Chlorurus microrhinos (id pacifique)
 # Coris variegata -> Coris batuensis (erreur variegata mer rouge, autre indien)
-# Pomacentrus similis -> Pomacentrus caeruleus 
-# Canthigaster cyanospilota -> Canthigaster coronata 
+# Pomacentrus similis -> Pomacentrus caeruleus
+# Canthigaster cyanospilota -> Canthigaster coronata
 
 
 sp_nm_all <- c(sp_nm_all, "Scarus_oviceps")
@@ -117,7 +117,7 @@ sp_nm_all <- c(sp_nm_all, "Labropsis_australis")
 sp_nm_all <- sp_nm_all[which(sp_nm_all != "Labropsis_xanthonota")]
 
 
-# no ok?
+# now ok?
 phylo <- fishtree::fishtree_phylogeny(species = sp_nm_all)
 
 
