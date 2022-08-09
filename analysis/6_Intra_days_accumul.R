@@ -59,6 +59,16 @@ saveRDS(presabs_day_site_df, here::here("transformed_data", "basic_accumul_df.rd
 
 # Step 3: Compute TD accumulation ####
 
+# load the basic df:
+basic_accum_df <- readRDS(here::here("transformed_data", "basic_accumul_df.rds"))
+
+# compute the TD accumul df (and save the sp richness variation plot):
+TD_accum <- compute.td.accum(basic_accum_df, rich_plot = TRUE)
+TD_accum_df <- TD_accum[[2]]
+
+# save the TD_accum_df:
+saveRDS(TD_accum_df, here::here("transformed_data", "TD_intraday_accum.rds"))
+
 
 # Step 4: Compute FD accumulation ####
 
