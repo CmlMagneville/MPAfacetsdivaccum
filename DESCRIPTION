@@ -15,7 +15,9 @@ Imports:
     betapart,
     dplyr,
     fishtree,
+    ggplot2,
     here,
     hms,
     mFD,
-    picante
+    picante,
+    usethis
