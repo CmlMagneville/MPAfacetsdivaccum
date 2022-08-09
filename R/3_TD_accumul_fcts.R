@@ -98,7 +98,7 @@ create.complete.df <- function(dfs_list, days_vect) {
 #'
 
 
-compute.td.accum <- function(basic_accum_df, rich_plot = TRUE) {
+compute.td.day.accum <- function(basic_accum_df, rich_plot = TRUE) {
 
 
   # first I compute species richness for each video and plot it if asked...

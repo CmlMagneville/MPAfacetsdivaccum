@@ -63,7 +63,7 @@ saveRDS(presabs_day_site_df, here::here("transformed_data", "basic_accumul_df.rd
 basic_accum_df <- readRDS(here::here("transformed_data", "basic_accumul_df.rds"))
 
 # compute the TD accumul df (and save the sp richness variation plot):
-TD_accum <- compute.td.accum(basic_accum_df, rich_plot = TRUE)
+TD_accum <- compute.td.day.accum(basic_accum_df, rich_plot = TRUE)
 TD_accum_df <- TD_accum[[2]]
 
 # save the TD_accum_df:
