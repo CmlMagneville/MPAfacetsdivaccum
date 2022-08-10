@@ -171,7 +171,7 @@ compute.td.day.accum <- function(basic_accum_df, rich_plot = TRUE) {
 
 
 
-  # now compute TD accum: first must but 0 after each first occ of the species:
+  # now compute TD accum: first occ 1 and 0 after each first occ of the species:
 
   ## add a new column: site + day:
   basic_df$site_day <- paste0(basic_df$site, sep = "_", basic_df$day)
@@ -193,7 +193,7 @@ compute.td.day.accum <- function(basic_accum_df, rich_plot = TRUE) {
 
         # if == 1, then for all the videos of the studied site_day -> 0
         if (basic_df[k, j] == 1) {
-          basic_df[which(as.numeric(rownames(basic_df)) > k & basic_df$site_day == i), j] <- 0
+          basic_df[which(as.numeric(rownames(basic_df)) > as.numeric(k) & basic_df$site_day == i), j] <- 0
         }
 
       } # loop on the rows
