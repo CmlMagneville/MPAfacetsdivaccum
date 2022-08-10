@@ -4,7 +4,7 @@
 ##
 ## 4_Exploratory_mFD.R
 ##
-## 04/08/2022 
+## 04/08/2022
 ##
 ## Camille Magneville
 ##
@@ -75,8 +75,8 @@ tr_cat <- readRDS(here::here("transformed_data", "tr_cat_df.rds"))
 # Species*Traits summary:
 
 traits_summ <- mFD::sp.tr.summary(
-  tr_cat     = tr_cat,   
-  sp_tr      = sp_tr, 
+  tr_cat     = tr_cat,
+  sp_tr      = sp_tr,
   stop_if_NA = TRUE)
 traits_summ$tr_summary_list
 
@@ -128,17 +128,22 @@ nrow(sp_dist_df[which(sp_dist_df$sp_dist == 0), ])
 
 ## gather ito FEs:
 sp_to_fe <- mFD::sp.to.fe(
-  sp_tr       = sp_tr, 
-  tr_cat      = tr_cat, 
-  fe_nm_type  = "fe_rank", 
+  sp_tr       = sp_tr,
+  tr_cat      = tr_cat,
+  fe_nm_type  = "fe_rank",
   check_input = TRUE)
 
 ## get the nb of FEs computed from 153 species: 92
 fe_nm <- sp_to_fe$fe_nm
 length(sp_to_fe$fe_nm)
+# save fe_nm because needed in FD accum fct:
+saveRDS(fe_nm, here::here("transformed_data", "fe_nm.rds"))
+
 
 ## retrieve the fe*traits dataframe
 fe_tr <- sp_to_fe$fe_tr
+# save because needed in FD accum fct:
+saveRDS(fe_tr, here::here("transformed_data", "fe_tr.rds"))
 
 ## get the number of species per FEs:
 sp_to_fe$fe_nb_sp
@@ -146,6 +151,8 @@ barplot(sp_to_fe$fe_nb_sp, ylab = "Number of species per FE",col = "grey90")
 
 ## get which species is in each FE:
 sp_fe_list <- sp_to_fe$sp_fe
+# save because needed in FD accum fct:
+saveRDS(sp_fe_list, here::here("transformed_data", "sp_to_fe_list.rds"))
 
 ## build the asb*fe df:
 fes_dfs <- from.spfe.to.feasb(fe_nm, sp_fe_list, asb_sp_w = asb_sp_df)
@@ -202,7 +209,7 @@ fspaces_quality$quality_fspaces
 mFD::quality.fspaces.plot(
   fspaces_quality            = fspaces_quality,
   quality_metric             = "mad",
-  fspaces_plot               = c("tree_average", "pcoa_2d", "pcoa_3d", 
+  fspaces_plot               = c("tree_average", "pcoa_2d", "pcoa_3d",
                                  "pcoa_4d", "pcoa_5d", "pcoa_6d"),
   name_file                  = NULL,
   range_dist                 = NULL,
@@ -222,13 +229,13 @@ fe_faxes_coord <- fspaces_quality$"details_fspaces"$"sp_pc_coord"
 
 # Get the correlations and plot it:
 fe_tr_faxes <- mFD::traits.faxes.cor(
-  sp_tr          = fe_tr, 
-  sp_faxes_coord = fe_faxes_coord[ , c("PC1", "PC2", "PC3", "PC4", "PC5")], 
+  sp_tr          = fe_tr,
+  sp_faxes_coord = fe_faxes_coord[ , c("PC1", "PC2", "PC3", "PC4", "PC5")],
   plot           = TRUE)
 fe_tr_faxes$tr_faxes_plot
 
 # PC1: (-) Small size, Sedentary, Bottom level (+) Big size, Very Mobile, High level
-# PC2: (-) Both/Night, Solitary (+) Day, Large Groups 
+# PC2: (-) Both/Night, Solitary (+) Day, Large Groups
 # PC4 ? : (-) Invertivores Mobiles (IM) (+) Other diets
 
 
@@ -273,7 +280,7 @@ asb_fe_df <- as.matrix(asb_fe_df)
 alpha_fd_indices_day <- mFD::alpha.fd.multidim(
   sp_faxes_coord   = fe_faxes_coord[ , c("PC1", "PC2", "PC3", "PC4", "PC5")],
   asb_sp_w         = asb_fe_df,
-  ind_vect         = c("fdis", "fric", 
+  ind_vect         = c("fdis", "fric",
                        "fspe", "fide"),
   scaling          = TRUE,
   check_input      = TRUE,
@@ -295,7 +302,7 @@ rownames(site_asb_fe_df) <- c("N'Gouja", "Boueni")
 alpha_fd_indices_site <- mFD::alpha.fd.multidim(
   sp_faxes_coord   = fe_faxes_coord[ , c("PC1", "PC2", "PC3", "PC4", "PC5")],
   asb_sp_w         = site_asb_fe_df,
-  ind_vect         = c("fdis", "fric", 
+  ind_vect         = c("fdis", "fric",
                        "fspe", "fide"),
   scaling          = TRUE,
   check_input      = TRUE,
@@ -313,7 +320,7 @@ alpha_fd_indices_site$functional_diversity_indices
 plots_alpha_site <- mFD::alpha.multidim.plot(
   output_alpha_fd_multidim = alpha_fd_indices_site,
   plot_asb_nm              = c("N'Gouja", "Boueni"),
-  ind_nm                   = c("fdis", "fide", "fric", 
+  ind_nm                   = c("fdis", "fide", "fric",
                                "fspe"),
   faxes                    = NULL,
   faxes_nm                 = NULL,
@@ -332,12 +339,12 @@ plots_alpha_site <- mFD::alpha.multidim.plot(
   shape_centroid_fdiv      = c(asb1 = 22,  asb2 = 24),
   shape_centroid_fspe      = 23,
   color_centroid_fspe      = "black",
-  size_sp_nm               = 3, 
+  size_sp_nm               = 3,
   color_sp_nm              = "black",
   plot_sp_nm               = NULL,
   fontface_sp_nm           = "plain",
   save_file                = FALSE,
-  check_input              = TRUE) 
+  check_input              = TRUE)
 
 fric_site_plot <- plots_alpha_site$fric$patchwork
 
