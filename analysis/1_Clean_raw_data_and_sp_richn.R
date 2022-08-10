@@ -51,7 +51,11 @@ presabs_06_C2 <- presabs_06_C2[c(2:35), ] # 34 videos -> complicated when poolin
 apply(presabs_06_C2[, -c(50, 51)], 1, sum)
 presabs_06_C2 <- presabs_06_C2[c(1:33), ]
 
-presabs_08_A1 <- presabs_08_A1[c(3:35), ] # 33 videos
+presabs_08_A1 <- presabs_08_A1[c(4:37), ] # 34 videos -> complicated when pooling
+# but no species on the last video:
+apply(presabs_08_A1[, -c(57,58)], 1, sum)
+presabs_08_A1 <- presabs_08_A1[c(1:33), ]
+
 presabs_08_C2 <- presabs_08_C2[c(3:35), ] # 33 videos
 
 presabs_09_A1 <- presabs_09_A1[c(6:38), ] # 33 videos

@@ -104,6 +104,7 @@ phylo <- fishtree::fishtree_phylogeny(species = sp_nm_all)
 
 # Compute beta PD:
 beta_PD <- betapart::phylo.beta.pair(site_asb_sp_df, phylo, index.family = "jaccard")
+beta_PD
 
 # Compute PD for each site:
 PD_values <- picante::pd(site_asb_sp_df, phylo, include.root=FALSE)
