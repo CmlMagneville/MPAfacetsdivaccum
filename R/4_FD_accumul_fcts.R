@@ -391,7 +391,7 @@ compute.fd.day.accum <- function(basic_fd_accum_df,
 
 
     ## loop on species:
-    for (j in (1:(ncol(basic_df) - 12))) {
+    for (j in (1:(ncol(basic_df) - 13))) {
 
 
       # set the rownames to basic:
@@ -422,7 +422,7 @@ compute.fd.day.accum <- function(basic_fd_accum_df,
 
   alpha_fd_indices_accum <- mFD::alpha.fd.multidim(
     sp_faxes_coord   = fe_faxes_coord[ , c("PC1", "PC2", "PC3", "PC4")],
-    asb_sp_w         = as.matrix(accum_FD_df[, c(1:(ncol(accum_FD_df) - 13))]),
+    asb_sp_w         = as.matrix(accum_FD_df[, c(1:(ncol(accum_FD_df) - 14))]),
     ind_vect         = fd_indices,
     scaling          = TRUE,
     check_input      = TRUE,

@@ -35,7 +35,7 @@ basic_fd_accum_df <- readRDS(here::here("transformed_data", "basic_FD_accum_df.r
 
 
 # arguments:
-fd_indices <- c("fric", "fspe", "fdis", "fide")
+fd_indices <- c("fric", "fspe", "fdis", "fdiv", "fide")
 sp_tr <- fe_tr
 
 FD_interday_accum <- compute.fd.day.accum(basic_fd_accum_df,
@@ -66,6 +66,24 @@ saveRDS(PD_interday_df, here::here("transformed_data", "PD_interday_accum.rds"))
 
 
 # Step 4: Plot 3 facets interday accumulation ####
+
+
+# Call the three accumulation df:
+TD_accum_df <- readRDS(here::here("transformed_data", "TD_interday_accum.rds"))
+FD_accum_df <- readRDS(here::here("transformed_data", "FD_interday_accum.rds"))
+PD_accum_df <- readRDS(here::here("transformed_data", "PD_interday_accum.rds"))
+
+
+# argument:
+sites_colors <- c("#bf812d", "#80cdc1")
+linewidth <- 0.9
+
+# then plot:
+plot.inter.day.accum(TD_accum_df,
+                     PD_accum_df,
+                     FD_accum_df,
+                     sites_colors,
+                     linewidth)
 
 
 
