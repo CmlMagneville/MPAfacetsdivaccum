@@ -412,7 +412,7 @@ compute.td.interday.accum <- function(basic_accum_df, rich_plot = TRUE) {
 
 
     ## loop on species:
-    for (j in (1:(ncol(basic_df) - 6))) {
+    for (j in (1:(ncol(basic_df) - 13))) {
 
 
       # set the rownames to basic:
@@ -456,32 +456,6 @@ compute.td.interday.accum <- function(basic_accum_df, rich_plot = TRUE) {
                                                                         "site", "richn",
                                                                         "day_nb", "accum_TD"))])
   accum_TD_df$accum_TD <- accum_TD_df$accum_TD / tot_TD_value
-
-
-  ## create a new column that will contain the percentage of new species ...
-  # ... seen on each video -> PD accumul with 100% at the end of the day ...
-  # ... all the species richness seen during the day_site is seen at the ...
-  # ... end of the day_site obviously ;) :
-  accum_TD_df$perc_TD_acc_day <- rep(0, nrow(accum_TD_df))
-
-  ## then fill this new column:
-  ## for each site:
-  for (i in (unique(accum_TD_df$site))) {
-
-    sum_tot_richn <- ncol(accum_TD_df[which(accum_TD_df$site == i),
-                                      which(! colnames(accum_TD_df) %in% c("video_nb",
-                                                                           "day", "vid_id",
-                                                                           "site", "richn",
-                                                                           "day_nb", "accum_TD",
-                                                                           "perc_TD_acc_day"))])
-
-    ## loop on the rows of each site_day:
-    for (j in rownames(accum_TD_df[which(accum_TD_df$site == i), ])) {
-
-      accum_TD_df[j, "perc_TD_acc_day"] <- (accum_TD_df[j, "accum_TD"]/sum_tot_richn)*100
-
-    }
-  }
 
 
   if (rich_plot == TRUE) {
