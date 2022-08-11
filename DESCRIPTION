@@ -20,4 +20,5 @@ Imports:
     hms,
     mFD,
     picante,
+    reshape2,
     usethis
