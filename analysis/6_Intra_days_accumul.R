@@ -141,3 +141,14 @@ saveRDS(PD_accum_df, here::here("transformed_data", "PD_intraday_accum.rds"))
 
 
 # Step 6: Plot intra-day accumulation of the three facets for each day, separing sites ####
+
+
+
+# Load data:
+TD_accum_df <- readRDS(here::here("transformed_data", "TD_intraday_accum.rds"))
+FD_accum_df <- readRDS(here::here("transformed_data", "FD_intraday_accum.rds"))
+PD_accum_df <- readRDS(here::here("transformed_data", "PD_intraday_accum.rds"))
+
+# Add graphic data (TD, FD, PD order):
+facets_colors <- c("#fdae61", "#abdda4", "#2b83ba")
+linewidth <- 0.9
