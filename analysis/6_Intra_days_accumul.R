@@ -3,7 +3,7 @@
 ## Script to compute and plot the accumulation of the three facets ...
 ## ... through a day
 ##
-## 3_TD_accul_fcts.R
+## 6_Intra_days_accumul.R
 ##
 ## 03/08/2022
 ##
@@ -107,6 +107,7 @@ asb_fe_w <- asb_fe_w$asb_fe_occ
 ## add the site, video etc information:
 basic_FD_accum_df <- cbind(asb_fe_w, basic_accum_df[, c(ncol(basic_accum_df), ncol(basic_accum_df) - 1,
                                                           ncol(basic_accum_df) - 2, ncol(basic_accum_df) - 3)])
+saveRDS(basic_FD_accum_df, here::here("transformed_data", "basic_FD_accum_df.rds"))
 
 # compute the FD accumul df (and save the FRic day variation plot):
 FD_accum <- compute.fd.day.accum(basic_fd_accum_df = basic_FD_accum_df,
