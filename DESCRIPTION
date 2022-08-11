@@ -19,6 +19,7 @@ Imports:
     here,
     hms,
     mFD,
+    patchwork,
     picante,
     reshape2,
     usethis
