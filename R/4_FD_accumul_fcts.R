@@ -4,11 +4,26 @@
 ##
 ## 4_FD_accul_fcts.R
 ##
-## 09/08/2022
+## 10/08/2022
 ##
 ## Camille Magneville
 ##
 ###############################################################################
+
+
+
+#' Title
+#'
+#' @param basic_fd_accum_df
+#' @param sp_tr
+#' @param tr_cat
+#' @param fd_indices
+#' @param rich_plot
+#'
+#' @return
+#' @export
+#'
+#' @examples
 
 
 
