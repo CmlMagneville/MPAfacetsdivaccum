@@ -125,6 +125,18 @@ saveRDS(FD_accum_df, here::here("transformed_data", "FD_intraday_accum.rds"))
 # Step 5: Compute PD accumulation ####
 
 
+# First call data needed:
+
+basic_accum_df <- readRDS(here::here("transformed_data", "basic_accumul_df.rds"))
+
+# compute the PD accumul df (and save the FRic day variation plot):
+PD_accum <- compute.pd.day.accum(basic_accum_df = basic_accum_df,
+                                 rich_plot = TRUE)
+
+PD_accum_df <- PD_accum[[2]]
+
+# save the TD_accum_df:
+saveRDS(PD_accum_df, here::here("transformed_data", "PD_intraday_accum.rds"))
 
 
 
