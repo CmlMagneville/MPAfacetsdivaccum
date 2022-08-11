@@ -152,3 +152,10 @@ PD_accum_df <- readRDS(here::here("transformed_data", "PD_intraday_accum.rds"))
 # Add graphic data (TD, FD, PD order):
 facets_colors <- c("#fdae61", "#abdda4", "#2b83ba")
 linewidth <- 0.9
+
+# plot (save):
+plot.intra.day.accum(TD_accum_df,
+                     PD_accum_df,
+                     FD_accum_df,
+                     facets_colors,
+                     linewidth)
