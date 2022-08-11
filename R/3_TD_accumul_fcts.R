@@ -107,7 +107,7 @@ compute.td.day.accum <- function(basic_accum_df, rich_plot = TRUE) {
   # add species richness column:
   basic_df <- basic_accum_df
 
-  ## make everycoumn being numeric:
+  ## make every column numeric:
   for (i in (1:(ncol(basic_df) - 4))) {
     basic_df[, i] <- as.numeric(basic_df[, i])
   }
@@ -116,6 +116,12 @@ compute.td.day.accum <- function(basic_accum_df, rich_plot = TRUE) {
   basic_df$richn <- apply(basic_df[, which(! colnames(basic_df) %in%
                                              c("video_nb", "day", "vid_id", "site"))],
                           1, sum)
+
+  # express species richness as a proportion of total species richness ...
+  # ... so its expressed as FRic (and PD):
+  tot_sp_richn <- ncol(basic_df[, which(! colnames(basic_df) %in%
+                                          c("video_nb", "day", "vid_id", "site"))])
+  basic_df$richn <- basic_df$richn / tot_sp_richn
 
   ## rename video_nb from 1, 2 -> vid_1, vid_2 and give right levels:
   basic_df$video_nb <- paste0(rep("vid_", nrow(basic_df)), sep = "", basic_df$video_nb)
@@ -161,7 +167,7 @@ compute.td.day.accum <- function(basic_accum_df, rich_plot = TRUE) {
                                           "15:00", "", "15:45", "", "16:30", "",
                                           "17:00", "", "17:30")) +
 
-      ggplot2::ylab("Species richness") +
+      ggplot2::ylab("Proportion of total species richness") +
 
       ggplot2::xlab("") +
 
@@ -217,6 +223,8 @@ compute.td.day.accum <- function(basic_accum_df, rich_plot = TRUE) {
                                 sum)
 
 
+
+
   ## create a new column that will contain the percentage of new species ...
   # ... seen on each video -> TD accumul with 100% at the end of the day ...
   # ... all the species richness seen during the day_site is seen at the ...
@@ -228,6 +236,8 @@ compute.td.day.accum <- function(basic_accum_df, rich_plot = TRUE) {
   for (i in (unique(accum_TD_df$site_day))) {
 
     sum_tot_richn <- sum(accum_TD_df[which(accum_TD_df$site_day == i), "sum_accum"])
+    # express it as percentage of total sp richness:
+    sum_tot_richn <- sum_tot_richn/tot_sp_richn
 
     # create a counter that will count the rows (as j in a name):
     k <- 0
@@ -239,7 +249,8 @@ compute.td.day.accum <- function(basic_accum_df, rich_plot = TRUE) {
 
       # if first video of the site_day, then no value to add:
       if (k == 1) {
-        accum_TD_df[j, "perc_TD_acc_day"] <- (accum_TD_df[j, "sum_accum"]/sum_tot_richn)*100
+        accum_TD_df[j, "perc_TD_acc_day"] <- accum_TD_df[j, "sum_accum"] / tot_sp_richn
+        accum_TD_df[j, "perc_TD_acc_day"] <- (accum_TD_df[j, "perc_TD_acc_day"]/sum_tot_richn)*100
       }
 
       # if it is not the first video, then must add accumulated sp_richn of the videos before:
@@ -254,6 +265,9 @@ compute.td.day.accum <- function(basic_accum_df, rich_plot = TRUE) {
         # compute the accumulated species richness up to the studied video:
         accum_TD_df[j, "perc_TD_acc_day"] <- accum_TD_df[j, "sum_accum"] +
                              sum(accum_TD_df[c(rown_first_vid:(rown_vid_before)), "sum_accum"])
+
+        # express as percentage of total sp richn (as FRic):
+        accum_TD_df[j, "perc_TD_acc_day"] <- accum_TD_df[j, "perc_TD_acc_day"]/tot_sp_richn
 
         # compute the percentage of species richness accumulated up to the studied video:
         accum_TD_df[j, "perc_TD_acc_day"] <- (accum_TD_df[j, "perc_TD_acc_day"]/sum_tot_richn)*100
