@@ -59,4 +59,32 @@ plot.rarcom(rarcom_df, sites_colors)
 
 
 
+# Step 3: Where are the rare/medium/common species in the functional sp for each site? ####
 
+
+# Call data:
+
+basic_fd_accum_df <- readRDS(here::here("transformed_data", "basic_FD_accum_df.rds"))
+
+sp_tr <- readRDS(here::here("transformed_data/fe_tr.rds"))
+tr_cat <- readRDS(here::here("transformed_data/tr_cat_df.rds"))
+
+site_asb_fe_df <- readRDS(here::here("transformed_data/site_asb_fe_df.rds"))
+
+
+# argument:
+rarity_shapes <- c(24, 22, 21)
+rarity_colors_NG <- c("#00441b", "#238b45", "#66c2a4")
+rarity_colors_B <- c("#543005", "#8c510a", "#bf812d")
+sites_colors <- c("#bf812d", "#80cdc1")
+
+# Plot:
+spot.rare.sp.fd(basic_fd_accum_df,
+                            site_asb_fe_df,
+                            sp_tr,
+                            tr_cat,
+                            rarcom_df,
+                            rarity_shapes,
+                            rarity_colors_B,
+                            rarity_colors_NG,
+                            sites_colors)
