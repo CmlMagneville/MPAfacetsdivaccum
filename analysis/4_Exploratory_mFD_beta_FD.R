@@ -281,6 +281,7 @@ alpha_fd_indices_day <- mFD::alpha.fd.multidim(
   sp_faxes_coord   = fe_faxes_coord[ , c("PC1", "PC2", "PC3", "PC4", "PC5")],
   asb_sp_w         = asb_fe_df,
   ind_vect         = c("fdis", "fric",
+                       "fdiv",
                        "fspe", "fide"),
   scaling          = TRUE,
   check_input      = TRUE,
@@ -298,11 +299,14 @@ site_asb_fe_df[4, ] <- site_asb_fe_df[4, ] + site_asb_fe_df[5, ] + site_asb_fe_d
 site_asb_fe_df <- site_asb_fe_df[-c(2, 3, 5, 6), ]
 site_asb_fe_df [site_asb_fe_df  > 1] <- 1
 rownames(site_asb_fe_df) <- c("N'Gouja", "Boueni")
+saveRDS(site_asb_fe_df, here::here("transformed_data", "site_asb_fe_df.rds"))
+
 
 alpha_fd_indices_site <- mFD::alpha.fd.multidim(
   sp_faxes_coord   = fe_faxes_coord[ , c("PC1", "PC2", "PC3", "PC4", "PC5")],
   asb_sp_w         = site_asb_fe_df,
   ind_vect         = c("fdis", "fric",
+                       "fdiv",
                        "fspe", "fide"),
   scaling          = TRUE,
   check_input      = TRUE,
