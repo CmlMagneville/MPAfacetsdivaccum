@@ -88,3 +88,118 @@ spot.rare.sp.fd(basic_fd_accum_df,
                             rarity_colors_B,
                             rarity_colors_NG,
                             sites_colors)
+
+
+# Step 3: Where are the rare/medium species in the phylogenetic tree of each site?
+
+
+# Call data:
+rar_com_df <- readRDS(here::here("transformed_data", "rarcom_df.rds"))
+
+
+# Rename species with their sister species for some so can be found ...
+# ... in the phylogenetic tree:
+
+rar_com_df[which(rar_com_df$species_nm == "Gomphosus_caeruleus"), "species_nm"] <- "Gomphosus_varius"
+rar_com_df[which(rar_com_df$species_nm == "Scolopsis_frenata"), "species_nm"] <- "Scolopsis_bilineata"
+rar_com_df[which(rar_com_df$species_nm == "Scolopsis_ghanam"), "species_nm"] <- "Scolopsis_bimaculata"
+rar_com_df[which(rar_com_df$species_nm == "Cetoscarus_ocellatus"), "species_nm"] <- "Cetoscarus_bicolor"
+rar_com_df[which(rar_com_df$species_nm == "Scarus_falcipinnis"), "species_nm"] <- "Scarus_altipinnis"
+rar_com_df[which(rar_com_df$species_nm == "Scarus_scaber"), "species_nm"] <- "Scarus_oviceps"
+rar_com_df[which(rar_com_df$species_nm == "Tylosurus_crocodilus"), "species_nm"] <- "Tylosurus_crocodilus_crocodilus"
+rar_com_df[which(rar_com_df$species_nm == "Chlorurus_strongylocephalus"), "species_nm"] <- "Chlorurus_microrhinos"
+rar_com_df[which(rar_com_df$species_nm == "Canthigaster_cyanospilota"), "species_nm"] <- "Canthigaster_coronata"
+rar_com_df[which(rar_com_df$species_nm == "Labropsis_xanthonota"), "species_nm"] <- "Labropsis_australis"
+rar_com_df[which(rar_com_df$species_nm == "Ac_Cten_dark"), "species_nm"] <- "Ctenochaetus_striatus"
+
+
+# plot N'Gouja phylogeny in colors according to species rarity on the global phylogeny:
+
+# get global phylo:
+sp_nm_all <- unique(rar_com_df$species_nm)
+phylo <- fishtree::fishtree_phylogeny(species = sp_nm_all)
+# convert into a dataframe:
+phylo_df <- tidytree::as_tibble(phylo)
+
+# create the phylo df for N'Gouja:
+phylo_df_NG <- phylo_df
+# add a column that will contain info about rarity (none if not in NG = black, ...
+# ... rare/medium/common otherwise)
+phylo_df_NG$rarity <- rep("none", nrow(phylo_df_NG))
+
+
+# loop on each tip labels:
+for (i in phylo_df_NG$label) {
+
+  # if the species is seen in N'Gouja, add its rarity:
+  if (i %in% rar_com_df[which(rar_com_df$site  == "N'Gouja"), "species_nm"]) {
+
+    phylo_df_NG[which(phylo_df_NG$label == i), "rarity"] <- rar_com_df[which(
+                                                              rar_com_df$species_nm == i &
+                                                              rar_com_df$site == "N'Gouja"),
+                                                              "rarity"]
+  }
+
+}
+
+
+# now plot it:
+NG_rar_tree <- ggtree::ggtree(ape::as.phylo(phylo_df_NG), ggplot2::aes(color = phylo_df_NG$rarity),
+               size = 1, layout = "circular") +
+
+  ggplot2::scale_color_manual(values =  c("#66c2a4",  "#238b45", "grey80", "#00441b"),
+                               name = "Rarity") +
+
+  ggtree::geom_tiplab(hjust = -.1, size = 3)
+
+# save it:
+ggplot2::ggsave(filename = here::here("outputs", "NG_rarity_tree.pdf"),
+                plot = NG_rar_tree,
+                device = "pdf",
+                scale = 1.4,
+                height = 6000,
+                width = 10000,
+                units = "px",
+                dpi = 600)
+
+
+# create the phylo df for Boueni:
+phylo_df_B <- phylo_df
+# add a column that will contain info about rarity (none if not in NG = black, ...
+# ... rare/medium/common otherwise)
+phylo_df_B$rarity <- rep("none", nrow(phylo_df_B))
+
+
+# loop on each tip labels:
+for (i in phylo_df_B$label) {
+
+  # if the species is seen in Boueni, add its rarity:
+  if (i %in% rar_com_df[which(rar_com_df$site  == "Boueni"), "species_nm"]) {
+
+    phylo_df_B[which(phylo_df_B$label == i), "rarity"] <- rar_com_df[which(
+      rar_com_df$species_nm == i &
+        rar_com_df$site == "Boueni"),
+      "rarity"]
+  }
+
+}
+
+
+# now plot it:
+B_rar_tree <- ggtree::ggtree(ape::as.phylo(phylo_df_B), ggplot2::aes(color = phylo_df_B$rarity),
+                              size = 1, layout = "circular") +
+
+  ggplot2::scale_color_manual(values =  c( "#bf812d", "#8c510a", "grey80", "#543005"),
+                              name = "Rarity") +
+
+  ggtree::geom_tiplab(hjust = -.1, size = 3)
+
+# save it:
+ggplot2::ggsave(filename = here::here("outputs", "B_rarity_tree.pdf"),
+                plot = B_rar_tree,
+                device = "pdf",
+                scale = 1.4,
+                height = 6000,
+                width = 10000,
+                units = "px",
+                dpi = 600)
