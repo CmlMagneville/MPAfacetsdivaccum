@@ -148,22 +148,22 @@ colnames(sp_tr_final)[4] <- "Schooling"
 # ... and other sources (doris, fishbase) to complete:
 
 # same as other Scolpsis sp.:
-sp_tr_final[which(sp_tr_final$Latin_name == "Scolopsis_frenata"), "Diet"] <- "Microinvertivores"
+sp_tr_final[which(sp_tr_final$Latin_name == "Scolopsis_frenata"), "Diets"] <- "Microinvertivores"
 
 # paper Parravicini et al 2020, Plos Biol:
-sp_tr_final[which(sp_tr_final$Latin_name == "Scarus_ferrugineus"), "Diet"] <- "Herbivores Microvores Detritivores"
-sp_tr_final[which(sp_tr_final$Latin_name == "Cephalopholis_nigripinnis"), "Diet"] <- "Piscivores"
+sp_tr_final[which(sp_tr_final$Latin_name == "Scarus_ferrugineus"), "Diets"] <- "Herbivores Microvores Detritivores"
+sp_tr_final[which(sp_tr_final$Latin_name == "Cephalopholis_nigripinnis"), "Diets"] <- "Piscivores"
 
 # As C. stratus because main species seen:
-sp_tr_final[which(sp_tr_final$Latin_name == "Ac_Cten_dark"), "Diet"] <- "Herbivores Microvores Detritivores"
+sp_tr_final[which(sp_tr_final$Latin_name == "Ac_Cten_dark"), "Diets"] <- "Herbivores Microvores Detritivores"
 
 # Fishbase:
-sp_tr_final[which(sp_tr_final$Latin_name == "Tylosurus_crocodilus"), "Diet"] <- "Piscivores"
-sp_tr_final[which(sp_tr_final$Latin_name == "Caesio_lunaris"), "Diet"] <- "Planktivores"
+sp_tr_final[which(sp_tr_final$Latin_name == "Tylosurus_crocodilus"), "Diets"] <- "Piscivores"
+sp_tr_final[which(sp_tr_final$Latin_name == "Caesio_lunaris"), "Diets"] <- "Planktivores"
 
 # several sources (fishbase, doris, Australian Museum) as several diet possible:
-sp_tr_final[which(sp_tr_final$Latin_name == "Aulostomus_chinensis"), "Diet"] <- "Piscivores"
-sp_tr_final[which(sp_tr_final$Latin_name == "Canthigaster_cyanospilota"), "Diet"] <- "sessile_invertivores"
+sp_tr_final[which(sp_tr_final$Latin_name == "Aulostomus_chinensis"), "Diets"] <- "Piscivores"
+sp_tr_final[which(sp_tr_final$Latin_name == "Canthigaster_cyanospilota"), "Diets"] <- "sessile_invertivores"
 
 
 # order the traits:
@@ -204,7 +204,7 @@ levels(sp_tr_final$Level_water)
 
 # put species in rows:
 rownames(sp_tr_final) <- sp_tr_final$Latin_name
-sp_tr_final <- sp_tr_final[, -ncol(sp_tr_final)]
+sp_tr_final <- sp_tr_final[, -6]
 
 # save trait data for the 155 fish species seen in Mayotte:
 saveRDS(sp_tr_final, here::here("transformed_data", "sp_tr_final.rds"))
