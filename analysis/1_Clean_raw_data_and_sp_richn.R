@@ -129,6 +129,7 @@ sort(sp_nm_B)
 # ... Rename Coris variegata into Coris batuensis because variegata is endemic from red sea
 # ... Add Pomacentrus similis and P. caeruleus as P. similis does not belong in Mayotte and ...
 # ... data checked on WAVE
+# ... Aulostomus_maculatus -> Aulostomus chinenesis as A. maculatus only in North America
 
 
 
@@ -227,6 +228,11 @@ presabs_06_A1$Chlorurus_sordidus <- presabs_06_A1$Chlorurus_sordidus +
   presabs_06_A1$Scarus_sordidus
 presabs_06_A1$Chlorurus_sordidus[which(presabs_06_A1$Chlorurus_sordidus > 1)] <- 1
 presabs_06_A1 <- presabs_06_A1[, which(! colnames(presabs_06_A1) %in% c("Scarus_sordidus"))]
+
+presabs_06_A1$Aulostomus_chinensis <- presabs_06_A1$Aulostomus_chinensis +
+  presabs_06_A1$Aulostomus_maculatus
+presabs_06_A1$Aulostomus_chinensis[which(presabs_06_A1$Aulostomus_chinensis > 1)] <- 1
+presabs_06_A1 <- presabs_06_A1[, which(! colnames(presabs_06_A1) %in% c("Aulostomus_maculatus"))]
 
 # 06 - C2
 
