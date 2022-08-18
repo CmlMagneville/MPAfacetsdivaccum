@@ -5,7 +5,7 @@
 ##
 ## 2_Traits_data.R
 ##
-## 02/08/2022 
+## 02/08/2022
 ##
 ## Camille Magneville
 ##
@@ -14,6 +14,8 @@
 
 
 # Step 1: Load the GASPAR data and get the names of species seen in Mayotte ####
+# Also load diet information from Parravicini et al. 2021 ProcB paper ...
+# ... more precise so use these diet informations instead of GASPAR's
 
 
 # GASPAR data is saved on two datasets: one gathering species taxonomic ...
@@ -25,6 +27,9 @@
 sp_taxo <- read.delim(here::here("raw_data", "sp_taxo_GASPAR.txt"), sep = "\t")
 # Load traits data:
 sp_tr <- read.delim(here::here("raw_data", "sp_traits_2014_MK_GASPAR.txt"), sep = "\t")
+
+# Load diet information:
+sp_diet <- read.csv(here::here("raw_data", "diet_Parravicini2.csv"))
 
 
 # Load the presence-absence dfs (cleaned through ...
@@ -61,7 +66,7 @@ sp_nm_all <- sp_nm_all[which(! sp_nm_all %in% c("time", "video_nm"))]
 # get sp name:
 sort(sp_nm_all)
 
-# get species nb: 155
+# get species nb: 150
 length(sp_nm_all)
 
 
@@ -114,7 +119,7 @@ sp_tr4[nrow(sp_tr4) + 1, ] <- Ac_Cten_dark
 
 
 # check that now every sp seen in Mayotte is in the traits db:
-setdiff(sp_nm_all, sp_tr4$Latin_name) # ok ! 
+setdiff(sp_nm_all, sp_tr4$Latin_name) # ok !
 
 
 # remove species which are not seen in Mayotte from the traits db:
@@ -122,9 +127,48 @@ remove_sp <- setdiff(sp_tr4$Latin_name, sp_nm_all)
 sp_tr_final <- sp_tr4[which(sp_tr4$Latin_name %in% sp_nm_all), ]
 
 
+# add trait data:
+
+## rename the species column in the diet dataset so can use left_join:
+sp_diet$Latin_name <- paste0(sp_diet$Genus, sep = "_", sp_diet$Species)
+
+## join
+sp_tr_final <- dplyr::left_join(sp_tr_final, sp_diet, by = "Latin_name")
+
+## remove unused columns:
+sp_tr_final <- sp_tr_final[, c(2:7, 19)]
+
+## rename the diet column and others:
+colnames(sp_tr_final)[ncol(sp_tr_final)] <- "Diets"
+colnames(sp_tr_final)[3] <- "Activity"
+colnames(sp_tr_final)[4] <- "Schooling"
+
+
+## there are 8 species missing diet data: use the paper Parravicini et al 2020 ...
+# ... and other sources (doris, fishbase) to complete:
+
+# same as other Scolpsis sp.:
+sp_tr_final[which(sp_tr_final$Latin_name == "Scolopsis_frenata"), "Diet"] <- "Microinvertivores"
+
+# paper Parravicini et al 2020, Plos Biol:
+sp_tr_final[which(sp_tr_final$Latin_name == "Scarus_ferrugineus"), "Diet"] <- "Herbivores Microvores Detritivores"
+sp_tr_final[which(sp_tr_final$Latin_name == "Cephalopholis_nigripinnis"), "Diet"] <- "Piscivores"
+
+# As C. stratus because main species seen:
+sp_tr_final[which(sp_tr_final$Latin_name == "Ac_Cten_dark"), "Diet"] <- "Herbivores Microvores Detritivores"
+
+# Fishbase:
+sp_tr_final[which(sp_tr_final$Latin_name == "Tylosurus_crocodilus"), "Diet"] <- "Piscivores"
+sp_tr_final[which(sp_tr_final$Latin_name == "Caesio_lunaris"), "Diet"] <- "Planktivores"
+
+# several sources (fishbase, doris, Australian Museum) as several diet possible:
+sp_tr_final[which(sp_tr_final$Latin_name == "Aulostomus_chinensis"), "Diet"] <- "Piscivores"
+sp_tr_final[which(sp_tr_final$Latin_name == "Canthigaster_cyanospilota"), "Diet"] <- "sessile_invertivores"
+
+
 # order the traits:
 
-## Diets: 
+## Diets:
 class(sp_tr_final$Diets)
 sp_tr_final$Diets <- as.factor(sp_tr_final$Diets)
 class(sp_tr_final$Diets)
@@ -182,8 +226,8 @@ saveRDS(trait_cat, file = here::here("transformed_data", "tr_cat_df.rds"))
 
 # Compute the summary:
 traits_summ <- mFD::sp.tr.summary(
-  tr_cat     = trait_cat,   
-  sp_tr      = sp_tr_final, 
+  tr_cat     = trait_cat,
+  sp_tr      = sp_tr_final,
   stop_if_NA = TRUE)
 
 traits_summ$tr_types
