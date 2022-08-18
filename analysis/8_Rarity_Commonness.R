@@ -189,16 +189,95 @@ for (i in phylo_df_B$label) {
 B_rar_tree <- ggtree::ggtree(ape::as.phylo(phylo_df_B), ggplot2::aes(color = phylo_df_B$rarity),
                               size = 1, layout = "circular") +
 
-  ggplot2::scale_color_manual(values =  c( "#bf812d", "#8c510a", "grey80", "#543005"),
+  ggplot2::scale_color_manual(values =  c("#bf812d", "#8c510a", "grey80", "#543005"),
                               name = "Rarity") +
 
   ggtree::geom_tiplab(hjust = -.1, size = 3)
+
 
 # save it:
 ggplot2::ggsave(filename = here::here("outputs", "B_rarity_tree.pdf"),
                 plot = B_rar_tree,
                 device = "pdf",
                 scale = 1.4,
+                height = 6000,
+                width = 10000,
+                units = "px",
+                dpi = 600)
+
+
+
+# Then  new plot with no colors on the tree but points on the tips:
+
+## create a matrix that will served as a heatmap showing on each tip...
+# .. the rarity on both sites:
+
+phylo_df <- as.data.frame(phylo_df)
+phylo_df_NG <- as.data.frame(phylo_df_NG)
+phylo_df_B <- as.data.frame(phylo_df_B)
+
+heatmap_df <- phylo_df_NG[which(! is.na(phylo_df_NG$label)), c(4, 5)]
+colnames(heatmap_df)[2] <- "NGouja"
+heatmap_df$Boueni <- rep(0, nrow(heatmap_df))
+
+for (i in heatmap_df$label) {
+
+  heatmap_df[which(heatmap_df$label == i), "Boueni"] <- phylo_df_B[which(phylo_df_B$label == i), "rarity"]
+
+}
+
+# format the column class:
+heatmap_df$NGouja <- as.factor(heatmap_df$NGouja)
+heatmap_df$Boueni <- as.factor(heatmap_df$Boueni)
+
+
+# compute the basic tree:
+phylo_df <- tidytree::as_tibble(phylo)
+rar_tree <- ggtree::ggtree(ape::as.phylo(phylo_df),
+                              size = 1, layout = "circular",
+                           right = TRUE, ladderize = FALSE) +
+
+  ggtree::geom_tiplab(ggplot2::aes(label = paste0(substr(phylo_df$label, 1, 1), sep = ". ", gsub(".*_","",phylo_df$label))),
+    hjust = -.1, size = 3, offset = 10)
+
+  # theme(plot.margin = unit(rep(-2,  4), "cm"))
+
+
+# get basic tree information:
+tree_dt <- as.data.frame(rar_tree$data)
+
+# get only the tips:
+tree_dt <- tree_dt[tree_dt$"isTip" == TRUE, ]
+
+tree_dt <- tree_dt[order(tree_dt$"y"), ]
+
+## Change x coordinates so can add points and chose color palette:
+tree_dt <- dplyr::left_join(tree_dt, heatmap_df)
+tree_dt$"x" <-  max(tree_dt$"x") + 5
+pal <- harrypotter::hp(n = 5, house = "Ravenclaw")
+
+# Add NGouja points:
+pts1 <- rar_tree +
+
+  ggplot2::geom_point(data = tree_dt,
+                      ggplot2::aes(x = x, y = y, color = NGouja),
+             shape = 20, size = 4, alpha = 0.8) +
+
+  ggplot2::scale_color_manual(values =  c(pal[4], "grey95", pal[3],  pal[1]),
+                              name = "Rarity")
+
+# Add Boueni points:
+pts2 <- pts1 +
+
+  ggplot2::geom_point(data = tree_dt,
+                      ggplot2::aes(x = x + 5, y = y, color = Boueni),
+                      shape = 17, size = 3, alpha = 0.8)
+
+# save it:
+ggplot2::ggsave(filename = here::here("outputs", "global_rarity_tree.pdf"),
+                plot = pts2,
+                device = "pdf",
+                scale = 1.2,
                 height = 6000,
                 width = 10000,
                 units = "px",

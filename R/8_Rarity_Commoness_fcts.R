@@ -173,6 +173,10 @@ plot.rarcom <- function(rarcom_df, sites_colors) {
   rarcom_df$species_nm <- gsub("_", " ", rarcom_df$species_nm)
   rarcom_df[c(2, 3), "species_nm"] <- "Ctenochaetus striatus"
 
+
+  # plot barplot for both sites:
+
+  ## NG:
   rarcom_plot_NG <- ggplot2::ggplot(data = rarcom_df[which(rarcom_df$site == "N'Gouja"), ]) +
 
     ggplot2::geom_bar(ggplot2::aes(x = reorder(species_nm, - vid_occ_nb), y = (vid_occ_nb/99)*100,
@@ -196,7 +200,7 @@ plot.rarcom <- function(rarcom_df, sites_colors) {
 
     ggplot2::xlab("")
 
-
+  # B:
   rarcom_plot_B <- ggplot2::ggplot(data = rarcom_df[which(rarcom_df$site == "Boueni"), ]) +
 
     ggplot2::geom_bar(ggplot2::aes(x = reorder(species_nm, - vid_occ_nb), y = (vid_occ_nb/99)*100,
@@ -236,7 +240,93 @@ plot.rarcom <- function(rarcom_df, sites_colors) {
                   dpi = 800)
 
 
-  return(plot_both)
+  ## plot biplot:
+
+  # create a dataframe to plot the biplot:
+  biplot_df <- as.data.frame(matrix(nrow = 1, ncol = 4))
+  colnames(biplot_df) <- c("species_nm", "NGouja", "Boueni", "presence")
+
+  # perc_vid occ en numeric:
+  rarcom_df$perc_vid_occ <- as.numeric(rarcom_df$perc_vid_occ)
+
+  # loop on species:
+  for (i in unique(rarcom_df$species_nm)) {
+
+    species_nm <- i
+
+    # if species seen in NG and B:
+    if (rarcom_df[which(rarcom_df$species_nm == i), "site_presence"] == "both") {
+
+      presence <- "both"
+      NG <- rarcom_df[which(rarcom_df$species_nm == i & rarcom_df$site == "N'Gouja"), "perc_vid_occ"]
+      B <- rarcom_df[which(rarcom_df$species_nm == i & rarcom_df$site == "Boueni"), "perc_vid_occ"]
+
+      biplot_df[nrow(biplot_df) + 1, ] <- c(species_nm, NG, B, presence)
+
+    }
+
+    # if species only seen in NG:
+    if (rarcom_df[which(rarcom_df$species_nm == i), "site_presence"] == "N'Gouja only") {
+
+      presence <- "N'Gouja only"
+      NG <- rarcom_df[which(rarcom_df$species_nm == i & rarcom_df$site == "N'Gouja"), "perc_vid_occ"]
+      B <- 0
+
+      biplot_df[nrow(biplot_df) + 1, ] <- c(species_nm, NG, B, presence)
+
+    }
+
+    # if species only seen in B:
+    if (rarcom_df[which(rarcom_df$species_nm == i), "site_presence"] == "Boueni only") {
+
+      presence <- "Boueni only"
+      NG <- 0
+      B <- rarcom_df[which(rarcom_df$species_nm == i & rarcom_df$site == "Boueni"), "perc_vid_occ"]
+
+      biplot_df[nrow(biplot_df) + 1, ] <- c(species_nm, NG, B, presence)
+
+    }
+  }
+
+  ## class columns:
+  biplot_df <- biplot_df[-1, ]
+  biplot_df$NGouja <- as.numeric(biplot_df$NGouja)
+  biplot_df$Boueni <- as.numeric(biplot_df$Boueni)
+
+
+  ## plot the biplot:
+  biplot_rarcom <- ggplot2::ggplot(data = biplot_df) +
+
+    ggplot2::geom_point(ggplot2::aes(x = Boueni, y = NGouja,
+                                   color = presence)) +
+
+    ggplot2::geom_abline(color = "grey30", linetype = "dashed") +
+
+    ggplot2::scale_color_manual(values = c(sites_colors[1],
+                                          sites_colors[2],
+                                          sites_colors[3]),
+                               name = "Site presence") +
+
+    ggplot2::theme(panel.background = ggplot2::element_rect(fill = "white",
+                                                            colour = "grey90"),
+                   panel.grid.major = ggplot2::element_line(colour = "grey90")) +
+
+    ggplot2::ylab("Percentage of occurrence in N'Gouja's videos") +
+
+    ggplot2::xlab("Percentage of occurrence in Boueni's videos")
+
+
+  ggplot2::ggsave(filename = here::here("outputs", "rar_comm_biplot.pdf"),
+                  plot = biplot_rarcom,
+                  device = "pdf",
+                  scale = 0.6,
+                  height = 8000,
+                  width = 9000,
+                  units = "px",
+                  dpi = 800)
+
+
+  return(list(plot_both, biplot_rarcom))
 
 
 }
