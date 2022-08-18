@@ -38,7 +38,7 @@ basic_fd_accum_df <- readRDS(here::here("transformed_data", "basic_FD_accum_df.r
 fd_indices <- c("fric", "fspe", "fdis", "fdiv", "fide")
 sp_tr <- fe_tr
 
-FD_interday_accum <- compute.fd.day.accum(basic_fd_accum_df,
+FD_interday_accum <- compute.fd.interday.accum(basic_fd_accum_df,
                                  sp_tr,
                                  tr_cat,
                                  fd_indices,

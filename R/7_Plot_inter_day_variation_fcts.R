@@ -34,6 +34,9 @@ plot.inter.day.accum <- function(TD_accum_df,
   complete_plot_df$FDiv <- FD_accum_df$fdiv
   complete_plot_df$FIde_PC1 <- FD_accum_df$fide_PC1
   complete_plot_df$FIde_PC2 <- FD_accum_df$fide_PC2
+  complete_plot_df$FIde_PC3 <- FD_accum_df$fide_PC3
+  complete_plot_df$FIde_PC4 <- FD_accum_df$fide_PC4
+
   complete_plot_df$PD <- PD_accum_df$accum_PD
 
 
@@ -328,7 +331,7 @@ plot.inter.day.accum <- function(TD_accum_df,
     ggplot2::guides(fill = "none")
 
 
-  # plot 1 for FIde_PC1:
+  # plot 2 for FIde_PC2:
   plot_FIde2 <- ggplot2::ggplot(data = final_plot_df[which(final_plot_df$metric == "FIde_PC2"), ]) +
 
     ggplot2::geom_line(ggplot2::aes(y = values, x = video_nb, group = site,
@@ -367,6 +370,84 @@ plot.inter.day.accum <- function(TD_accum_df,
     ggplot2::guides(fill = "none")
 
 
+  # plot 3 for FIde_PC3:
+  plot_FIde3 <- ggplot2::ggplot(data = final_plot_df[which(final_plot_df$metric == "FIde_PC3"), ]) +
+
+    ggplot2::geom_line(ggplot2::aes(y = values, x = video_nb, group = site,
+                                    color = site, fill = site),
+                       size = 0.9) +
+
+    ggplot2::facet_grid(. ~ day_nb,
+                        labeller = ggplot2::labeller(day_nb = day_labs)) +
+
+
+    ggplot2::scale_fill_manual(values = c("#bf812d",
+                                          "#80cdc1"),
+                               name = "Site") +
+
+    ggplot2::scale_colour_manual(values = c("#bf812d",
+                                            "#80cdc1"),
+                                 name = "Site") +
+
+    ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90),
+                   panel.background = ggplot2::element_rect(fill = "white",
+                                                            colour = "grey90"),
+                   panel.grid.major = ggplot2::element_line(colour = "grey90")) +
+
+
+    ggplot2::scale_x_discrete(labels= c("7:30", "", "8:00", "", "8:40", "",
+                                        "9:15", "", "9:45", "", "10:20", "",
+                                        "10:55", "", "11:40", "", "12:20", "",
+                                        "12:55", "", "13:40", "", "14:25", "",
+                                        "15:00", "", "15:45", "", "16:30", "",
+                                        "17:00", "", "17:30")) +
+
+    ggplot2::ylab("FIde PC3") +
+
+    ggplot2::xlab("") +
+
+    ggplot2::guides(fill = "none")
+
+
+  # plot 3 for FIde_PC4:
+  plot_FIde4 <- ggplot2::ggplot(data = final_plot_df[which(final_plot_df$metric == "FIde_PC4"), ]) +
+
+    ggplot2::geom_line(ggplot2::aes(y = values, x = video_nb, group = site,
+                                    color = site, fill = site),
+                       size = 0.9) +
+
+    ggplot2::facet_grid(. ~ day_nb,
+                        labeller = ggplot2::labeller(day_nb = day_labs)) +
+
+
+    ggplot2::scale_fill_manual(values = c("#bf812d",
+                                          "#80cdc1"),
+                               name = "Site") +
+
+    ggplot2::scale_colour_manual(values = c("#bf812d",
+                                            "#80cdc1"),
+                                 name = "Site") +
+
+    ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90),
+                   panel.background = ggplot2::element_rect(fill = "white",
+                                                            colour = "grey90"),
+                   panel.grid.major = ggplot2::element_line(colour = "grey90")) +
+
+
+    ggplot2::scale_x_discrete(labels= c("7:30", "", "8:00", "", "8:40", "",
+                                        "9:15", "", "9:45", "", "10:20", "",
+                                        "10:55", "", "11:40", "", "12:20", "",
+                                        "12:55", "", "13:40", "", "14:25", "",
+                                        "15:00", "", "15:45", "", "16:30", "",
+                                        "17:00", "", "17:30")) +
+
+    ggplot2::ylab("FIde PC4") +
+
+    ggplot2::xlab("") +
+
+    ggplot2::guides(fill = "none")
+
+
   # Assemble the 3 plots to return:
 
   plot_richness <- (plot_TD + plot_FRic + plot_PD) +
@@ -377,9 +458,9 @@ plot.inter.day.accum <- function(TD_accum_df,
     patchwork::plot_layout(byrow = TRUE, heights = c(1, 1), widths = c(1, 1),
                            ncol = 3, nrow = 1, guides = "collect")
 
-  plot_fide <- (plot_FIde + plot_FIde2) +
+  plot_fide <- (plot_FIde + plot_FIde2 + plot_FIde3 + plot_FIde4) +
     patchwork::plot_layout(byrow = TRUE, heights = c(1, 1), widths = c(1, 1),
-                           ncol = 2, nrow = 1, guides = "collect")
+                           ncol = 2, nrow = 2, guides = "collect")
 
 
 
@@ -389,7 +470,7 @@ plot.inter.day.accum <- function(TD_accum_df,
                   device = "pdf",
                   scale = 1,
                   height = 6000,
-                  width = 17000,
+                  width = 14000,
                   units = "px",
                   dpi = 800)
   ggplot2::ggsave(filename = here::here("outputs", "interday_fd_ind.pdf"),
@@ -404,8 +485,8 @@ plot.inter.day.accum <- function(TD_accum_df,
                   plot = plot_fide,
                   device = "pdf",
                   scale = 1,
-                  height = 5000,
-                  width = 14000,
+                  height = 6000,
+                  width = 17000,
                   units = "px",
                   dpi = 800)
 

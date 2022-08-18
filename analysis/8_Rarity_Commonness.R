@@ -29,21 +29,21 @@ rarcom_df <- rarcom.computation(basic_accum_df)
 saveRDS(rarcom_df, here::here("transformed_data", "rarcom_df.rds"))
 
 
-# Compute figures:
+# Compute figures: ( rare = super_ rare, medium = rare, common = common)
 
-perc_rare_sp_NG <- (nrow(rarcom_df[which(rarcom_df$site == "N'Gouja" & rarcom_df$rarity == "rare"), ])/
+perc_rare_sp_NG <- (nrow(rarcom_df[which(rarcom_df$site == "N'Gouja" & rarcom_df$rarity == "super rare"), ])/
   nrow(rarcom_df[which(rarcom_df$site == "N'Gouja"), ]))*100
 perc_common_sp_NG <- (nrow(rarcom_df[which(rarcom_df$site == "N'Gouja" & rarcom_df$rarity == "common"), ])/
                       nrow(rarcom_df[which(rarcom_df$site == "N'Gouja"), ]))*100
-perc_med_sp_NG <- (nrow(rarcom_df[which(rarcom_df$site == "N'Gouja" & rarcom_df$rarity == "medium"), ])/
+perc_med_sp_NG <- (nrow(rarcom_df[which(rarcom_df$site == "N'Gouja" & rarcom_df$rarity == "rare"), ])/
                         nrow(rarcom_df[which(rarcom_df$site == "N'Gouja"), ]))*100
 
-perc_rare_sp_B <- (nrow(rarcom_df[which(rarcom_df$site == "Boueni" & rarcom_df$rarity == "rare"), ])/
+perc_rare_sp_B <- (nrow(rarcom_df[which(rarcom_df$site == "Boueni" & rarcom_df$rarity == "super rare"), ])/
                       nrow(rarcom_df[which(rarcom_df$site == "Boueni"), ]))*100
 perc_common_sp_B <- (nrow(rarcom_df[which(rarcom_df$site == "Boueni" & rarcom_df$rarity == "common"), ])/
                         nrow(rarcom_df[which(rarcom_df$site == "Boueni"), ]))*100
-perc_med_sp_B <- (nrow(rarcom_df[which(rarcom_df$site == "Boueni" & rarcom_df$rarity == "medium"), ])/
-                     nrow(rarcom[which(rarcom_df$site == "Boueni"), ]))*100
+perc_med_sp_B <- (nrow(rarcom_df[which(rarcom_df$site == "Boueni" & rarcom_df$rarity == "rare"), ])/
+                     nrow(rarcom_df[which(rarcom_df$site == "Boueni"), ]))*100
 
 perc_unique_sp_NG <- (nrow(rarcom_df[which(rarcom_df$site == "N'Gouja" & rarcom_df$site_presence == "N'Gouja only"), ])/
                         nrow(rarcom_df[which(rarcom_df$site == "N'Gouja"), ]))*100

@@ -127,15 +127,15 @@ rarcom.computation <- function(basic_accum_df) {
 
   for (i in (rownames(rarcom_df))) {
 
-    if (rarcom_df[i, "perc_vid_occ"] <= 25) {
+    if (rarcom_df[i, "perc_vid_occ"] <= 5) {
+      rarcom_df[i, "rarity"] <- "super rare"
+    }
+
+    if (rarcom_df[i, "perc_vid_occ"] > 5 & rarcom_df[i, "perc_vid_occ"] < 25) {
       rarcom_df[i, "rarity"] <- "rare"
     }
 
-    if (rarcom_df[i, "perc_vid_occ"] > 25 & rarcom_df[i, "perc_vid_occ"] < 50) {
-      rarcom_df[i, "rarity"] <- "medium"
-    }
-
-    if (rarcom_df[i, "perc_vid_occ"] >= 50) {
+    if (rarcom_df[i, "perc_vid_occ"] >= 25) {
       rarcom_df[i, "rarity"] <- "common"
     }
 
@@ -179,6 +179,10 @@ plot.rarcom <- function(rarcom_df, sites_colors) {
                                    fill = site_presence),
                       stat = "identity") +
 
+    ggplot2:: geom_hline(yintercept = 5, linetype = "dashed", color = "black") +
+
+    ggplot2:: geom_hline(yintercept = 25, linetype = "dashed", color = "black") +
+
     ggplot2::scale_fill_manual(values = c(sites_colors[1],
                                           sites_colors[3]),
                                name = "Site presence") +
@@ -198,6 +202,11 @@ plot.rarcom <- function(rarcom_df, sites_colors) {
     ggplot2::geom_bar(ggplot2::aes(x = reorder(species_nm, - vid_occ_nb), y = (vid_occ_nb/99)*100,
                                    fill = site_presence),
                       stat = "identity") +
+
+    ggplot2:: geom_hline(yintercept = 5, linetype = "dashed", color = "black") +
+
+    ggplot2:: geom_hline(yintercept = 25, linetype = "dashed", color = "black") +
+
 
     ggplot2::scale_fill_manual(values = c(sites_colors[1],
                                           sites_colors[2]),
@@ -296,19 +305,19 @@ spot.rare.sp.fd <- function(basic_fd_accum_df,
   site_asb_fe_df <- as.data.frame(site_asb_fe_df)
 
   site_asb_fe_df[nrow(site_asb_fe_df) + 1, ] <- rep(0, ncol(site_asb_fe_df))
-  rownames(site_asb_fe_df)[nrow(site_asb_fe_df)] <- "NG_rare"
+  rownames(site_asb_fe_df)[nrow(site_asb_fe_df)] <- "NG_super_rare"
 
   site_asb_fe_df[nrow(site_asb_fe_df) + 1, ] <- rep(0, ncol(site_asb_fe_df))
-  rownames(site_asb_fe_df)[nrow(site_asb_fe_df)] <- "NG_medium"
+  rownames(site_asb_fe_df)[nrow(site_asb_fe_df)] <- "NG_rare"
 
   site_asb_fe_df[nrow(site_asb_fe_df) + 1, ] <- rep(0, ncol(site_asb_fe_df))
   rownames(site_asb_fe_df)[nrow(site_asb_fe_df)] <- "NG_common"
 
   site_asb_fe_df[nrow(site_asb_fe_df) + 1, ] <- rep(0, ncol(site_asb_fe_df))
-  rownames(site_asb_fe_df)[nrow(site_asb_fe_df)] <- "B_rare"
+  rownames(site_asb_fe_df)[nrow(site_asb_fe_df)] <- "B_super_rare"
 
   site_asb_fe_df[nrow(site_asb_fe_df) + 1, ] <- rep(0, ncol(site_asb_fe_df))
-  rownames(site_asb_fe_df)[nrow(site_asb_fe_df)] <- "B_medium"
+  rownames(site_asb_fe_df)[nrow(site_asb_fe_df)] <- "B_rare"
 
   site_asb_fe_df[nrow(site_asb_fe_df) + 1, ] <- rep(0, ncol(site_asb_fe_df))
   rownames(site_asb_fe_df)[nrow(site_asb_fe_df)] <- "B_common"
@@ -320,11 +329,11 @@ spot.rare.sp.fd <- function(basic_fd_accum_df,
     rarity <- rarcom_fd_df[which(rarcom_fd_df$species_nm == i &
                                 rarcom_fd_df$site == "N'Gouja"), "rarity"]
 
-    if (rarity == "rare") {
+    if (rarity == "super rare") {
       site_asb_fe_df[c(3:5), i] <- c(1, 0, 0)
     }
 
-    if (rarity == "medium") {
+    if (rarity == "rare") {
       site_asb_fe_df[c(3:5), i] <- c(0, 1, 0)
     }
 
@@ -341,11 +350,11 @@ spot.rare.sp.fd <- function(basic_fd_accum_df,
     rarity <- rarcom_fd_df[which(rarcom_fd_df$species_nm == i &
                                    rarcom_fd_df$site == "Boueni"), "rarity"]
 
-    if (rarity == "rare") {
+    if (rarity == "super rare") {
       site_asb_fe_df[c(6:8), i] <- c(1, 0, 0)
     }
 
-    if (rarity == "medium") {
+    if (rarity == "rare") {
       site_asb_fe_df[c(6:8), i] <- c(0, 1, 0)
     }
 
@@ -450,7 +459,7 @@ spot.rare.sp.fd <- function(basic_fd_accum_df,
     ## Add rare/medium/common species:
 
     # Retrieve species coordinates matrix for the assemblage NG_rare:
-    sp_filter <- mFD::sp.filter(asb_nm = c("NG_rare"),
+    sp_filter <- mFD::sp.filter(asb_nm = c("NG_super_rare"),
                                 sp_faxes_coord = fe_faxes_coord_xy,
                                 asb_sp_w       = site_asb_fe_df)
     sp_faxes_coord_rare <- sp_filter$`species coordinates`
@@ -459,7 +468,7 @@ spot.rare.sp.fd <- function(basic_fd_accum_df,
                                   order_2D = TRUE, check_input = TRUE)
 
     # Retrieve species coordinates matrix for the assemblage NG_medium:
-    sp_filter <- mFD::sp.filter(asb_nm = c("NG_medium"),
+    sp_filter <- mFD::sp.filter(asb_nm = c("NG_rare"),
                                 sp_faxes_coord = fe_faxes_coord_xy,
                                 asb_sp_w       = site_asb_fe_df)
     sp_faxes_coord_medium <- sp_filter$`species coordinates`
@@ -477,38 +486,38 @@ spot.rare.sp.fd <- function(basic_fd_accum_df,
                                     order_2D = TRUE, check_input = TRUE)
 
     plot_k <- mFD::fric.plot(ggplot_bg = plot_k,
-                             asb_sp_coord2D = list("NG_rare" =
+                             asb_sp_coord2D = list("NG_super_rare" =
                                                      sp_faxes_coord_rare,
-                                                   "NG_medium" =
+                                                   "NG_rare" =
                                                      sp_faxes_coord_medium,
                                                    "NG_common" =
                                                      sp_faxes_coord_common),
-                             asb_vertices_nD = list("NG_rare" = vert_nm_rare,
-                                                    "NG_medium" = vert_nm_medium,
+                             asb_vertices_nD = list("NG_super_rare" = vert_nm_rare,
+                                                    "NG_rare" = vert_nm_medium,
                                                     "NG_common" = vert_nm_common),
                              plot_sp = TRUE,
                              color_ch = NA,
                              fill_ch = NA,
                              alpha_ch = NA,
-                             shape_sp = list("NG_rare" = rarity_shapes[1],
-                                             "NG_medium" = rarity_shapes[2],
+                             shape_sp = list("NG_super_rare" = rarity_shapes[1],
+                                             "NG_rare" = rarity_shapes[2],
                                              "NG_common" = rarity_shapes[3]),
-                             size_sp = c("NG_rare" = 2, "NG_medium" = 3, "NG_common" = 3),
-                             color_sp = c("NG_rare" = rarity_colors_NG[1],
-                                          "NG_medium" = rarity_colors_NG[2],
+                             size_sp = c("NG_super_rare" = 2, "NG_rare" = 3, "NG_common" = 3),
+                             color_sp = c("NG_super_rare" = rarity_colors_NG[1],
+                                          "NG_rare" = rarity_colors_NG[2],
                                           "NG_common" = rarity_colors_NG[3]),
-                             fill_sp = c("NG_rare" = rarity_colors_NG[1],
-                                         "NG_medium" = rarity_colors_NG[2],
+                             fill_sp = c("NG_super_rare" = rarity_colors_NG[1],
+                                         "NG_rare" = rarity_colors_NG[2],
                                          "NG_common" = rarity_colors_NG[3]),
-                             shape_vert = list("NG_rare" = rarity_shapes[1],
-                                               "NG_medium" = rarity_shapes[2],
+                             shape_vert = list("NG_super_rare" = rarity_shapes[1],
+                                               "NG_rare" = rarity_shapes[2],
                                                "NG_common" = rarity_shapes[3]),
-                             size_vert = c("NG_rare" = 2, "NG_medium" = 2, "NG_common" = 2),
-                             color_vert = c("NG_rare" = rarity_colors_NG[1],
-                                            "NG_medium" = rarity_colors_NG[2],
+                             size_vert = c("NG_super_rare" = 2, "NG_rare" = 2, "NG_common" = 2),
+                             color_vert = c("NG_super_rare" = rarity_colors_NG[1],
+                                            "NG_rare" = rarity_colors_NG[2],
                                             "NG_common" = rarity_colors_NG[3]),
-                             fill_vert =  c("NG_rare" = rarity_colors_NG[1],
-                                            "NG_medium" = rarity_colors_NG[2],
+                             fill_vert =  c("NG_super_rare" = rarity_colors_NG[1],
+                                            "NG_rare" = rarity_colors_NG[2],
                                             "NG_common" = rarity_colors_NG[3]))
 
     plot_NG[[k]] <- plot_k
@@ -603,7 +612,7 @@ spot.rare.sp.fd <- function(basic_fd_accum_df,
     ## Add rare/medium/common species:
 
     # Retrieve species coordinates matrix for the assemblage B_rare:
-    sp_filter <- mFD::sp.filter(asb_nm = c("B_rare"),
+    sp_filter <- mFD::sp.filter(asb_nm = c("B_super_rare"),
                                 sp_faxes_coord = fe_faxes_coord_xy,
                                 asb_sp_w       = site_asb_fe_df)
     sp_faxes_coord_rare <- sp_filter$`species coordinates`
@@ -612,7 +621,7 @@ spot.rare.sp.fd <- function(basic_fd_accum_df,
                                   order_2D = TRUE, check_input = TRUE)
 
     # Retrieve species coordinates matrix for the assemblage B_medium:
-    sp_filter <- mFD::sp.filter(asb_nm = c("B_medium"),
+    sp_filter <- mFD::sp.filter(asb_nm = c("B_rare"),
                                 sp_faxes_coord = fe_faxes_coord_xy,
                                 asb_sp_w       = site_asb_fe_df)
     sp_faxes_coord_medium <- sp_filter$`species coordinates`
@@ -630,38 +639,38 @@ spot.rare.sp.fd <- function(basic_fd_accum_df,
                                     order_2D = TRUE, check_input = TRUE)
 
     plot_k <- mFD::fric.plot(ggplot_bg = plot_k,
-                             asb_sp_coord2D = list("B_rare" =
+                             asb_sp_coord2D = list("B_super_rare" =
                                                      sp_faxes_coord_rare,
-                                                   "B_medium" =
+                                                   "B_rare" =
                                                      sp_faxes_coord_medium,
                                                    "B_common" =
                                                      sp_faxes_coord_common),
-                             asb_vertices_nD = list("B_rare" = vert_nm_rare,
-                                                    "B_medium" = vert_nm_medium,
+                             asb_vertices_nD = list("B_super_rare" = vert_nm_rare,
+                                                    "B_rare" = vert_nm_medium,
                                                     "B_common" = vert_nm_common),
                              plot_sp = TRUE,
                              color_ch = NA,
                              fill_ch = NA,
                              alpha_ch = NA,
-                             shape_sp = list("B_rare" = rarity_shapes[1],
-                                             "B_medium" = rarity_shapes[2],
+                             shape_sp = list("B_super_rare" = rarity_shapes[1],
+                                             "B_rare" = rarity_shapes[2],
                                              "B_common" = rarity_shapes[3]),
-                             size_sp = c("B_rare" = 2, "B_medium" = 3, "B_common" = 3),
-                             color_sp = c("B_rare" = rarity_colors_B[1],
-                                          "B_medium" = rarity_colors_B[2],
+                             size_sp = c("B_super_rare" = 2, "B_rare" = 3, "B_common" = 3),
+                             color_sp = c("B_super_rare" = rarity_colors_B[1],
+                                          "B_rare" = rarity_colors_B[2],
                                           "B_common" = rarity_colors_B[3]),
-                             fill_sp = c("B_rare" = rarity_colors_B[1],
-                                         "B_medium" = rarity_colors_B[2],
+                             fill_sp = c("B_super_rare" = rarity_colors_B[1],
+                                         "B_rare" = rarity_colors_B[2],
                                          "B_common" = rarity_colors_B[3]),
-                             shape_vert = list("B_rare" = rarity_shapes[1],
-                                               "B_medium" = rarity_shapes[2],
+                             shape_vert = list("B_super_rare" = rarity_shapes[1],
+                                               "B_rare" = rarity_shapes[2],
                                                "B_common" = rarity_shapes[3]),
-                             size_vert = c("B_rare" = 2, "B_medium" = 2, "B_common" = 2),
-                             color_vert = c("B_rare" = rarity_colors_B[1],
-                                            "B_medium" = rarity_colors_B[2],
+                             size_vert = c("B_super_rare" = 2, "B_rare" = 2, "B_common" = 2),
+                             color_vert = c("B_super_rare" = rarity_colors_B[1],
+                                            "B_rare" = rarity_colors_B[2],
                                             "B_common" = rarity_colors_B[3]),
-                             fill_vert =  c("B_rare" = rarity_colors_B[1],
-                                            "B_medium" = rarity_colors_B[2],
+                             fill_vert =  c("B_super_rare" = rarity_colors_B[1],
+                                            "B_rare" = rarity_colors_B[2],
                                             "B_common" = rarity_colors_B[3]))
 
     plot_B[[k]] <- plot_k
@@ -670,34 +679,14 @@ spot.rare.sp.fd <- function(basic_fd_accum_df,
 
 
   # Then use patchwork to have two wonderful graphs:
-  plot_NG <- (plot_NG[[1]] + patchwork::plot_spacer() + patchwork::plot_spacer() +
-                plot_NG[[2]] + plot_NG[[4]] +
-                patchwork::plot_spacer() +
-                plot_NG[[3]] + plot_NG[[5]] + plot_NG[[6]]) +
+  plot_rarity_space <- (plot_NG[[1]] + plot_NG[[6]] + plot_B[[1]] + plot_B[[6]])
     patchwork::plot_layout(byrow = TRUE, heights = rep(1, 3),
-                           widths = rep(1, 3), ncol = 3, nrow = 3,
+                           widths = rep(1, 3), ncol = 2, nrow = 2,
                            guides = "collect")
-
-  plot_B <- (plot_B[[1]] + patchwork::plot_spacer() + patchwork::plot_spacer() +
-                plot_B[[2]] + plot_B[[4]] +
-                patchwork::plot_spacer() +
-                plot_B[[3]] + plot_B[[5]] + plot_B[[6]]) +
-    patchwork::plot_layout(byrow = TRUE, heights = rep(1, 3),
-                           widths = rep(1, 3), ncol = 3, nrow = 3,
-                           guides = "collect")
-
 
   # save:
-  ggplot2::ggsave(filename = here::here("outputs", "FD_rarcomm_NG.pdf"),
-                  plot = plot_NG,
-                  device = "pdf",
-                  scale = 1,
-                  height = 10000,
-                  width = 15000,
-                  units = "px",
-                  dpi = 800)
-  ggplot2::ggsave(filename = here::here("outputs", "FD_rarcomm_B.pdf"),
-                  plot = plot_B,
+  ggplot2::ggsave(filename = here::here("outputs", "plot_rarity_space.pdf"),
+                  plot = plot_rarity_space,
                   device = "pdf",
                   scale = 1,
                   height = 10000,
@@ -705,10 +694,7 @@ spot.rare.sp.fd <- function(basic_fd_accum_df,
                   units = "px",
                   dpi = 800)
 
-
-
-
-  return(list(plot_NG, plot_B))
+  return(plot_rarity_space)
 
 
 }

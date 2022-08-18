@@ -267,7 +267,7 @@ compute.fd.day.accum <- function(basic_fd_accum_df,
 
 
 
-compute.fd.day.accum <- function(basic_fd_accum_df,
+compute.fd.interday.accum <- function(basic_fd_accum_df,
                                  sp_tr,
                                  tr_cat,
                                  fd_indices,

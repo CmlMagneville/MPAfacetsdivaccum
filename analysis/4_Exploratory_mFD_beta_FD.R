@@ -118,7 +118,7 @@ sp_dist_df <- mFD::dist.to.df(list(sp_dist = sp_dist))
 sp_dist_df[which(sp_dist_df$sp_dist == 0), ]
 nrow(sp_dist_df[which(sp_dist_df$sp_dist == 0), ])
 
-# 157 species pairs have a fctional distance == 0: so I must group into FEs
+# 128 species pairs have a fctional distance == 0: so I must group into FEs
 
 
 # Step 5: Gather into FEs and summarise FEs ####
@@ -236,7 +236,6 @@ fe_tr_faxes$tr_faxes_plot
 
 # PC1: (-) Small size, Sedentary, Bottom level (+) Big size, Very Mobile, High level
 # PC2: (-) Both/Night, Solitary (+) Day, Large Groups
-# PC4 ? : (-) Invertivores Mobiles (IM) (+) Other diets
 
 
 # Step 9: Plot functional space on the first 4 axis ####
@@ -378,3 +377,4 @@ beta_fd_indices <- mFD::beta.fd.multidim(
   check_input      = TRUE,
   beta_family      = c("Jaccard"),
   details_returned = TRUE)
+

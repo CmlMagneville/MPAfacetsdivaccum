@@ -211,9 +211,9 @@ saveRDS(sp_tr_final, here::here("transformed_data", "sp_tr_final.rds"))
 
 
 # Build trait categories dataframe (needed in mFD):
-trait_name <- c("Diets", "Size_Class", "Home_Range", "Activity",
-                "Schooling", "Level_water")
-trait_type <- c("N", "O", "O", "N", "O", "O")
+trait_name <- c("Size_Class", "Home_Range", "Activity",
+                "Schooling", "Level_water", "Diets")
+trait_type <- c("O", "O", "N", "O", "O", "N")
 trait_cat <- cbind(trait_name, trait_type)
 trait_cat <- as.data.frame(trait_cat)
 
