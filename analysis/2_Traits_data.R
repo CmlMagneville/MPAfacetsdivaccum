@@ -163,7 +163,7 @@ sp_tr_final[which(sp_tr_final$Latin_name == "Caesio_lunaris"), "Diets"] <- "Plan
 
 # several sources (fishbase, doris, Australian Museum) as several diet possible:
 sp_tr_final[which(sp_tr_final$Latin_name == "Aulostomus_chinensis"), "Diets"] <- "Piscivores"
-sp_tr_final[which(sp_tr_final$Latin_name == "Canthigaster_cyanospilota"), "Diets"] <- "sessile_invertivores"
+sp_tr_final[which(sp_tr_final$Latin_name == "Canthigaster_cyanospilota"), "Diets"] <- "sessile invertivores"
 
 
 # order the traits:
