@@ -242,7 +242,7 @@ fe_tr_faxes$tr_faxes_plot
 
 
 big_plot <- mFD::funct.space.plot(
-  sp_faxes_coord  = fe_faxes_coord[ , c("PC1", "PC2", "PC3", "PC4")],
+  sp_faxes_coord  = fe_faxes_coord[ , c("PC1", "PC2", "PC3", "PC4", "PC5")],
   faxes           = c("PC1", "PC2", "PC3", "PC4"),
   name_file       = NULL,
   faxes_nm        = NULL,

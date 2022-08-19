@@ -456,9 +456,9 @@ spot.rare.sp.fd <- function(basic_fd_accum_df,
 
 
 
-  # restraint the coord to the first 4 axes: work in the 4d dimensional space:
-  ## only work with the first 4 dimensions:
-  fe_faxes_coord <- fe_faxes_coord[, c("PC1", "PC2", "PC3", "PC4")]
+  # restraint the coord to the first 5 axes: work in the 5d dimensional space:
+  ## only work with the first 5 dimensions:
+  fe_faxes_coord <- fe_faxes_coord[, c("PC1", "PC2", "PC3", "PC4", "PC5")]
 
 
 
