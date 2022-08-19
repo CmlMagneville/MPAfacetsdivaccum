@@ -133,6 +133,8 @@ sp_to_fe <- mFD::sp.to.fe(
   fe_nm_type  = "fe_rank",
   check_input = TRUE)
 
+saveRDS(sp_to_fe, here::here("transformed_data", "sp_to_fe_all_info.rds"))
+
 ## get the nb of FEs computed from 153 species: 92
 fe_nm <- sp_to_fe$fe_nm
 length(sp_to_fe$fe_nm)
@@ -313,6 +315,9 @@ alpha_fd_indices_site <- mFD::alpha.fd.multidim(
 
 alpha_fd_indices_site$functional_diversity_indices
 
+
+# save coord:
+saveRDS(fe_faxes_coord, here::here("transformed_data", "fe_faxes_coord_5D.rds"))
 
 
 # Step 11: Plot indices ####
