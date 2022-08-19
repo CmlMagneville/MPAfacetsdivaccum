@@ -27,6 +27,10 @@ fe_faxes_coord <- readRDS(here::here("transformed_data", "fe_faxes_coord_5D.rds"
 
 
 # TD:
+rownames(basic_accum_df) <- basic_accum_df$vid_id
+basic_accum_df <- basic_accum_df[, -c(151:154)]
+basic_accum_df <- apply(basic_accum_df, 2, as.numeric)
+
 beta_TD <- betapart::beta.pair(basic_accum_df, index.family = "jaccard")
 saveRDS(beta_TD, here::here("transformed_data", "beta_TD_videos_dist.rds"))
 
@@ -35,6 +39,7 @@ saveRDS(beta_TD, here::here("transformed_data", "beta_TD_videos_dist.rds"))
 ## Change 11 species names which are not in the fishtree phylogeny in the ...
 ## ... basic_accum_df:
 
+basic_accum_df <- as.data.frame(basic_accum_df)
 basic_accum_df <- dplyr::rename(basic_accum_df, "Gomphosus_varius" = "Gomphosus_caeruleus")
 basic_accum_df <- dplyr::rename(basic_accum_df, "Scolopsis_bilineata" = "Scolopsis_frenata")
 basic_accum_df <- dplyr::rename(basic_accum_df, "Scolopsis_bimaculata" = "Scolopsis_ghanam")
