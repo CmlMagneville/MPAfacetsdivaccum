@@ -87,5 +87,12 @@ plot.inter.day.accum(TD_accum_df,
 
 
 
+# Step 5: Plot the delta between N'Gouja and Boueni diversities ####
 
+
+TD_accum_df <- readRDS(here::here("transformed_data", "TD_interday_accum.rds"))
+FD_accum_df <- readRDS(here::here("transformed_data", "FD_interday_accum.rds"))
+PD_accum_df <- readRDS(here::here("transformed_data", "PD_interday_accum.rds"))
+
+facets_colors <- c("#fdae61", "#abdda4", "#2b83ba")
 
