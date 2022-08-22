@@ -23,13 +23,14 @@ basic_fd_accum_df <- readRDS(here::here("transformed_data", "basic_FD_accum_df.r
 fe_faxes_coord <- readRDS(here::here("transformed_data", "fe_faxes_coord_5D.rds"))
 
 
+
 # Step 2: Compute beta diversities avec save them ####
 
 
 # TD:
+basic_accum_df[, -c(151:154)] <- apply(basic_accum_df[, -c(151:154)], 2, as.numeric)
 rownames(basic_accum_df) <- basic_accum_df$vid_id
 basic_accum_df <- basic_accum_df[, -c(151:154)]
-basic_accum_df <- apply(basic_accum_df, 2, as.numeric)
 
 beta_TD <- betapart::beta.pair(basic_accum_df, index.family = "jaccard")
 saveRDS(beta_TD, here::here("transformed_data", "beta_TD_videos_dist.rds"))
@@ -63,6 +64,11 @@ saveRDS(beta_PD, here::here("transformed_data", "beta_PD_videos_dist.rds"))
 
 
 # FD:
+basic_fd <- basic_fd_accum_df
+basic_fd[, -c(87:90)] <- apply(basic_fd[, -c(87:90)], 2, as.numeric)
+rownames(basic_fd) <- basic_fd$vid_id
+basic_fd <- basic_fd[, -c(87:90)]
+
 beta_FD <- mFD::beta.fd.multidim(
    sp_faxes_coord   = fe_faxes_coord[ , c("PC1", "PC2", "PC3", "PC4", "PC5")],
    asb_sp_occ       = basic_fd,
@@ -81,17 +87,117 @@ saveRDS(beta_FD, here::here("transformed_data", "beta_FD_videos_dist.rds"))
 # ... if same_day = TRUE and same_video = FALSE -> intraday variation
 # ... if same_day = FALSE and same_video = TRUE and site = same -> interday variation
 
+# Call TD data:
+beta_TD <- readRDS(here::here("transformed_data", "beta_TD_videos_dist.rds"))
+beta_TD_tot <- beta_TD$beta.jac
 
-beta_TD_df <- beta.video.clean.df(beta_TD$)
-beta_PD_df <- beta.video.clean.df(beta_PD$)
-beta_FD_df <- beta.video.clean.df(beta_FD$)
+# Compute df:
+beta_TD_df <- beta.video.clean.df(beta_df = beta_TD_tot)
+saveRDS(beta_TD_df, here::here("transformed_data", "beta_TD_df.rds"))
 
-saveRDS(beta_TD_df, here::here("transformed_data", "beta_TD_videos_df.rds"))
-saveRDS(beta_PD_df, here::here("transformed_data", "beta_PD_videos_df.rds"))
-saveRDS(beta_FD_df, here::here("transformed_data", "beta_FD_videos_df.rds"))
+
+# Call PD data:
+beta_PD <- readRDS(here::here("transformed_data", "beta_PD_videos_dist.rds"))
+beta_PD_tot <- beta_PD$phylo.beta.jac
+
+# Compute df
+beta_PD_df <- beta.video.clean.df(beta_df = beta_PD_tot)
+saveRDS(beta_PD_df, here::here("transformed_data", "beta_PD_df.rds"))
+
+
+# Call FD data:
+beta_FD <- readRDS(here::here("transformed_data", "beta_FD_videos_dist.rds"))
+beta_FD_tot <- beta_FD$jac_diss
+
+# Compute df:
+beta_FD_df <- beta.video.clean.df(beta_FD_tot)
+saveRDS(beta_FD_df, here::here("transformed_data", "beta_FD_df.rds"))
+
 
 
 # Step 4: Plot boxplots beta intra and inter days for each facet ####
 
 
+# Call data:
+beta_TD_df <- readRDS(here::here("transformed_data", "beta_TD_df.rds"))
+beta_PD_df <- readRDS(here::here("transformed_data", "beta_PD_df.rds"))
+beta_FD_df <- readRDS(here::here("transformed_data", "beta_FD_df.rds"))
+
+
+# Plot and save for TD:
+plot.boxplots.beta(beta_df = beta_TD_df, metric = "TD")
+
+# Plot and save for PD:
+plot.boxplots.beta(beta_df = beta_PD_df, metric = "PD")
+
+# Plot and save for FD:
+plot.boxplots.beta(beta_df = beta_PD_df, metric = "FD")
+
+
+# Is the interdays variation significantly different in NG than in B?
+# H0: not stat different
+beta_fd <- beta_PD_df
+wilcox.test(beta_df[which(beta_df[, "same_video"] == TRUE & beta_df[, "same_site"] == TRUE
+                          & beta_df[, "site_nm"] == "N'Gouja"), "beta"],
+
+            beta_df[which(beta_df[, "same_video"] == TRUE & beta_df[, "same_site"] == TRUE
+                          & beta_df[, "site_nm"] == "Boueni"), "beta"])
+# pvalue 3.66*10e-9 -> reject H0 so stats different
+
+# Is the intraday variation significantly different in NG than in B?
+# H0: not stat different
+wilcox.test(beta_df[which(beta_df[, "same_day"] == TRUE
+                          & beta_df[, "site_nm"] == "N'Gouja"), "beta"],
+
+            beta_df[which(beta_df[, "same_day"] == TRUE
+                          & beta_df[, "site_nm"] == "Boueni"), "beta"])
+# pvalue < 2.2*10e-16 -> reject H0 so stats different
+
+
+# Is the interday variation significantly superior to the intraday ?
+# sites pooled
+# H0: not stat different
+wilcox.test(beta_df[which(beta_df[, "same_video"] == TRUE & beta_df[, "same_site"] == TRUE), "beta"],
+
+            beta_df[which(beta_df[, "same_day"] == TRUE), "beta"],
+            alternative = "greater")
+
+# yes sites inter > intra when sites pooled
+
+# N'Gouja only
+# H0: not stat different
+wilcox.test(beta_df[which(beta_df[, "same_video"] == TRUE & beta_df[, "same_site"] == TRUE &
+                            beta_df[, "site_nm"] == "N'Gouja"), "beta"],
+
+            beta_df[which(beta_df[, "same_day"] == TRUE &
+                            beta_df[, "site_nm"] == "N'Gouja"), "beta"],
+            alternative = "greater")
+
+# yes inter > intra in N'Gouja
+
+
+# Boueni only
+# H0: not stat different
+wilcox.test(beta_df[which(beta_df[, "same_video"] == TRUE & beta_df[, "same_site"] == TRUE &
+                            beta_df[, "site_nm"] == "Boueni"), "beta"],
+
+            beta_df[which(beta_df[, "same_day"] == TRUE &
+                            beta_df[, "site_nm"] == "Boueni"), "beta"],
+            alternative = "greater")
+
+# yes inter > intra in Boueni
+
+
+# Step 5: PCoA on beta between videos ####
+
+
+# Call data:
+beta_TD_df <- readRDS(here::here("transformed_data", "beta_TD_df.rds"))
+beta_PD_df <- readRDS(here::here("transformed_data", "beta_PD_df.rds"))
+beta_FD_df <- readRDS(here::here("transformed_data", "beta_FD_df.rds"))
+
+
+# TD:
+
+##
 
