@@ -447,7 +447,7 @@ compute.fd.interday.accum <- function(basic_fd_accum_df,
 
   if (rich_plot == TRUE) {
 
-    return_list <- list(richn_var, accum_FD_df)
+    return_list <- list(richn_var, accum_FD_df, basic_df)
 
     # and save:
     ggplot2::ggsave(filename = here::here("outputs", "FD_richn_interday_var.pdf"),
@@ -463,7 +463,7 @@ compute.fd.interday.accum <- function(basic_fd_accum_df,
 
   if (rich_plot == FALSE) {
 
-    return_list <- list(accum_FD_df)
+    return_list <- list(accum_FD_df, basic_df)
 
   }
 

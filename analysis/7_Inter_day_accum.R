@@ -1,7 +1,7 @@
 ###############################################################################
 ##
 ## Script to compute and plot the accumulation of the three facets ...
-## ... through the three days of sampling
+## ... through the three days of sampling and diff mean video's diversities
 ##
 ## 7_Inter_day_accumul.R
 ##
@@ -12,7 +12,7 @@
 ###############################################################################
 
 
-# Step 1: Compute TD interday accumulation ####
+# Step 1: Compute TD interday accumulation and test TD difference between sites ####
 
 # load the basic_accum_df (created and saved in 6_Intra_days_accumul.R):
 basic_accum_df <- readRDS(here::here("transformed_data", "basic_accumul_df.rds"))
@@ -23,6 +23,39 @@ TD_interday_df <- TD_interday_accum[[2]]
 
 # save it:
 saveRDS(TD_interday_df, here::here("transformed_data", "TD_interday_accum.rds"))
+
+
+# TEST:
+
+# Get the dataframe with species richness on each video (3*33 values per site):
+TD_vid_df <- TD_interday_accum[[3]]
+
+# Get interesting values on which the T-test is done:
+NG_TD <- TD_vid_df$richn[which(TD_vid_df$site == "N'Gouja")]
+length(NG_TD) # 99 ok :)
+B_TD <- TD_vid_df$richn[which(TD_vid_df$site == "Boueni")]
+length(B_TD) # 99 ok :)
+
+test_df <- cbind(c(rep("N'Gouja", length(NG_TD)), rep("Boueni", length(B_TD))),
+                 c(NG_TD, B_TD), c(1:2*length(NG_TD)))
+colnames(test_df) <- c("site", "TD", "id")
+test_df <- as.data.frame(test_df)
+test_df$TD <- as.numeric(test_df$TD)
+test_df$site <- as.factor(test_df$site)
+
+# Test normality of data to know which T test to use:
+test_df %>%
+  dplyr::group_by(site) %>%
+  rstatix::shapiro_test(TD)
+# normality of data, can use student t test
+
+# Test homogeneity of variance to know which T test to use:
+rstatix::levene_test(data = test_df, TD ~ site)
+# pvalue < 5% : significative difference in variance: use welch correction:
+
+# Test: in fact use wilcoxon test to have an identical test for 3 facets:
+wilcox.test(NG_TD, B_TD, alternative = "greater")
+# Alternative: N'Gouja has a lower TD mean on video than Boueni: significant
 
 
 # Step 2: Compute FD interday accumulation ####
@@ -50,6 +83,36 @@ FD_interday_df <- FD_interday_accum[[2]]
 saveRDS(FD_interday_df, here::here("transformed_data", "FD_interday_accum.rds"))
 
 
+# TEST:
+
+# Get the dataframe with species richness on each video (3*33 values per site):
+FD_vid_df <- FD_interday_accum[[3]]
+
+# Get interesting values on which the T-test is done:
+NG_FD <- FD_vid_df$fric[which(FD_vid_df$site == "N'Gouja")]
+length(NG_FD) # 99 ok :)
+B_FD <- FD_vid_df$fric[which(FD_vid_df$site == "Boueni")]
+length(B_FD) # 99 ok :)
+
+test_df <- cbind(c(rep("N'Gouja", length(NG_FD)), rep("Boueni", length(B_FD))),
+                 c(NG_FD, B_FD), c(1:2*length(NG_FD)))
+colnames(test_df) <- c("site", "FD", "id")
+test_df <- as.data.frame(test_df)
+test_df$FD <- as.numeric(test_df$FD)
+test_df$site <- as.factor(test_df$site)
+
+# Test normality of data to know which T test to use:
+test_df %>%
+  dplyr::group_by(site) %>%
+  rstatix::shapiro_test(FD)
+# not normal: use wilcoxon test
+
+# Test: in fact use wilcoxon test to have an identical test for 3 facets:
+wilcox.test(NG_FD, B_FD)
+# No significant difference of FD based on video scale btw N'Gouja and Boueni
+
+
+
 # Step 3: Compute PD interday accumulation ####
 
 
@@ -63,6 +126,35 @@ PD_interday_df <- PD_interday_accum[[2]]
 
 # save it:
 saveRDS(PD_interday_df, here::here("transformed_data", "PD_interday_accum.rds"))
+
+# TEST:
+
+# Get the dataframe with species richness on each video (3*33 values per site):
+PD_vid_df <- PD_interday_accum[[3]]
+
+# Get interesting values on which the T-test is done:
+NG_PD <- PD_vid_df$video_PD[which(PD_vid_df$site == "N'Gouja")]
+length(NG_PD) # 99 ok :)
+  B_PD <- PD_vid_df$video_PD[which(PD_vid_df$site == "Boueni")]
+length(B_PD) # 99 ok :)
+
+test_df <- cbind(c(rep("N'Gouja", length(NG_PD)), rep("Boueni", length(B_PD))),
+                 c(NG_PD, B_PD), c(1:2*length(NG_PD)))
+colnames(test_df) <- c("site", "PD", "id")
+test_df <- as.data.frame(test_df)
+test_df$PD <- as.numeric(test_df$PD)
+test_df$site <- as.factor(test_df$site)
+
+# Test normality of data to know which T test to use:
+test_df %>%
+  dplyr::group_by(site) %>%
+  rstatix::shapiro_test(PD)
+# normal, could test homogeneity of variance but use wilcox so consistent for the 3 facets
+
+# Test: in fact use wilcoxon test to have an identical test for 3 facets:
+wilcox.test(NG_PD, B_PD)
+# No significant difference of FD based on video scale btw N'Gouja and Boueni
+
 
 
 # Step 4: Plot 3 facets interday accumulation ####
