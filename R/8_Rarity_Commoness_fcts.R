@@ -348,7 +348,7 @@ plot.rarcom <- function(rarcom_df, sites_colors) {
 #' @examples
 #'
 
-spot.rare.sp.fd <- function(basic_fd_accum_df,
+spot.rare.sp.fd <- function(basic_accum_df,
                             site_asb_fe_df,
                             sp_tr,
                             tr_cat,
@@ -361,7 +361,7 @@ spot.rare.sp.fd <- function(basic_fd_accum_df,
 
   # 1
   # Compute the rarity/commoness of each FE and not species:
-  rarcom_fd_df <- rarcom.computation(basic_fd_accum_df)
+  rarcom_fd_df <- rarcom.computation(basic_accum_df)
 
 
   # 2
@@ -794,58 +794,30 @@ spot.rare.sp.fd <- function(basic_fd_accum_df,
 ####
 
 
-plot.rarity.fspe <- function(fe_dist_gravcenter,
-                             basic_fd_accum_df,
-                             sp_to_fe,
+plot.rarity.fspe <- function(sp_dist_gravcenter,
+                             basic_accum_df,
                              rarcom_df) {
 
 
-  # Compute the rarity/commoness of each FE and not species:
-  rarcom_fd_df <- rarcom.computation(basic_fd_accum_df)
-
-  fspe_rarcom_df <- rarcom_fd_df
-
-  # Join FE and species information:
-  ## get fe_sp_df:
-  sp_fe_df <- fe.sp.df.computation(sp_to_fe)
-  ## rename the fe_nm column of fspe_rarcom_df which is called species_nm:
-  colnames(fspe_rarcom_df)[2] <- "fe_nm"
-  fspe_rarcom_df <- dplyr::left_join(fspe_rarcom_df, sp_fe_df, by = "fe_nm")
-
-
   # Add FSpe informations:
+  fspe_rarcom_df <- rarcom_df
   fspe_rarcom_df$relat_dist_to_grav <- rep(0, nrow(fspe_rarcom_df))
 
   for (i in (1:nrow(fspe_rarcom_df))) {
 
-    fe_nm <- fspe_rarcom_df[i, "fe_nm"]
-    fspe_value <- fe_dist_gravcenter[which(names(fe_dist_gravcenter) == fe_nm)][[1]]
+    sp_nm <- fspe_rarcom_df[i, "species_nm"]
+    fspe_value <- fe_dist_gravcenter[which(names(sp_dist_gravcenter) == sp_nm)][[1]]
 
     fspe_rarcom_df[i, "relat_dist_to_grav"] <- fspe_value
 
   }
-
-
-  # add the Fspe information to the rarcom_df based on species:
-  rarcom_df$relat_dist_to_grav <- rep(0, nrow(rarcom_df))
-
-  for (i in (1:nrow(rarcom_df))) {
-
-    sp_nm <- rarcom_df[i, "species_nm"]
-    fspe_sp <- unique(fspe_rarcom_df[which(fspe_rarcom_df$species_nm == sp_nm), "relat_dist_to_grav"])
-
-    rarcom_df[i, "relat_dist_to_grav"] <- fspe_sp
-
-  }
-
-
 
   # Labels for wraps:
   labs <- c("Species shared between sites", "Species only present in N'Gouja")
   names(labs) <- c("both", "N'Gouja only")
 
   # plot N'Gouja's data:
-  NG_rar_fspe_plot <- ggplot2::ggplot(data = rarcom_df[which(rarcom_df$site == "N'Gouja"), ],
+  NG_rar_fspe_plot <- ggplot2::ggplot(data = fspe_rarcom_df[which(rarcom_df$site == "N'Gouja"), ],
                                       ggplot2::aes(x = rarity, y = relat_dist_to_grav)) +
 
     ggplot2::geom_boxplot(color = "#80cdc1", fill = "#80cdc1", alpha = 0.3) +
@@ -870,7 +842,7 @@ plot.rarity.fspe <- function(fe_dist_gravcenter,
   names(labs) <- c("both", "Boueni only")
 
   # plot Boueni's data:
-  B_rar_fspe_plot <- ggplot2::ggplot(data = rarcom_df[which(rarcom_df$site == "Boueni"), ],
+  B_rar_fspe_plot <- ggplot2::ggplot(data = fspe_rarcom_df[which(rarcom_df$site == "Boueni"), ],
                                       ggplot2::aes(x = rarity, y = relat_dist_to_grav)) +
 
     ggplot2::geom_boxplot(color = "#bf812d", fill = "#bf812d", alpha = 0.3) +

@@ -66,10 +66,10 @@ plot.rarcom(rarcom_df, sites_colors)
 
 basic_accum_df <- readRDS(here::here("transformed_data", "basic_accumul_df.rds"))
 
-sp_tr <- readRDS(here::here("transformed_data/fe_tr.rds"))
+sp_tr <- readRDS(here::here("transformed_data/sp_tr_final.rds"))
 tr_cat <- readRDS(here::here("transformed_data/tr_cat_df.rds"))
 
-site_asb_fe_df <- readRDS(here::here("transformed_data/site_asb_fe_df.rds"))
+site_asb_df <- readRDS(here::here("transformed_data/site_asb_df.rds"))
 
 
 # argument:
@@ -79,8 +79,8 @@ rarity_colors_B <- c("#543005", "#8c510a", "#bf812d")
 sites_colors <- c("#bf812d", "#80cdc1")
 
 # Plot:
-spot.rare.sp.fd(basic_fd_accum_df,
-                            site_asb_fe_df,
+spot.rare.sp.fd(basic_accum_df,
+                            site_asb_fe_df = site_asb_df,
                             sp_tr,
                             tr_cat,
                             rarcom_df,
@@ -288,17 +288,11 @@ ggplot2::ggsave(filename = here::here("outputs", "global_rarity_tree.pdf"),
 # Step 5: Plot the functional specialisation of each rare/common species and Test ####
 
 
-# call fd basic accum df:
-basic_fd_accum_df <- readRDS(here::here("transformed_data", "basic_FD_accum_df.rds"))
-
 # call site asb fe df:
-site_asb_fe_df <- readRDS(here::here("transformed_data/site_asb_fe_df.rds"))
+site_asb_sp_df <- readRDS(here::here("transformed_data/site_asb_sp_df.rds"))
 
-# call fe coordinates:
-fe_faxes_coord <- readRDS(here::here("transformed_data", "fe_faxes_coord_5D.rds"))
-
-# sp_to_fe info:
-sp_to_fe <- readRDS(here::here("transformed_data", "sp_to_fe_all_info.rds"))
+# call sp coordinates:
+sp_faxes_coord <- readRDS(here::here("transformed_data", "sp_faxes_coord.rds"))
 
 # rar comm informations about species:
 rarcom_df <- readRDS(here::here("transformed_data", "rarcom_df.rds"))
@@ -306,20 +300,19 @@ rarcom_df <- readRDS(here::here("transformed_data", "rarcom_df.rds"))
 
 # compute fspe:
 alpha_fd_indices_site <- mFD::alpha.fd.multidim(
-  sp_faxes_coord   = fe_faxes_coord[ , c("PC1", "PC2", "PC3", "PC4", "PC5")],
-  asb_sp_w         = site_asb_fe_df,
+  sp_faxes_coord   = as.matrix(sp_faxes_coord[ , c("PC1", "PC2", "PC3", "PC4", "PC5")]),
+  asb_sp_w         = as.matrix(site_asb_sp_df),
   ind_vect         = c("fspe"),
   scaling          = TRUE,
   check_input      = TRUE,
   details_returned = TRUE)
 
-fe_dist_gravcenter <- alpha_fd_indices_site$details$pool_sp_dist_O / max(alpha_fd_indices_site$details$pool_sp_dist_O)
+sp_dist_gravcenter <- alpha_fd_indices_site$details$pool_sp_dist_O / max(alpha_fd_indices_site$details$pool_sp_dist_O)
 
 
-rarfspe <- plot.rarity.fspe(fe_dist_gravcenter,
-                 basic_fd_accum_df,
-                 sp_to_fe,
-                 rarcom_df)
+rarfspe <- plot.rarity.fspe(sp_dist_gravcenter,
+                            basic_accum_df,
+                            rarcom_df)
 
 
 # TEST

@@ -170,6 +170,14 @@ sp_tr_final[which(sp_tr_final$Latin_name == "Canthigaster_cyanospilota"), "Diets
 
 ## Diets:
 class(sp_tr_final$Diets)
+sp_tr_final$Diets[which(sp_tr_final$Diets == "Macroinvertivores")] <- "MacI"
+sp_tr_final$Diets[which(sp_tr_final$Diets == "Planktivores")] <- "Pla"
+sp_tr_final$Diets[which(sp_tr_final$Diets == "Herbivores Microvores Detritivores")] <- "HMD"
+sp_tr_final$Diets[which(sp_tr_final$Diets == "Piscivores")] <- "Pis"
+sp_tr_final$Diets[which(sp_tr_final$Diets == "Crustacivores")] <- "Cru"
+sp_tr_final$Diets[which(sp_tr_final$Diets == "Microinvertivores")] <- "MicI"
+sp_tr_final$Diets[which(sp_tr_final$Diets == "Corallivores")] <- "Cor"
+sp_tr_final$Diets[which(sp_tr_final$Diets == "sessile invertivores")] <- "SI"
 sp_tr_final$Diets <- as.factor(sp_tr_final$Diets)
 class(sp_tr_final$Diets)
 

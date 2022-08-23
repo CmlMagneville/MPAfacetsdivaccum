@@ -63,15 +63,15 @@ wilcox.test(NG_TD, B_TD, alternative = "greater")
 
 # load the fe basic_accumul_df and data needed for FD accumul fct:
 tr_cat <- readRDS(here::here("transformed_data", "tr_cat_df.rds"))
-fe_tr <- readRDS(here::here("transformed_data", "fe_tr.rds"))
-basic_fd_accum_df <- readRDS(here::here("transformed_data", "basic_FD_accum_df.rds"))
+sp_tr <- readRDS(here::here("transformed_data", "sp_tr_final.rds"))
+basic_accum_df <- readRDS(here::here("transformed_data", "basic_accumul_df.rds"))
 
 
 # arguments:
 fd_indices <- c("fric", "fspe", "fdis", "fdiv", "fide")
-sp_tr <- fe_tr
 
-FD_interday_accum <- compute.fd.interday.accum(basic_fd_accum_df,
+
+FD_interday_accum <- compute.fd.interday.accum(basic_fd_accum_df = basic_accum_df,
                                  sp_tr,
                                  tr_cat,
                                  fd_indices,
@@ -187,4 +187,10 @@ FD_accum_df <- readRDS(here::here("transformed_data", "FD_interday_accum.rds"))
 PD_accum_df <- readRDS(here::here("transformed_data", "PD_interday_accum.rds"))
 
 facets_colors <- c("#fdae61", "#abdda4", "#2b83ba")
+linewidth <- 0.9
 
+plot.delta.alpha.inter.day.accum(TD_accum_df,
+                                             PD_accum_df,
+                                             FD_accum_df,
+                                             facets_colors,
+                                             linewidth)

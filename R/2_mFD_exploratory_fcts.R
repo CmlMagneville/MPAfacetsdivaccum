@@ -111,3 +111,43 @@ search.sp.nm <- function(sp_to_fe, nm_fe) {
   return(sp_vect)
 
 }
+
+
+
+#####
+
+
+from.fecoord.to.spcoord <- function(fe_faxes_coord, asb_sp_df,
+                                    sp_to_fe) {
+
+
+  # Create a dataframe with as many columns as there are PCs and ...
+  # ... as many rows as they are species:
+  sp_faxes_coord <- as.data.frame(matrix(0, ncol = ncol(fe_faxes_coord),
+                                         nrow = ncol(asb_sp_df)))
+  colnames(sp_faxes_coord) <- colnames(fe_faxes_coord)
+  rownames(sp_faxes_coord) <- colnames(asb_sp_df)
+
+  for (i in (1:nrow(fe_faxes_coord))) {
+
+    sp_nm <- search.sp.nm(sp_to_fe, rownames(fe_faxes_coord)[i])
+
+    values <- fe_faxes_coord[i, ]
+
+    sp_faxes_coord[which(rownames(sp_faxes_coord) %in% sp_nm), "PC1"] <- values[1]
+    sp_faxes_coord[which(rownames(sp_faxes_coord) %in% sp_nm), "PC2"] <- values[2]
+    sp_faxes_coord[which(rownames(sp_faxes_coord) %in% sp_nm), "PC3"] <- values[3]
+    sp_faxes_coord[which(rownames(sp_faxes_coord) %in% sp_nm), "PC4"] <- values[4]
+    sp_faxes_coord[which(rownames(sp_faxes_coord) %in% sp_nm), "PC5"] <- values[5]
+    sp_faxes_coord[which(rownames(sp_faxes_coord) %in% sp_nm), "PC6"] <- values[6]
+    sp_faxes_coord[which(rownames(sp_faxes_coord) %in% sp_nm), "PC7"] <- values[7]
+    sp_faxes_coord[which(rownames(sp_faxes_coord) %in% sp_nm), "PC8"] <- values[8]
+    sp_faxes_coord[which(rownames(sp_faxes_coord) %in% sp_nm), "PC9"] <- values[9]
+    sp_faxes_coord[which(rownames(sp_faxes_coord) %in% sp_nm), "PC10"] <- values[10]
+
+
+  }
+
+  return(sp_faxes_coord)
+
+}

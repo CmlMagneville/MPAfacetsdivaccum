@@ -118,7 +118,8 @@ sp_dist_df <- mFD::dist.to.df(list(sp_dist = sp_dist))
 sp_dist_df[which(sp_dist_df$sp_dist == 0), ]
 nrow(sp_dist_df[which(sp_dist_df$sp_dist == 0), ])
 
-# 128 species pairs have a fctional distance == 0: so I must group into FEs
+# 128 species pairs have a fctional distance == 0: so I must group into FEs for the computation of the functional space
+# and then transform FE coordinates in the fctional space into species coordinates in the same space
 
 
 # Step 5: Gather into FEs and summarise FEs ####
@@ -229,10 +230,10 @@ mFD::quality.fspaces.plot(
 # Get FEs coordinates along the 5 first PCS:
 fe_faxes_coord <- fspaces_quality$"details_fspaces"$"sp_pc_coord"
 
-# Get the correlations and plot it:
+# Get the correlations and plot it for FEs space:
 fe_tr_faxes <- mFD::traits.faxes.cor(
   sp_tr          = fe_tr,
-  sp_faxes_coord = fe_faxes_coord[ , c("PC1", "PC2", "PC3", "PC4", "PC5")],
+  sp_faxes_coord = fe_faxes_coord[ , c("PC1", "PC2", "PC3", "PC4")],
   plot           = TRUE)
 fe_tr_faxes$tr_faxes_plot
 
@@ -244,7 +245,7 @@ fe_tr_faxes$tr_faxes_plot
 
 
 big_plot <- mFD::funct.space.plot(
-  sp_faxes_coord  = fe_faxes_coord[ , c("PC1", "PC2", "PC3", "PC4", "PC5")],
+  sp_faxes_coord  = fe_faxes_coord[ , c("PC1", "PC2", "PC3", "PC4")],
   faxes           = c("PC1", "PC2", "PC3", "PC4"),
   name_file       = NULL,
   faxes_nm        = NULL,
@@ -270,17 +271,23 @@ big_plot <- mFD::funct.space.plot(
   check_input     = TRUE)
 
 
+# Then convert FE coordinates into species coordinates:
+sp_faxes_coord <- from.fecoord.to.spcoord(fe_faxes_coord, asb_sp_df,
+                                    sp_to_fe)
+saveRDS(sp_faxes_coord[ , c("PC1", "PC2", "PC3", "PC4", "PC5")], here::here("transformed_data", "sp_faxes_coord.rds"))
+
 
 # Step 10: Get FD indices for each day: FRic, Fspe, FDis and FIde ####
 
 
-# Compute for each day:
+# Compute for each day with species:
 
-asb_fe_df <- as.matrix(asb_fe_df)
+asb_sp_df <- as.matrix(asb_sp_df)
+sp_faxes_coord <- as.matrix(sp_faxes_coord)
 
 alpha_fd_indices_day <- mFD::alpha.fd.multidim(
-  sp_faxes_coord   = fe_faxes_coord[ , c("PC1", "PC2", "PC3", "PC4", "PC5")],
-  asb_sp_w         = asb_fe_df,
+  sp_faxes_coord   = sp_faxes_coord[ , c("PC1", "PC2", "PC3", "PC4", "PC5")],
+  asb_sp_w         = asb_sp_df,
   ind_vect         = c("fdis", "fric",
                        "fdiv",
                        "fspe", "fide"),
@@ -297,21 +304,22 @@ B_FD <- alpha_fd_indices_day$functional_diversity_indices[c(4:6), 3]
 wilcox.test(NG_FD, B_FD)
 # p value not significative so do not reject H0: same FD between sites
 
-# Compute for each site:
+
+# Compute for each site with FEs:
 
 ## first I should gather the first three rows of asb_fe_df and idem three next rows:
-site_asb_fe_df <- asb_fe_df
-site_asb_fe_df[1, ] <- site_asb_fe_df[1, ] + site_asb_fe_df[2, ] + site_asb_fe_df[3, ]
-site_asb_fe_df[4, ] <- site_asb_fe_df[4, ] + site_asb_fe_df[5, ] + site_asb_fe_df[6, ]
-site_asb_fe_df <- site_asb_fe_df[-c(2, 3, 5, 6), ]
-site_asb_fe_df [site_asb_fe_df  > 1] <- 1
-rownames(site_asb_fe_df) <- c("N'Gouja", "Boueni")
-saveRDS(site_asb_fe_df, here::here("transformed_data", "site_asb_fe_df.rds"))
+site_asb_df <- asb_sp_df
+site_asb_df[1, ] <- site_asb_df[1, ] + site_asb_df[2, ] + site_asb_df[3, ]
+site_asb_df[4, ] <- site_asb_df[4, ] + site_asb_df[5, ] + site_asb_df[6, ]
+site_asb_df <- site_asb_df[-c(2, 3, 5, 6), ]
+site_asb_df [site_asb_df  > 1] <- 1
+rownames(site_asb_df) <- c("N'Gouja", "Boueni")
+saveRDS(site_asb_df, here::here("transformed_data", "site_asb_df.rds"))
 
 
 alpha_fd_indices_site <- mFD::alpha.fd.multidim(
-  sp_faxes_coord   = fe_faxes_coord[ , c("PC1", "PC2", "PC3", "PC4", "PC5")],
-  asb_sp_w         = site_asb_fe_df,
+  sp_faxes_coord   = sp_faxes_coord[ , c("PC1", "PC2", "PC3", "PC4", "PC5")],
+  asb_sp_w         = site_asb_df,
   ind_vect         = c("fdis", "fric",
                        "fdiv",
                        "fspe", "fide"),
@@ -321,9 +329,6 @@ alpha_fd_indices_site <- mFD::alpha.fd.multidim(
 
 alpha_fd_indices_site$functional_diversity_indices
 
-
-# save coord:
-saveRDS(fe_faxes_coord, here::here("transformed_data", "fe_faxes_coord_5D.rds"))
 
 
 # Step 11: Plot indices ####
@@ -383,8 +388,8 @@ search.sp.nm(sp_to_fe, "fe_73")
 
 
 beta_fd_indices <- mFD::beta.fd.multidim(
-  sp_faxes_coord   = fe_faxes_coord[ , c("PC1", "PC2", "PC3", "PC4", "PC5")],
-  asb_sp_occ       = site_asb_fe_df,
+  sp_faxes_coord   = sp_faxes_coord[ , c("PC1", "PC2", "PC3", "PC4", "PC5")],
+  asb_sp_occ       = site_asb_df,
   check_input      = TRUE,
   beta_family      = c("Jaccard"),
   details_returned = TRUE)

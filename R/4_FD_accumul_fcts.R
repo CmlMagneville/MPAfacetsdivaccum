@@ -273,6 +273,8 @@ compute.fd.interday.accum <- function(basic_fd_accum_df,
                                  fd_indices,
                                  rich_plot = TRUE) {
 
+  # Written FEs but talking about species
+
   # 1
   # First compute functional distances between the FEs:
   fe_dist <- mFD::funct.dist(

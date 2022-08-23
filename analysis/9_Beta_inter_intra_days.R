@@ -134,15 +134,34 @@ plot.boxplots.beta(beta_df = beta_PD_df, metric = "PD")
 plot.boxplots.beta(beta_df = beta_PD_df, metric = "FD")
 
 
-# Is the interdays variation significantly different in NG than in B?
+
+# Test
+
+# change facets name to have different facets:
 # H0: not stat different
-beta_fd <- beta_PD_df
+beta_df <- beta_PD_df
+
+# Is the variation in N'Gouja significantly superior to the variation in B?
+wilcox.test(beta_df[which(beta_df[, "site_nm"] == "N'Gouja"), "beta"],
+            beta_df[which(beta_df[, "site_nm"] == "Boueni"), "beta"],
+            alternative = "greater")
+
+
+# Is the interdays variation significantly different in NG than in B?
 wilcox.test(beta_df[which(beta_df[, "same_video"] == TRUE & beta_df[, "same_site"] == TRUE
                           & beta_df[, "site_nm"] == "N'Gouja"), "beta"],
 
             beta_df[which(beta_df[, "same_video"] == TRUE & beta_df[, "same_site"] == TRUE
                           & beta_df[, "site_nm"] == "Boueni"), "beta"])
 # pvalue 3.66*10e-9 -> reject H0 so stats different
+
+# Is the interday beta superior in N'Gouja than in Boueni? yes
+wilcox.test(beta_df[which(beta_df[, "same_video"] == TRUE & beta_df[, "same_site"] == TRUE
+                          & beta_df[, "site_nm"] == "N'Gouja"), "beta"],
+
+            beta_df[which(beta_df[, "same_video"] == TRUE & beta_df[, "same_site"] == TRUE
+                          & beta_df[, "site_nm"] == "Boueni"), "beta"],
+            alternative = "greater")
 
 # Is the intraday variation significantly different in NG than in B?
 # H0: not stat different
@@ -152,6 +171,15 @@ wilcox.test(beta_df[which(beta_df[, "same_day"] == TRUE
             beta_df[which(beta_df[, "same_day"] == TRUE
                           & beta_df[, "site_nm"] == "Boueni"), "beta"])
 # pvalue < 2.2*10e-16 -> reject H0 so stats different
+
+# Is the intraday beta superior in N'Gouja than in Boueni? yes
+wilcox.test(beta_df[which(beta_df[, "same_day"] == TRUE
+                          & beta_df[, "site_nm"] == "N'Gouja"), "beta"],
+
+            beta_df[which(beta_df[, "same_day"] == TRUE
+                          & beta_df[, "site_nm"] == "Boueni"), "beta"],
+            alternative = "greater")
+
 
 
 # Is the interday variation significantly superior to the intraday ?

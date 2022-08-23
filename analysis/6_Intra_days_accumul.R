@@ -61,7 +61,6 @@ saveRDS(presabs_day_site_df, here::here("transformed_data", "basic_accumul_df.rd
 # Step 3: Compute TD accumulation ####
 
 
-
 # load the basic df:
 basic_accum_df <- readRDS(here::here("transformed_data", "basic_accumul_df.rds"))
 
@@ -77,41 +76,13 @@ saveRDS(TD_accum_df, here::here("transformed_data", "TD_intraday_accum.rds"))
 # Step 4: Compute FD accumulation ####
 
 
-
-# First call data needed (will work with FEs so FEs data also):
-
-sp_fe_list <- readRDS(here::here("transformed_data", "sp_to_fe_list.rds"))
-fe_nm <- readRDS(here::here("transformed_data", "fe_nm.rds"))
-
-tr_cat <- readRDS(here::here("transformed_data", "tr_cat_df.rds"))
-fe_tr <- readRDS(here::here("transformed_data", "fe_tr.rds"))
-
 basic_accum_df <- readRDS(here::here("transformed_data", "basic_accumul_df.rds"))
-
-
-
-# Compute a dataframe with fe*asb where asb = video_site_day
-
-## first must put basic_accum_df into a asb*sp format:
-clean_accum_df <- basic_accum_df
-rownames(clean_accum_df) <- clean_accum_df$vid_id
-clean_accum_df <- clean_accum_df[, -c(ncol(clean_accum_df), ncol(clean_accum_df) - 1,
-                                      ncol(clean_accum_df) - 2, ncol(clean_accum_df) - 3)]
-# values -> numeric and not character:
-clean_accum_df <- apply(clean_accum_df, 2, as.numeric)
-
-## use the from_sp_tofe fct():
-asb_fe_w <- from.spfe.to.feasb(fe_nm, sp_fe_list, asb_sp_w = clean_accum_df)
-asb_fe_w <- asb_fe_w$asb_fe_occ
-
-## add the site, video etc information:
-basic_FD_accum_df <- cbind(asb_fe_w, basic_accum_df[, c(ncol(basic_accum_df), ncol(basic_accum_df) - 1,
-                                                          ncol(basic_accum_df) - 2, ncol(basic_accum_df) - 3)])
-saveRDS(basic_FD_accum_df, here::here("transformed_data", "basic_FD_accum_df.rds"))
+tr_cat <- readRDS(here::here("transformed_data", "tr_cat_df.rds"))
+sp_tr <- readRDS(here::here("transformed_data", "sp_tr_final.rds"))
 
 # compute the FD accumul df (and save the FRic day variation plot):
-FD_accum <- compute.fd.day.accum(basic_fd_accum_df = basic_FD_accum_df,
-                                 sp_tr = fe_tr,
+FD_accum <- compute.fd.day.accum(basic_fd_accum_df = basic_accum_df,
+                                 sp_tr = sp_tr,
                                  tr_cat = tr_cat,
                                  fd_indices = c("fric"),
                                  rich_plot = TRUE)
