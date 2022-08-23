@@ -109,3 +109,32 @@ beta_PD
 # Compute PD for each site:
 PD_values <- picante::pd(site_asb_sp_df, phylo, include.root=FALSE)
 PD_values
+
+
+# Compute PD for each day:
+day_asb_sp_df <- readRDS(here::here("transformed_data", "asb_sp_site_day.rds"))
+
+day_asb_sp_df <- dplyr::rename(day_asb_sp_df, "Gomphosus_varius" = "Gomphosus_caeruleus")
+day_asb_sp_df <- dplyr::rename(day_asb_sp_df, "Scolopsis_bilineata" = "Scolopsis_frenata")
+day_asb_sp_df <- dplyr::rename(day_asb_sp_df, "Scolopsis_bimaculata" = "Scolopsis_ghanam")
+day_asb_sp_df <- dplyr::rename(day_asb_sp_df, "Cetoscarus_bicolor" = "Cetoscarus_ocellatus")
+day_asb_sp_df <- dplyr::rename(day_asb_sp_df, "Scarus_altipinnis" = "Scarus_falcipinnis")
+day_asb_sp_df <- dplyr::rename(day_asb_sp_df, "Scarus_oviceps" = "Scarus_scaber")
+day_asb_sp_df <- dplyr::rename(day_asb_sp_df, "Tylosurus_crocodilus_crocodilus" = "Tylosurus_crocodilus")
+day_asb_sp_df <- dplyr::rename(day_asb_sp_df, "Chlorurus_microrhinos" = "Chlorurus_strongylocephalus")
+day_asb_sp_df <- dplyr::rename(day_asb_sp_df, "Canthigaster_coronata" = "Canthigaster_cyanospilota")
+day_asb_sp_df <- dplyr::rename(day_asb_sp_df, "Labropsis_australis" = "Labropsis_xanthonota")
+day_asb_sp_df <- dplyr::rename(day_asb_sp_df, "Ctenochaetus_striatus" = "Ac_Cten_dark")
+
+# Compute PD for each site:
+PD_values_day <- picante::pd(day_asb_sp_df, phylo, include.root=FALSE)
+PD_values_day
+
+# Test differences in PD and TD between sites at day scale:
+NG_PD <- PD_values_day$PD[c(1:3)]
+B_PD <- PD_values_day$PD[c(4:6)]
+wilcox.test(NG_PD, B_PD)
+
+NG_TD <- PD_values_day$SR[c(1:3)]
+B_TD <- PD_values_day$SR[c(4:6)]
+wilcox.test(NG_TD, B_TD)

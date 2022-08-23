@@ -907,7 +907,7 @@ plot.rarity.fspe <- function(fe_dist_gravcenter,
                   units = "px",
                   dpi = 800)
 
-  return(plot_rarity_space)
+  return(list(rarcom_df, both_plot))
 
 
 }

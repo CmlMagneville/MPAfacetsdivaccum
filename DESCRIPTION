@@ -23,5 +23,6 @@ Imports:
     patchwork,
     picante,
     reshape2,
+    rstatix,
     tidytree,
     usethis

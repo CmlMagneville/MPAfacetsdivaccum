@@ -291,6 +291,12 @@ alpha_fd_indices_day <- mFD::alpha.fd.multidim(
 alpha_fd_indices_day$functional_diversity_indices
 
 
+# Test differences in FD between sites using day scale:
+NG_FD <- alpha_fd_indices_day$functional_diversity_indices[c(1:3), 3]
+B_FD <- alpha_fd_indices_day$functional_diversity_indices[c(4:6), 3]
+wilcox.test(NG_FD, B_FD)
+# p value not significative so do not reject H0: same FD between sites
+
 # Compute for each site:
 
 ## first I should gather the first three rows of asb_fe_df and idem three next rows:

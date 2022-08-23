@@ -285,7 +285,7 @@ ggplot2::ggsave(filename = here::here("outputs", "global_rarity_tree.pdf"),
 
 
 
-# Step 5: Plot the functional specialisation of each rare/common species ####
+# Step 5: Plot the functional specialisation of each rare/common species and Test ####
 
 
 # call fd basic accum df:
@@ -316,5 +316,92 @@ alpha_fd_indices_site <- mFD::alpha.fd.multidim(
 fe_dist_gravcenter <- alpha_fd_indices_site$details$pool_sp_dist_O / max(alpha_fd_indices_site$details$pool_sp_dist_O)
 
 
+rarfspe <- plot.rarity.fspe(fe_dist_gravcenter,
+                 basic_fd_accum_df,
+                 sp_to_fe,
+                 rarcom_df)
+
+
+# TEST
+
+
+# get the fspe rarity df to test fspe differences:
+rarspe_df <- rarfspe[[1]]
+
+# add a column with site_rarity and test if difference of FSpe between sites and Rarity levels:
+# ... taking all species, unique and shared:
+rarspe_df$site_rar <- paste0(rarspe_df$site, sep = "_", rarspe_df$rarity)
+
+
+# FOR ALL SPECIES POOLED: SHARED AND UNIQUE
+
+
+## Test differences of FSpe with N'Gouja data (difference of FSpe between rarity levels):
+
+kruskal.test(data = rarspe_df[which(rarspe_df$site == "N'Gouja"), ],
+             relat_dist_to_grav ~ site_rar)
+
+# yes differences between categories: between which: Dunn Test:
+FSA::dunnTest(relat_dist_to_grav ~ site_rar,
+         data = rarspe_df[which(rarspe_df$site == "N'Gouja"), ],
+         method = "bonferroni")
+# diff signif for common and super rare
+
+
+## Test differences of FSpe with Boueni data (difference of FSpe between rarity levels):
+
+kruskal.test(data = rarspe_df[which(rarspe_df$site == "Boueni"), ],
+             relat_dist_to_grav ~ site_rar)
+
+# yes differences between categories: between which: Dunn Test:
+FSA::dunnTest(relat_dist_to_grav ~ site_rar,
+              data = rarspe_df[which(rarspe_df$site == "Boueni"), ],
+              method = "bonferroni")
+# diff signif for common and super rare and between common and rare.
+
+
+## Test differences of FSpe with N'Gouja AND Boueni data (difference of FSpe ...
+# ... between rarity levels AND sites):
+
+kruskal.test(data = rarspe_df,
+             relat_dist_to_grav ~ site_rar)
+
+# yes differences between categories: between which: Dunn Test:
+results_Dunn_site_rar <- FSA::dunnTest(relat_dist_to_grav ~ site_rar,
+              data = rarspe_df,
+              method = "bonferroni")
+results_Dunn_site_rar_df <- results_Dunn_site_rar$res
+# diff signif for common and super rare
+
+
+# ONLY FOR SPECIES UNIQUE AT EACH SITE:
+
+
+rarspe_df <- rarspe_df[which(rarspe_df$site_presence %in% c("N'Gouja only",
+                                                            "Boueni only")), ]
+
+
+## Test differences of FSpe with N'Gouja data (difference of FSpe between rarity levels):
+
+kruskal.test(data = rarspe_df[which(rarspe_df$site == "N'Gouja"), ],
+             relat_dist_to_grav ~ site_rar)
+
+# no differences between rarity levels of unique species in N'Gouja
+
+## Test differences of FSpe with Boueni data (difference of FSpe between rarity levels):
+
+kruskal.test(data = rarspe_df[which(rarspe_df$site == "Boueni"), ],
+             relat_dist_to_grav ~ site_rar)
+
+# no differences between rarity levels of unique species in Boueni
+
+
+## Test differences of FSpe with N'Gouja AND Boueni data (difference of FSpe ...
+# ... between rarity levels AND sites):
+
+kruskal.test(data = rarspe_df,
+             relat_dist_to_grav ~ site_rar)
+
+# no differences between rarity levels of unique species in N'Gouja AND Boueni
 
 
