@@ -20,15 +20,8 @@ rm(list = ls(all.names = TRUE), envir = .GlobalEnv)
 devtools::install_deps()
 
 
-# Load the functions so make them available for use OR devtools::load_all():
-source(here::here("R/1_Merge_cam_df_fcts.R"))
-source(here::here("R/2_mFD_exploratory_fcts.R"))
-source(here::here("R/3_TD_accumul_fcts.R"))
-source(here::here("R/4_FD_accumul_fcts.R"))
-source(here::here("R/5_PD_accumul_fcts.R"))
-source(here::here("R/6_Plot_intra_day_variation.R"))
-source(here::here("R/7_Plot_inter_day_variation.R"))
-source(here::here("R/8_Rarity_Commoness_fcts.R"))
+# Load the functions so make them available for use:
+devtools::load_all()
 
 
 # Load the analysis scripts:
@@ -57,7 +50,11 @@ source(here::here("analysis/7_Inter_day_accum.R"))
 # 8:
 source(here::here("analysis/8_Rarity_Commonness.R"))
 
+# 9
+source(here::here("analysis/9_Beta_inter_intra_days.R"))
 
+# 10
+source(here::here("analysis/10_Lose_species_first.R"))
 
 
 

@@ -68,7 +68,7 @@ compute.fd.day.accum <- function(basic_fd_accum_df,
 
   # the best space has 5dim but one asb as 5 species -> 4 dim which is also good:
   alpha_fd_indices_day <- mFD::alpha.fd.multidim(
-    sp_faxes_coord   = fe_faxes_coord[ , c("PC1", "PC2", "PC3", "PC4")],
+    sp_faxes_coord   = fe_faxes_coord[ , c("PC1", "PC2", "PC3", "PC4", "PC5")],
     asb_sp_w         = as.matrix(basic_fd_accum_df[, -c(ncol(basic_fd_accum_df), ncol(basic_fd_accum_df) - 1,
                                                         ncol(basic_fd_accum_df) - 2, ncol(basic_fd_accum_df) - 3)]),
     ind_vect         = fd_indices,
@@ -180,7 +180,7 @@ compute.fd.day.accum <- function(basic_fd_accum_df,
   rownames(accum_FD_df) <- accum_FD_df$vid_id
 
   alpha_fd_indices_accum <- mFD::alpha.fd.multidim(
-    sp_faxes_coord   = fe_faxes_coord[ , c("PC1", "PC2", "PC3", "PC4")],
+    sp_faxes_coord   = fe_faxes_coord[ , c("PC1", "PC2", "PC3", "PC4", "PC5")],
     asb_sp_w         = as.matrix(accum_FD_df[, -c(ncol(accum_FD_df), ncol(accum_FD_df) - 1,
                                                         ncol(accum_FD_df) - 2, ncol(accum_FD_df) - 3,
                                                         ncol(accum_FD_df) - 4, ncol(accum_FD_df) - 5)]),
@@ -310,7 +310,7 @@ compute.fd.interday.accum <- function(basic_fd_accum_df,
 
   # the best space has 5dim but one asb as 5 species -> 4 dim which is also good:
   alpha_fd_indices_day <- mFD::alpha.fd.multidim(
-    sp_faxes_coord   = fe_faxes_coord[ , c("PC1", "PC2", "PC3", "PC4")],
+    sp_faxes_coord   = fe_faxes_coord[ , c("PC1", "PC2", "PC3", "PC4", "PC5")],
     asb_sp_w         = as.matrix(basic_fd_accum_df[, -c(ncol(basic_fd_accum_df), ncol(basic_fd_accum_df) - 1,
                                                         ncol(basic_fd_accum_df) - 2, ncol(basic_fd_accum_df) - 3)]),
     ind_vect         = fd_indices,
@@ -423,7 +423,7 @@ compute.fd.interday.accum <- function(basic_fd_accum_df,
   rownames(accum_FD_df) <- accum_FD_df$vid_id
 
   alpha_fd_indices_accum <- mFD::alpha.fd.multidim(
-    sp_faxes_coord   = fe_faxes_coord[ , c("PC1", "PC2", "PC3", "PC4")],
+    sp_faxes_coord   = fe_faxes_coord[ , c("PC1", "PC2", "PC3", "PC4", "PC5")],
     asb_sp_w         = as.matrix(accum_FD_df[, c(1:(ncol(accum_FD_df) - 14))]),
     ind_vect         = fd_indices,
     scaling          = TRUE,

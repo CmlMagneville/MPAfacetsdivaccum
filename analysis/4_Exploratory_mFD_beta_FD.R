@@ -233,19 +233,19 @@ fe_faxes_coord <- fspaces_quality$"details_fspaces"$"sp_pc_coord"
 # Get the correlations and plot it for FEs space:
 fe_tr_faxes <- mFD::traits.faxes.cor(
   sp_tr          = fe_tr,
-  sp_faxes_coord = fe_faxes_coord[ , c("PC1", "PC2", "PC3", "PC4")],
+  sp_faxes_coord = fe_faxes_coord[ , c("PC1", "PC2", "PC3", "PC4", "PC5")],
   plot           = TRUE)
 fe_tr_faxes$tr_faxes_plot
 
-# PC1: (-) Small size, Sedentary, Bottom level (+) Big size, Very Mobile, High level
-# PC2: (-) Both/Night, Solitary (+) Day, Large Groups
+# PC1: (-) Big size, Very Mobile, High level
+# PC2: (-) LargeG
 
 
-# Step 9: Plot functional space on the first 4 axis ####
+# Step 9: Plot 5D functional space on the first 4 axis ####
 
 
 big_plot <- mFD::funct.space.plot(
-  sp_faxes_coord  = fe_faxes_coord[ , c("PC1", "PC2", "PC3", "PC4")],
+  sp_faxes_coord  = fe_faxes_coord[ , c("PC1", "PC2", "PC3", "PC4", "PC5")],
   faxes           = c("PC1", "PC2", "PC3", "PC4"),
   name_file       = NULL,
   faxes_nm        = NULL,
@@ -298,12 +298,23 @@ alpha_fd_indices_day <- mFD::alpha.fd.multidim(
 alpha_fd_indices_day$functional_diversity_indices
 
 
-# Test differences in FD between sites using day scale:
+# Test differences in FRic between sites using day scale:
 NG_FD <- alpha_fd_indices_day$functional_diversity_indices[c(1:3), 3]
 B_FD <- alpha_fd_indices_day$functional_diversity_indices[c(4:6), 3]
 wilcox.test(NG_FD, B_FD)
-# p value not significative so do not reject H0: same FD between sites
+# p value not significative so do not reject H0: same FRic between sites
 
+# Test differences in FDis between sites using day scale:
+NG_FD <- alpha_fd_indices_day$functional_diversity_indices[c(1:3), 2]
+B_FD <- alpha_fd_indices_day$functional_diversity_indices[c(4:6), 2]
+wilcox.test(NG_FD, B_FD)
+# p value not significative so do not reject H0: same FDis between sites
+
+# Test differences in FSpe between sites using day scale:
+NG_FD <- alpha_fd_indices_day$functional_diversity_indices[c(1:3), 5]
+B_FD <- alpha_fd_indices_day$functional_diversity_indices[c(4:6), 5]
+wilcox.test(NG_FD, B_FD)
+# p value not significative so do not reject H0: same FD between sites
 
 # Compute for each site with FEs:
 
