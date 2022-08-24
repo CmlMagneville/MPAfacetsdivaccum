@@ -15,12 +15,11 @@
 # Step 1: Call data ####
 
 
-# TD and PD:
+# TD, FD and  PD:
 basic_accum_df <- readRDS(here::here("transformed_data", "basic_accumul_df.rds"))
 
 # FD:
-basic_fd_accum_df <- readRDS(here::here("transformed_data", "basic_FD_accum_df.rds"))
-fe_faxes_coord <- readRDS(here::here("transformed_data", "fe_faxes_coord_5D.rds"))
+sp_faxes_coord <- readRDS(here::here("transformed_data", "sp_faxes_coord.rds"))
 
 
 
@@ -64,13 +63,13 @@ saveRDS(beta_PD, here::here("transformed_data", "beta_PD_videos_dist.rds"))
 
 
 # FD:
-basic_fd <- basic_fd_accum_df
+basic_fd <- basic_accum_df
 basic_fd[, -c(87:90)] <- apply(basic_fd[, -c(87:90)], 2, as.numeric)
 rownames(basic_fd) <- basic_fd$vid_id
 basic_fd <- basic_fd[, -c(87:90)]
 
 beta_FD <- mFD::beta.fd.multidim(
-   sp_faxes_coord   = fe_faxes_coord[ , c("PC1", "PC2", "PC3", "PC4", "PC5")],
+   sp_faxes_coord   = sp_faxes_coord[ , c("PC1", "PC2", "PC3", "PC4", "PC5")],
    asb_sp_occ       = basic_fd,
    check_input      = TRUE,
    beta_family      = c("Jaccard"),
