@@ -106,7 +106,7 @@ saveRDS(beta_PD_df, here::here("transformed_data", "beta_PD_df.rds"))
 
 # Call FD data:
 beta_FD <- readRDS(here::here("transformed_data", "beta_FD_videos_dist.rds"))
-beta_FD_tot <- beta_FD$jac_diss
+beta_FD_tot <- beta_FD$pairasb_fbd_indices$jac_diss
 
 # Compute df:
 beta_FD_df <- beta.video.clean.df(beta_FD_tot)
@@ -138,7 +138,7 @@ plot.boxplots.beta(beta_df = beta_PD_df, metric = "FD")
 
 # change facets name to have different facets:
 # H0: not stat different
-beta_df <- beta_PD_df
+beta_df <- beta_FD_df
 
 # Is the variation in N'Gouja significantly superior to the variation in B?
 wilcox.test(beta_df[which(beta_df[, "site_nm"] == "N'Gouja"), "beta"],
@@ -187,7 +187,7 @@ wilcox.test(beta_df[which(beta_df[, "same_day"] == TRUE
 wilcox.test(beta_df[which(beta_df[, "same_video"] == TRUE & beta_df[, "same_site"] == TRUE), "beta"],
 
             beta_df[which(beta_df[, "same_day"] == TRUE), "beta"],
-            alternative = "greater")
+            alternative = "less")
 
 # yes sites inter > intra when sites pooled
 
@@ -224,7 +224,49 @@ beta_PD_df <- readRDS(here::here("transformed_data", "beta_PD_df.rds"))
 beta_FD_df <- readRDS(here::here("transformed_data", "beta_FD_df.rds"))
 
 
-# TD:
+# Link the three facets on a single df and name each video pair:
+# easy as dataframes have same rows:
+colnames(beta_TD_df)[3] <- "beta_TD"
+colnames(beta_PD_df)[3] <- "beta_PD"
+colnames(beta_FD_df)[3] <- "beta_FD"
+beta_all_df <- cbind(beta_TD_df, beta_FD_df$beta_FD, beta_PD_df$beta_PD)
+colnames(beta_all_df)[8] <- "beta_FD"
+colnames(beta_all_df)[9] <- "beta_PD"
 
-##
+# only keep inter and intra comparisons:
+beta_all_small_df <- beta_all_df
+beta_all_small_df <- beta_all_small_df[which((beta_all_small_df$same_site == TRUE & beta_all_small_df$same_video == TRUE) |
+                          (beta_all_small_df$same_day == TRUE)), ]
+# ok it has the right number of rows: 3366 = 198 (interday) + 3168 (intraday) ...
+# ... 198 = 33 videos * 3 days combinations * 2 sites
+# ... 3168 = combination of two videos on 33 videos * 3 days = 1056 * 3
 
+
+# compute the video * traits (= beta diversities) df:
+vid_tr <- beta_all_small_df
+rownames(vid_tr) <- paste0("pair", sep = "_", c(1:nrow(vid_tr)))
+vid_tr <- vid_tr[, c(3, 8, 9)]
+tr_cat <- cbind(c("beta_TD", "beta_FD", "beta_PD"), c("Q", "Q", "Q"))
+colnames(tr_cat) <- c("trait_name", "trait_type")
+tr_cat <- as.data.frame(tr_cat)
+
+# Compute functional distance between pairs of video, here sp ~ pair of video:
+sp_dist_vid <- mFD::funct.dist(
+  sp_tr         = vid_tr,
+  tr_cat        = tr_cat,
+  metric        = "euclidean",
+  scale_euclid  = "scale_center",
+  ordinal_var   = "classic",
+  weight_type   = "equal",
+  stop_if_NA    = TRUE)
+
+# Compute PcoA
+pcoa_vid <- ape::pcoa(sp_dist_vid)
+plot(pcoa_vid$vectors[, 1], pcoa_vid$vectors[, 2], type = "n", xlab = "PCoA1", ylab = "PCoA2",
+     axes = TRUE)
+
+
+# Compute the permdisp test to test if
+rownames(beta_all_small_df) <- paste0("pair", sep = "_", c(1:nrow(beta_all_small_df)))
+dispersion <- vegan::betadisper(sp_dist_vid, group = beta_all_small_df$site_nm)
+plot(dispersion, hull=TRUE, ellipse=TRUE)

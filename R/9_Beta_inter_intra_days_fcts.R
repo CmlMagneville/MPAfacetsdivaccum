@@ -45,12 +45,12 @@ beta.video.clean.df <- function(beta_df) {
     day2 <- substr(beta_df2[i, 2], 5, 14)
 
     # retrieve video information:
-    nm1 <- substr(beta_df2[i, 1], nchar(as.character(beta_df2[i, 1])) - 4 + 1,
+    nm1 <- substr(beta_df2[i, 1], nchar(as.character(beta_df2[i, 1])) - 7 + 1,
                   nchar(as.character(beta_df2[i, 1])))
-    vid1 <- paste0("vid", sep = "", gsub(".*9","", nm1))
-    nm2 <- substr(beta_df2[i, 2], nchar(as.character(beta_df2[i, 2])) - 4 + 1,
+    vid1 <- paste0("vid", sep = "", gsub(".*2019","", nm1))
+    nm2 <- substr(beta_df2[i, 2], nchar(as.character(beta_df2[i, 2])) - 7 + 1,
                   nchar(as.character(beta_df2[i, 2])))
-    vid2 <- paste0("vid", sep = "", gsub(".*9","", nm2))
+    vid2 <- paste0("vid", sep = "", gsub(".*2019","", nm2))
 
     # if same day and different video:
     if(day1 == day2 & vid1 != vid2) {
