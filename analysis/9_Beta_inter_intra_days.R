@@ -262,6 +262,7 @@ sp_dist_vid <- mFD::funct.dist(
 
 # Compute PcoA
 pcoa_vid <- ape::pcoa(sp_dist_vid)
+coordinates_pairs <- as.data.frame(pcoa_vid$vectors)
 plot(pcoa_vid$vectors[, 1], pcoa_vid$vectors[, 2], type = "n", xlab = "PCoA1", ylab = "PCoA2",
      axes = TRUE)
 
@@ -269,4 +270,65 @@ plot(pcoa_vid$vectors[, 1], pcoa_vid$vectors[, 2], type = "n", xlab = "PCoA1", y
 # Compute the permdisp test to test if
 rownames(beta_all_small_df) <- paste0("pair", sep = "_", c(1:nrow(beta_all_small_df)))
 dispersion <- vegan::betadisper(sp_dist_vid, group = beta_all_small_df$site_nm)
+pmod <- vegan::permutest(dispersion, pairwise = TRUE, permutations = 99)
 plot(dispersion, hull=TRUE, ellipse=TRUE)
+
+# permanova:
+permanova_results <- vegan::adonis(beta_all_small_df[, c(3, 8, 9)] ~ beta_all_small_df$site_nm, method="bray",perm = 99)
+
+
+# plot:
+
+## add to the coordinates dataframe the columns to add colors on the plot:
+coordinates_pairs <- cbind(coordinates_pairs, beta_all_small_df$same_day,
+                           beta_all_small_df$same_video,
+                           beta_all_small_df$same_site,
+                           beta_all_small_df$site_nm)
+colnames(coordinates_pairs) <- c("PC1", "PC2", "PC3", "same_day", "same_video",
+                                 "same_site", "site_nm")
+
+## add column if intraday:
+coordinates_pairs$intraday <- rep("no", nrow(coordinates_pairs))
+for (i in (1:nrow(coordinates_pairs))){
+
+  if (coordinates_pairs$same_day[i] == TRUE) {
+    coordinates_pairs[i, "intraday"] <- "yes"
+  }
+
+}
+
+## add column if interday:
+coordinates_pairs$interday <- rep("no", nrow(coordinates_pairs))
+for (i in (1:nrow(coordinates_pairs))){
+
+  if (coordinates_pairs$same_video[i] == TRUE & coordinates_pairs$same_site[i] == TRUE) {
+    coordinates_pairs[i, "interday"] <- "yes"
+  }
+
+}
+
+
+pcoa_plot <- ggplot2::ggplot() +
+
+  # add interday dots in black:
+  ggplot2::geom_point(data = coordinates_pairs[which(coordinates_pairs$interday == "yes"), ],
+                      ggplot2::aes(x = PC1, y = PC2)) +
+
+  # add N'Gouja intra day plots:
+  ggplot2::geom_point(data = coordinates_pairs[which(coordinates_pairs$intraday == "yes" &
+                                                     coordinates_pairs$site_nm == "N'Gouja"), ],
+                      ggplot2::aes(x = PC1, y = PC2), color = "#80cdc1", alpha = 0.6) +
+
+  # add Boueni intra day plots:
+  ggplot2::geom_point(data = coordinates_pairs[which(coordinates_pairs$intraday == "yes" &
+                                                       coordinates_pairs$site_nm == "Boueni"), ],
+                      ggplot2::aes(x = PC1, y = PC2), color = "#bf812d", alpha = 0.6) +
+
+  ggplot2::theme(panel.background = ggplot2::element_rect(fill = "white",
+                                                          colour = "white"),
+                 panel.grid.major = ggplot2::element_line(colour = "grey90"))
+
+
+
+
+
