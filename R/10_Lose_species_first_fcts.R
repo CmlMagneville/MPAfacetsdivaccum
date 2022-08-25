@@ -27,7 +27,9 @@
 
 lose.species.div.plot <- function(rarcom_df_site,
                                   sp_faxes_coord,
-                                  asb_sp_site) {
+                                  asb_sp_site,
+                                  site_color,
+                                  site) {
 
 
   # LOSE RAREST FIRST ####
@@ -63,15 +65,27 @@ lose.species.div.plot <- function(rarcom_df_site,
 
   phylo_rarest_final_df <- rarest_final_df
 
-  phylo_rarest_final_df <- dplyr::rename(phylo_rarest_final_df, "Gomphosus_varius" = "Gomphosus_caeruleus")
-  phylo_rarest_final_df <- dplyr::rename(phylo_rarest_final_df, "Scolopsis_bilineata" = "Scolopsis_frenata")
-  phylo_rarest_final_df <- dplyr::rename(phylo_rarest_final_df, "Scolopsis_bimaculata" = "Scolopsis_ghanam")
-  phylo_rarest_final_df <- dplyr::rename(phylo_rarest_final_df, "Cetoscarus_bicolor" = "Cetoscarus_ocellatus")
-  phylo_rarest_final_df <- dplyr::rename(phylo_rarest_final_df, "Scarus_altipinnis" = "Scarus_falcipinnis")
-  phylo_rarest_final_df <- dplyr::rename(phylo_rarest_final_df, "Scarus_oviceps" = "Scarus_scaber")
-  phylo_rarest_final_df <- dplyr::rename(phylo_rarest_final_df, "Tylosurus_crocodilus_crocodilus" = "Tylosurus_crocodilus")
-  phylo_rarest_final_df <- dplyr::rename(phylo_rarest_final_df, "Chlorurus_microrhinos" = "Chlorurus_strongylocephalus")
-  phylo_rarest_final_df <- dplyr::rename(phylo_rarest_final_df, "Ctenochaetus_striatus" = "Ac_Cten_dark")
+  if (site == "NGouja") {
+    phylo_rarest_final_df <- dplyr::rename(phylo_rarest_final_df, "Gomphosus_varius" = "Gomphosus_caeruleus")
+    phylo_rarest_final_df <- dplyr::rename(phylo_rarest_final_df, "Scolopsis_bilineata" = "Scolopsis_frenata")
+    phylo_rarest_final_df <- dplyr::rename(phylo_rarest_final_df, "Scolopsis_bimaculata" = "Scolopsis_ghanam")
+    phylo_rarest_final_df <- dplyr::rename(phylo_rarest_final_df, "Cetoscarus_bicolor" = "Cetoscarus_ocellatus")
+    phylo_rarest_final_df <- dplyr::rename(phylo_rarest_final_df, "Scarus_altipinnis" = "Scarus_falcipinnis")
+    phylo_rarest_final_df <- dplyr::rename(phylo_rarest_final_df, "Scarus_oviceps" = "Scarus_scaber")
+    phylo_rarest_final_df <- dplyr::rename(phylo_rarest_final_df, "Tylosurus_crocodilus_crocodilus" = "Tylosurus_crocodilus")
+    phylo_rarest_final_df <- dplyr::rename(phylo_rarest_final_df, "Chlorurus_microrhinos" = "Chlorurus_strongylocephalus")
+    phylo_rarest_final_df <- dplyr::rename(phylo_rarest_final_df, "Ctenochaetus_striatus" = "Ac_Cten_dark")
+  }
+
+  if (site == "Boueni") {
+    phylo_rarest_final_df <- dplyr::rename(phylo_rarest_final_df, "Gomphosus_varius" = "Gomphosus_caeruleus")
+    phylo_rarest_final_df <- dplyr::rename(phylo_rarest_final_df, "Cetoscarus_bicolor" = "Cetoscarus_ocellatus")
+    phylo_rarest_final_df <- dplyr::rename(phylo_rarest_final_df, "Tylosurus_crocodilus_crocodilus" = "Tylosurus_crocodilus")
+    phylo_rarest_final_df <- dplyr::rename(phylo_rarest_final_df, "Ctenochaetus_striatus" = "Ac_Cten_dark")
+    phylo_rarest_final_df <- dplyr::rename(phylo_rarest_final_df, "Canthigaster_coronata" = "Canthigaster_cyanospilota")
+    phylo_rarest_final_df <- dplyr::rename(phylo_rarest_final_df, "Labropsis_australis" = "Labropsis_xanthonota")
+
+  }
 
 
   asb_sp_site <- dplyr::rename(asb_sp_site, "Gomphosus_varius" = "Gomphosus_caeruleus")
@@ -101,22 +115,49 @@ lose.species.div.plot <- function(rarcom_df_site,
   PD_rarest$PD <- PD_rarest$PD / PD_max$PD
 
   PD_rares <- PD_rarest$PD
-  PD_rares[c(127, 128)] <- c(0, 0)
+  if (site == "NGouja") {
+    PD_rares[c(127, 128)] <- c(0, 0)
+  }
+  if (site == "Boueni") {
+    PD_rares[c(111, 112)] <- c(0, 0)
+  }
 
 
   # compute FRic (only for assemblages with more than 5 species):
-  alpha_fd_indices <- mFD::alpha.fd.multidim(
-    sp_faxes_coord   = as.matrix(sp_faxes_coord[ , c("PC1", "PC2", "PC3", "PC4", "PC5")]),
-    asb_sp_w         = as.matrix(rarest_final_df[c(1:122), ]),
-    ind_vect         = c("fdis", "fric",
-                         "fspe"),
-    scaling          = TRUE,
-    check_input      = TRUE,
-    details_returned = TRUE)
+  if (site == "NGouja") {
+
+    alpha_fd_indices <- mFD::alpha.fd.multidim(
+      sp_faxes_coord   = as.matrix(sp_faxes_coord[ , c("PC1", "PC2", "PC3", "PC4", "PC5")]),
+      asb_sp_w         = as.matrix(rarest_final_df[c(1:122), ]),
+      ind_vect         = c("fdis", "fric",
+                           "fspe"),
+      scaling          = TRUE,
+      check_input      = TRUE,
+      details_returned = TRUE)
+
+  }
+
+  if (site == "Boueni") {
+
+    alpha_fd_indices <- mFD::alpha.fd.multidim(
+      sp_faxes_coord   = as.matrix(sp_faxes_coord[ , c("PC1", "PC2", "PC3", "PC4", "PC5")]),
+      asb_sp_w         = as.matrix(rarest_final_df[c(1:106), ]),
+      ind_vect         = c("fdis", "fric",
+                           "fspe"),
+      scaling          = TRUE,
+      check_input      = TRUE,
+      details_returned = TRUE)
+
+  }
+
 
   # asb 121 has NA in FRic...? species in the same FE, not enough points:
   FRic_rares <- alpha_fd_indices$functional_diversity_indices$fric
-  FRic_rares[122] <- 0
+
+  if (site == "NGouja") {
+    FRic_rares[122] <- 0
+  }
+
   FRic_rares <- c(FRic_rares, rep(0, 6))
 
   FDis_rares <- alpha_fd_indices$functional_diversity_indices$fdis
@@ -170,16 +211,27 @@ lose.species.div.plot <- function(rarcom_df_site,
 
   phylo_common_final_df <- common_final_df
 
-  phylo_common_final_df <- dplyr::rename(phylo_common_final_df, "Gomphosus_varius" = "Gomphosus_caeruleus")
-  phylo_common_final_df <- dplyr::rename(phylo_common_final_df, "Scolopsis_bilineata" = "Scolopsis_frenata")
-  phylo_common_final_df <- dplyr::rename(phylo_common_final_df, "Scolopsis_bimaculata" = "Scolopsis_ghanam")
-  phylo_common_final_df <- dplyr::rename(phylo_common_final_df, "Cetoscarus_bicolor" = "Cetoscarus_ocellatus")
-  phylo_common_final_df <- dplyr::rename(phylo_common_final_df, "Scarus_altipinnis" = "Scarus_falcipinnis")
-  phylo_common_final_df <- dplyr::rename(phylo_common_final_df, "Scarus_oviceps" = "Scarus_scaber")
-  phylo_common_final_df <- dplyr::rename(phylo_common_final_df, "Tylosurus_crocodilus_crocodilus" = "Tylosurus_crocodilus")
-  phylo_common_final_df <- dplyr::rename(phylo_common_final_df, "Chlorurus_microrhinos" = "Chlorurus_strongylocephalus")
-  phylo_common_final_df <- dplyr::rename(phylo_common_final_df, "Ctenochaetus_striatus" = "Ac_Cten_dark")
+  if (site == "NGouja") {
+    phylo_common_final_df <- dplyr::rename(phylo_common_final_df, "Gomphosus_varius" = "Gomphosus_caeruleus")
+    phylo_common_final_df <- dplyr::rename(phylo_common_final_df, "Scolopsis_bilineata" = "Scolopsis_frenata")
+    phylo_common_final_df <- dplyr::rename(phylo_common_final_df, "Scolopsis_bimaculata" = "Scolopsis_ghanam")
+    phylo_common_final_df <- dplyr::rename(phylo_common_final_df, "Cetoscarus_bicolor" = "Cetoscarus_ocellatus")
+    phylo_common_final_df <- dplyr::rename(phylo_common_final_df, "Scarus_altipinnis" = "Scarus_falcipinnis")
+    phylo_common_final_df <- dplyr::rename(phylo_common_final_df, "Scarus_oviceps" = "Scarus_scaber")
+    phylo_common_final_df <- dplyr::rename(phylo_common_final_df, "Tylosurus_crocodilus_crocodilus" = "Tylosurus_crocodilus")
+    phylo_common_final_df <- dplyr::rename(phylo_common_final_df, "Chlorurus_microrhinos" = "Chlorurus_strongylocephalus")
+    phylo_common_final_df <- dplyr::rename(phylo_common_final_df, "Ctenochaetus_striatus" = "Ac_Cten_dark")
+  }
 
+  if (site == "Boueni") {
+    phylo_common_final_df <- dplyr::rename(phylo_common_final_df, "Gomphosus_varius" = "Gomphosus_caeruleus")
+    phylo_common_final_df <- dplyr::rename(phylo_common_final_df, "Cetoscarus_bicolor" = "Cetoscarus_ocellatus")
+    phylo_common_final_df <- dplyr::rename(phylo_common_final_df, "Tylosurus_crocodilus_crocodilus" = "Tylosurus_crocodilus")
+    phylo_common_final_df <- dplyr::rename(phylo_common_final_df, "Ctenochaetus_striatus" = "Ac_Cten_dark")
+    phylo_common_final_df <- dplyr::rename(phylo_common_final_df, "Canthigaster_coronata" = "Canthigaster_cyanospilota")
+    phylo_common_final_df <- dplyr::rename(phylo_common_final_df, "Labropsis_australis" = "Labropsis_xanthonota")
+
+  }
 
   # compute Faith's PD for each assemblage where loose common species first:
   PD_common <- picante::pd(phylo_common_final_df, phylo, include.root=FALSE)
@@ -188,22 +240,44 @@ lose.species.div.plot <- function(rarcom_df_site,
   PD_common$PD <- PD_common$PD / PD_max$PD
 
   PD_commons <- PD_common$PD
-  PD_commons[c(127, 128)] <- c(0, 0)
+  if (site == "NGouja") {
+    PD_commons[c(127, 128)] <- c(0, 0)
+  }
+  if (site == "Boueni") {
+    PD_commons[c(111, 112)] <- c(0, 0)
+  }
 
 
   # compute FRic (only for assemblages with more than 5 species):
-  alpha_fd_indices <- mFD::alpha.fd.multidim(
-    sp_faxes_coord   = as.matrix(sp_faxes_coord[ , c("PC1", "PC2", "PC3", "PC4", "PC5")]),
-    asb_sp_w         = as.matrix(common_final_df[c(1:122), ]),
-    ind_vect         = c("fdis", "fric",
-                         "fspe"),
-    scaling          = TRUE,
-    check_input      = TRUE,
-    details_returned = TRUE)
+  if (site == "NGouja") {
+    alpha_fd_indices <- mFD::alpha.fd.multidim(
+      sp_faxes_coord   = as.matrix(sp_faxes_coord[ , c("PC1", "PC2", "PC3", "PC4", "PC5")]),
+      asb_sp_w         = as.matrix(common_final_df[c(1:122), ]),
+      ind_vect         = c("fdis", "fric",
+                           "fspe"),
+      scaling          = TRUE,
+      check_input      = TRUE,
+      details_returned = TRUE)
+  }
+  if (site == "Boueni") {
+    alpha_fd_indices <- mFD::alpha.fd.multidim(
+      sp_faxes_coord   = as.matrix(sp_faxes_coord[ , c("PC1", "PC2", "PC3", "PC4", "PC5")]),
+      asb_sp_w         = as.matrix(common_final_df[c(1:106), ]),
+      ind_vect         = c("fdis", "fric",
+                           "fspe"),
+      scaling          = TRUE,
+      check_input      = TRUE,
+      details_returned = TRUE)
+  }
+
 
   # asb 121 has NA in FRic...? species in the same FE, not enough points:
   FRic_commons <- alpha_fd_indices$functional_diversity_indices$fric
-  FRic_commons[122] <- 0
+
+  if (site == "NGouja") {
+    FRic_commons[122] <- 0
+  }
+
   FRic_commons <- c(FRic_commons, rep(0, 6))
 
   FDis_commons <- alpha_fd_indices$functional_diversity_indices$fdis
@@ -230,7 +304,7 @@ lose.species.div.plot <- function(rarcom_df_site,
   colnames(random_iteration_df) <- c("metric", "value", "Species_loss", "iter_nb")
 
 
-  while(n <= 20) {
+  while(n <= 100) {
 
 
     # create a list of species name:
@@ -272,15 +346,27 @@ lose.species.div.plot <- function(rarcom_df_site,
 
     phylo_random_final_df <- random_final_df
 
-    phylo_random_final_df <- dplyr::rename(phylo_random_final_df, "Gomphosus_varius" = "Gomphosus_caeruleus")
-    phylo_random_final_df <- dplyr::rename(phylo_random_final_df, "Scolopsis_bilineata" = "Scolopsis_frenata")
-    phylo_random_final_df <- dplyr::rename(phylo_random_final_df, "Scolopsis_bimaculata" = "Scolopsis_ghanam")
-    phylo_random_final_df <- dplyr::rename(phylo_random_final_df, "Cetoscarus_bicolor" = "Cetoscarus_ocellatus")
-    phylo_random_final_df <- dplyr::rename(phylo_random_final_df, "Scarus_altipinnis" = "Scarus_falcipinnis")
-    phylo_random_final_df <- dplyr::rename(phylo_random_final_df, "Scarus_oviceps" = "Scarus_scaber")
-    phylo_random_final_df <- dplyr::rename(phylo_random_final_df, "Tylosurus_crocodilus_crocodilus" = "Tylosurus_crocodilus")
-    phylo_random_final_df <- dplyr::rename(phylo_random_final_df, "Chlorurus_microrhinos" = "Chlorurus_strongylocephalus")
-    phylo_random_final_df <- dplyr::rename(phylo_random_final_df, "Ctenochaetus_striatus" = "Ac_Cten_dark")
+    if (site == "NGouja") {
+      phylo_random_final_df <- dplyr::rename(phylo_random_final_df, "Gomphosus_varius" = "Gomphosus_caeruleus")
+      phylo_random_final_df <- dplyr::rename(phylo_random_final_df, "Scolopsis_bilineata" = "Scolopsis_frenata")
+      phylo_random_final_df <- dplyr::rename(phylo_random_final_df, "Scolopsis_bimaculata" = "Scolopsis_ghanam")
+      phylo_random_final_df <- dplyr::rename(phylo_random_final_df, "Cetoscarus_bicolor" = "Cetoscarus_ocellatus")
+      phylo_random_final_df <- dplyr::rename(phylo_random_final_df, "Scarus_altipinnis" = "Scarus_falcipinnis")
+      phylo_random_final_df <- dplyr::rename(phylo_random_final_df, "Scarus_oviceps" = "Scarus_scaber")
+      phylo_random_final_df <- dplyr::rename(phylo_random_final_df, "Tylosurus_crocodilus_crocodilus" = "Tylosurus_crocodilus")
+      phylo_random_final_df <- dplyr::rename(phylo_random_final_df, "Chlorurus_microrhinos" = "Chlorurus_strongylocephalus")
+      phylo_random_final_df <- dplyr::rename(phylo_random_final_df, "Ctenochaetus_striatus" = "Ac_Cten_dark")
+    }
+
+    if (site == "Boueni") {
+      phylo_random_final_df <- dplyr::rename(phylo_random_final_df, "Gomphosus_varius" = "Gomphosus_caeruleus")
+      phylo_random_final_df <- dplyr::rename(phylo_random_final_df, "Cetoscarus_bicolor" = "Cetoscarus_ocellatus")
+      phylo_random_final_df <- dplyr::rename(phylo_random_final_df, "Tylosurus_crocodilus_crocodilus" = "Tylosurus_crocodilus")
+      phylo_random_final_df <- dplyr::rename(phylo_random_final_df, "Ctenochaetus_striatus" = "Ac_Cten_dark")
+      phylo_random_final_df <- dplyr::rename(phylo_random_final_df, "Canthigaster_coronata" = "Canthigaster_cyanospilota")
+      phylo_random_final_df <- dplyr::rename(phylo_random_final_df, "Labropsis_australis" = "Labropsis_xanthonota")
+
+    }
 
     sp_nm_all <- colnames(asb_sp_site)
 
@@ -294,22 +380,45 @@ lose.species.div.plot <- function(rarcom_df_site,
     PD_random$PD <- PD_random$PD / PD_max$PD
 
     PD_randoms <- PD_random$PD
-    PD_randoms[c(127, 128)] <- c(0, 0)
+    if (site == "NGouja") {
+      PD_randoms[c(127, 128)] <- c(0, 0)
+    }
+    if (site == "Boueni") {
+      PD_randoms[c(111, 112)] <- c(0, 0)
+    }
 
 
     # compute FRic (only for assemblages with more than 5 species):
-    alpha_fd_indices <- mFD::alpha.fd.multidim(
-      sp_faxes_coord   = as.matrix(sp_faxes_coord[ , c("PC1", "PC2", "PC3", "PC4", "PC5")]),
-      asb_sp_w         = as.matrix(random_final_df[c(1:122), ]),
-      ind_vect         = c("fdis", "fric",
-                           "fspe"),
-      scaling          = TRUE,
-      check_input      = TRUE,
-      details_returned = TRUE)
+    if (site == "NGouja") {
+      alpha_fd_indices <- mFD::alpha.fd.multidim(
+        sp_faxes_coord   = as.matrix(sp_faxes_coord[ , c("PC1", "PC2", "PC3", "PC4", "PC5")]),
+        asb_sp_w         = as.matrix(random_final_df[c(1:122), ]),
+        ind_vect         = c("fdis", "fric",
+                             "fspe"),
+        scaling          = TRUE,
+        check_input      = TRUE,
+        details_returned = TRUE)
+    }
+    if (site == "Boueni") {
+      alpha_fd_indices <- mFD::alpha.fd.multidim(
+        sp_faxes_coord   = as.matrix(sp_faxes_coord[ , c("PC1", "PC2", "PC3", "PC4", "PC5")]),
+        asb_sp_w         = as.matrix(random_final_df[c(1:106), ]),
+        ind_vect         = c("fdis", "fric",
+                             "fspe"),
+        scaling          = TRUE,
+        check_input      = TRUE,
+        details_returned = TRUE)
 
-    # asb 121 has NA in FRic...? species in the same FE, not enough points:
+    }
+
+
     FRic_randoms <- alpha_fd_indices$functional_diversity_indices$fric
-    FRic_randoms[122] <- 0
+
+    if (site == "NGouja") {
+      # asb 121 has NA in FRic...? species in the same FE, not enough points:
+      FRic_randoms[122] <- 0
+    }
+
     FRic_randoms <- c(FRic_randoms, rep(0, 6))
 
     FDis_randoms <- alpha_fd_indices$functional_diversity_indices$fdis
@@ -420,11 +529,13 @@ lose.species.div.plot <- function(rarcom_df_site,
   plot_all_lose_df$values <- as.numeric(plot_all_lose_df$values)
 
 
-  # compute the median value for each metric*sp_loss:
-  plot_random_med_df <- as.data.frame(matrix(nrow = 1, ncol = 3))
+  # compute the median value for each metric*sp_loss and confidence intervals:
+  plot_random_med_df <- as.data.frame(matrix(nrow = 1, ncol = 5))
   colnames(plot_random_med_df) <- c("Species_loss",
                                     "median_value",
-                                    "ind")
+                                    "ind",
+                                    "lower_ci",
+                                    "higher_ci")
   ## loop on species loss
   random_iteration_df <- random_iteration_df[-1, ]
   for (i in unique(random_iteration_df$Species_loss)) {
@@ -436,7 +547,15 @@ lose.species.div.plot <- function(rarcom_df_site,
       med_ij <- median(as.numeric(random_iteration_df[which(random_iteration_df$Species_loss == i &
                                                   random_iteration_df$metric == j), "value"]))
 
-      plot_random_med_df[nrow(plot_random_med_df) + 1, ] <- c(i, med_ij, j)
+      data <- as.numeric(random_iteration_df[which(random_iteration_df$Species_loss == i &
+                                                     random_iteration_df$metric == j), "value"])
+
+      ci <- DescTools::MedianCI(data, conf.level = 0.95, sides = "two.sided")
+      lower <- ci[[2]]
+      upper <- ci[[3]]
+
+      plot_random_med_df[nrow(plot_random_med_df) + 1, ] <- c(i, med_ij, j,
+                                                              lower, upper)
 
     }
 
@@ -453,6 +572,9 @@ lose.species.div.plot <- function(rarcom_df_site,
 
   # numeric value column in the rare/common df:
   plot_random_med_df$median_value <- as.numeric(plot_random_med_df$median_value)
+  plot_random_med_df$lower_ci <- as.numeric(plot_random_med_df$lower_ci)
+  plot_random_med_df$higher_ci <- as.numeric(plot_random_med_df$higher_ci)
+
 
 
   # add median values to the plot_all_lose_df:
@@ -467,16 +589,37 @@ lose.species.div.plot <- function(rarcom_df_site,
 
   plot_all_lose_df$values <- as.numeric(plot_all_lose_df$values)
 
+  plot_all_lose_df$ind <- ordered(plot_all_lose_df$ind,
+                                             levels = c("Faith's PD",
+                                                        "FRic",
+                                                        "FDis",
+                                                        "FSpe"))
 
+  plot_all_lose_df$Species_loss <- gsub(".*lose_sp_","", plot_all_lose_df$Species_loss)
+  plot_all_lose_df$Species_loss <- as.numeric(plot_all_lose_df$Species_loss)
+
+  plot_random_med_df$Species_loss <- gsub(".*lose_sp_","", plot_random_med_df$Species_loss)
+  plot_random_med_df$Species_loss <- as.numeric(plot_random_med_df$Species_loss)
+  plot_random_med_df$ind <- ordered(plot_random_med_df$ind,
+                                  levels = c("Faith's PD",
+                                             "FRic",
+                                             "FDis",
+                                             "FSpe"))
 
   # plot rare and common (should add mediam and conf interval of randoms when pb solved):
-  plot_lose_sp <- ggplot2::ggplot() +
+  plot_lose_sp <- ggplot2::ggplot(data = plot_all_lose_df,
+                                  ggplot2::aes(x = Species_loss)) +
 
     ggplot2::geom_line(data = plot_all_lose_df,
-                       ggplot2::aes(y = values, x = Species_loss, group = metric,
+                       ggplot2::aes(y = values, group = metric,
                                              linetype = metric),
                                 size = 0.9,
                                 colour = site_color) +
+
+    ggplot2::geom_ribbon(data = plot_random_med_df,
+                         ggplot2::aes(x = Species_loss,
+                                    ymin = lower_ci, ymax = higher_ci),
+                         alpha = 0.3, fill = site_color) +
 
     ggplot2::facet_grid(. ~ ind) +
 
@@ -484,7 +627,7 @@ lose.species.div.plot <- function(rarcom_df_site,
                                               "dashed",
                                               "dotted"),
                                    labels = c("Lose common species first",
-                                              "Lose rares species first",
+                                              "Lose rarest species first",
                                               "Lose random species first")) +
 
     ggplot2::theme(axis.text.x = ggplot2::element_blank(),
@@ -500,8 +643,7 @@ lose.species.div.plot <- function(rarcom_df_site,
 
 
 
-
-
+  return(list(plot_all_lose_df, plot_lose_sp))
 
 
 }
