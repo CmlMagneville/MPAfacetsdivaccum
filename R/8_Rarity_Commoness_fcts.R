@@ -806,25 +806,26 @@ plot.rarity.fspe <- function(sp_dist_gravcenter,
   for (i in (1:nrow(fspe_rarcom_df))) {
 
     sp_nm <- fspe_rarcom_df[i, "species_nm"]
-    fspe_value <- fe_dist_gravcenter[which(names(sp_dist_gravcenter) == sp_nm)][[1]]
+    fspe_value <- sp_dist_gravcenter[which(names(sp_dist_gravcenter) == sp_nm)][[1]]
 
     fspe_rarcom_df[i, "relat_dist_to_grav"] <- fspe_value
 
   }
 
-  # Labels for wraps:
-  labs <- c("Species shared between sites", "Species only present in N'Gouja")
-  names(labs) <- c("both", "N'Gouja only")
 
   # plot N'Gouja's data:
   NG_rar_fspe_plot <- ggplot2::ggplot(data = fspe_rarcom_df[which(rarcom_df$site == "N'Gouja"), ],
                                       ggplot2::aes(x = rarity, y = relat_dist_to_grav)) +
 
-    ggplot2::geom_boxplot(color = "#80cdc1", fill = "#80cdc1", alpha = 0.3) +
+    ggplot2::geom_boxplot(color = "#80cdc1", fill = "#80cdc1", alpha = 0.3,
+                          outlier.shape = NA) +
 
-    ggplot2::geom_jitter(color = "#80cdc1", shape = 20, size = 2) +
+    ggplot2::geom_jitter(ggplot2::aes(shape = site_presence), color = "#80cdc1", size = 2) +
 
-    ggplot2::facet_wrap(~ site_presence, labeller = ggplot2::labeller(site_presence = labs)) +
+    ggplot2::scale_shape_manual(values = c(20, 21),
+                                name = "Site presence",
+                                labels = c("Species shared between sites",
+                                           "Species only present in the studied site")) +
 
     ggplot2::xlab("") +
 
@@ -836,26 +837,26 @@ plot.rarity.fspe <- function(sp_dist_gravcenter,
                                                             colour = "grey90"),
                    panel.grid.major = ggplot2::element_line(colour = "grey90"))
 
-
-  # Labels for wraps:
-  labs <- c("Species shared between sites", "Species only present in Boueni")
-  names(labs) <- c("both", "Boueni only")
-
   # plot Boueni's data:
   B_rar_fspe_plot <- ggplot2::ggplot(data = fspe_rarcom_df[which(rarcom_df$site == "Boueni"), ],
                                       ggplot2::aes(x = rarity, y = relat_dist_to_grav)) +
 
     ggplot2::geom_boxplot(color = "#bf812d", fill = "#bf812d", alpha = 0.3) +
 
-    ggplot2::geom_jitter(color = "#bf812d", shape = 20, size = 2) +
+    ggplot2::geom_jitter(ggplot2::aes(shape = site_presence), color = "#bf812d", size = 2) +
 
-    ggplot2::facet_wrap(~ site_presence, labeller = ggplot2::labeller(site_presence = labs)) +
+    ggplot2::scale_shape_manual(values = c(20, 21),
+                                name = "Site presence",
+                                labels = c("Species shared between sites",
+                                           "Species only present in the studied site")) +
 
     ggplot2::xlab("") +
 
     ggplot2::ylab("Relative distance to the gravity center of the global pool") +
 
     ggplot2::ylim(0, 1) +
+
+    ggplot2::guides(colour = "none", shape = "none")+
 
     ggplot2::theme(panel.background = ggplot2::element_rect(fill = "white",
                                                             colour = "grey90"),
@@ -866,7 +867,8 @@ plot.rarity.fspe <- function(sp_dist_gravcenter,
   both_plot <- (NG_rar_fspe_plot + B_rar_fspe_plot) +
   patchwork::plot_layout(byrow = TRUE, heights = rep(1, 3),
                          widths = rep(1, 3), ncol = 2, nrow = 1,
-                         guides = "collect")
+                         guides = "collect") +
+  patchwork::plot_annotation(tag_levels = "A")
 
 
   # save:
