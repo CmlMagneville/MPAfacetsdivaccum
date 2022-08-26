@@ -301,19 +301,19 @@ alpha_fd_indices_day$functional_diversity_indices
 # Test differences in FRic between sites using day scale:
 NG_FD <- alpha_fd_indices_day$functional_diversity_indices[c(1:3), 3]
 B_FD <- alpha_fd_indices_day$functional_diversity_indices[c(4:6), 3]
-wilcox.test(NG_FD, B_FD)
+kruskal.test(NG_FD, B_FD)
 # p value not significative so do not reject H0: same FRic between sites
 
 # Test differences in FDis between sites using day scale:
 NG_FD <- alpha_fd_indices_day$functional_diversity_indices[c(1:3), 2]
 B_FD <- alpha_fd_indices_day$functional_diversity_indices[c(4:6), 2]
-wilcox.test(NG_FD, B_FD)
+kruskal.test(NG_FD, B_FD)
 # p value not significative so do not reject H0: same FDis between sites
 
 # Test differences in FSpe between sites using day scale:
 NG_FD <- alpha_fd_indices_day$functional_diversity_indices[c(1:3), 5]
 B_FD <- alpha_fd_indices_day$functional_diversity_indices[c(4:6), 5]
-wilcox.test(NG_FD, B_FD)
+kruskal.test(NG_FD, B_FD)
 # p value not significative so do not reject H0: same FD between sites
 
 # Compute for each site with FEs:

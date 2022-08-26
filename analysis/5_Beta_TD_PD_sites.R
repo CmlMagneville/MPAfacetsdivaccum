@@ -133,8 +133,8 @@ PD_values_day
 # Test differences in PD and TD between sites at day scale:
 NG_PD <- PD_values_day$PD[c(1:3)]
 B_PD <- PD_values_day$PD[c(4:6)]
-wilcox.test(NG_PD, B_PD)
+kruskal.test(NG_PD, B_PD)
 
 NG_TD <- PD_values_day$SR[c(1:3)]
 B_TD <- PD_values_day$SR[c(4:6)]
-wilcox.test(NG_TD, B_TD)
+kruskal.test(NG_TD, B_TD)

@@ -53,8 +53,8 @@ test_df %>%
 rstatix::levene_test(data = test_df, TD ~ site)
 # pvalue < 5% : significative difference in variance: use welch correction:
 
-# Test: in fact use wilcoxon test to have an identical test for 3 facets:
-wilcox.test(NG_TD, B_TD, alternative = "greater")
+# Test: in fact use krusal test to have an identical test for 3 facets:
+kruskal.test(NG_TD, B_TD)
 # Alternative: N'Gouja has a lower TD mean on video than Boueni: significant
 
 
@@ -108,7 +108,7 @@ test_df %>%
 # not normal: use wilcoxon test
 
 # Test: in fact use wilcoxon test to have an identical test for 3 facets:
-wilcox.test(NG_FD, B_FD)
+kruskal.test(NG_FD, B_FD)
 # No significant difference of FD based on video scale btw N'Gouja and Boueni
 
 
@@ -151,8 +151,8 @@ test_df %>%
   rstatix::shapiro_test(PD)
 # normal, could test homogeneity of variance but use wilcox so consistent for the 3 facets
 
-# Test: in fact use wilcoxon test to have an identical test for 3 facets:
-wilcox.test(NG_PD, B_PD)
+# Test: in fact use Kruskal test to have an identical test for 3 facets:
+kruskal.test(NG_PD, B_PD)
 # No significant difference of FD based on video scale btw N'Gouja and Boueni
 
 
