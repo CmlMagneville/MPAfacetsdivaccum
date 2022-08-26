@@ -215,7 +215,7 @@ wilcox.test(beta_df[which(beta_df[, "same_video"] == TRUE & beta_df[, "same_site
 # yes inter > intra in Boueni
 
 
-# Step 5: PCoA on beta between videos ####
+# Step 5: PERMDISP on beta between videos ####
 
 
 # Call data:
@@ -237,39 +237,22 @@ colnames(beta_all_df)[9] <- "beta_PD"
 beta_all_small_df <- beta_all_df
 beta_all_small_df <- beta_all_small_df[which((beta_all_small_df$same_site == TRUE & beta_all_small_df$same_video == TRUE) |
                           (beta_all_small_df$same_day == TRUE)), ]
+rownames(beta_all_small_df) <- paste0("pair", sep = "_", c(1:nrow(beta_all_small_df)))
 # ok it has the right number of rows: 3366 = 198 (interday) + 3168 (intraday) ...
 # ... 198 = 33 videos * 3 days combinations * 2 sites
 # ... 3168 = combination of two videos on 33 videos * 3 days = 1056 * 3
 
-
-# compute the video * traits (= beta diversities) df:
-vid_tr <- beta_all_small_df
-rownames(vid_tr) <- paste0("pair", sep = "_", c(1:nrow(vid_tr)))
-vid_tr <- vid_tr[, c(3, 8, 9)]
-tr_cat <- cbind(c("beta_TD", "beta_FD", "beta_PD"), c("Q", "Q", "Q"))
-colnames(tr_cat) <- c("trait_name", "trait_type")
-tr_cat <- as.data.frame(tr_cat)
-
-# Compute functional distance between pairs of video, here sp ~ pair of video:
-sp_dist_vid <- mFD::funct.dist(
-  sp_tr         = vid_tr,
-  tr_cat        = tr_cat,
-  metric        = "euclidean",
-  scale_euclid  = "scale_center",
-  ordinal_var   = "classic",
-  weight_type   = "equal",
-  stop_if_NA    = TRUE)
-
-# Compute PcoA
-pcoa_vid <- ape::pcoa(sp_dist_vid)
-coordinates_pairs <- as.data.frame(pcoa_vid$vectors)
-plot(pcoa_vid$vectors[, 1], pcoa_vid$vectors[, 2], type = "n", xlab = "PCoA1", ylab = "PCoA2",
-     axes = TRUE)
+beta_all_small_df$site_nm <- as.factor(beta_all_small_df$site_nm)
 
 
-# Compute the permdisp test to test if
-rownames(beta_all_small_df) <- paste0("pair", sep = "_", c(1:nrow(beta_all_small_df)))
-dispersion <- vegan::betadisper(sp_dist_vid, group = beta_all_small_df$site_nm)
+# Compute the permdisp test for video beta TD:
+
+## Get a distance matrix:
+dist_TD <- reshape2::acast(beta_all_small_df[, c(1,2,3)], x1 ~ x2, value.var='beta_TD', margins=FALSE)
+dist_TD <- as.dist(dist_TD)
+
+## Compute the dispersion:
+dispersion <- vegan::betadisper(dist_TD, group = beta_all_small_df$site_nm)
 pmod <- vegan::permutest(dispersion, pairwise = TRUE, permutations = 99)
 plot(dispersion, hull=TRUE, ellipse=TRUE)
 
