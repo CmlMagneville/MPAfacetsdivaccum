@@ -235,7 +235,16 @@ fe_tr_faxes <- mFD::traits.faxes.cor(
   sp_tr          = fe_tr,
   sp_faxes_coord = fe_faxes_coord[ , c("PC1", "PC2", "PC3", "PC4", "PC5")],
   plot           = TRUE)
-fe_tr_faxes$tr_faxes_plot
+correl_tr_faxes <- fe_tr_faxes$tr_faxes_plot
+
+ggplot2::ggsave(filename = here::here("outputs/Correl_tr_faxes.pdf"),
+                plot = correl_tr_faxes,
+                device = "pdf",
+                scale = 1,
+                height = 5000,
+                width = 11000,
+                units = "px",
+                dpi = 600)
 
 # PC1: (-) Big size, Very Mobile, High level
 # PC2: (-) LargeG
