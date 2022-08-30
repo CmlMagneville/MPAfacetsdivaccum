@@ -31,7 +31,6 @@ compute.fd.day.accum <- function(basic_fd_accum_df,
                                  sp_tr,
                                  tr_cat,
                                  fd_indices,
-                                 site_asb_df,
                                  rich_plot = TRUE) {
 
   # 1
@@ -220,41 +219,8 @@ compute.fd.day.accum <- function(basic_fd_accum_df,
     }
   }
 
-
-  ## create a new column that will contain the percentage of new species ...
-  # ... seen on each video -> FD accumul with 100% being the total FD on the ...
-  # ... studied site:
-  accum_FD_df$perc_FD_acc_site <- rep(0, nrow(accum_FD_df))
-
-  ## then fill this new column:
-  ## for each site_day:
-  for (i in (unique(accum_FD_df$site_day))) {
-
-    site <- substr(i, 1, 7)
-
-    # for Boueni, the gsub function returns "Boueni_" so put "Boueni" instead:
-    if (grepl("Boueni", site)) {
-      site <- "Boueni"
-    }
-
-    # then, must compute the FRic of the studied site:
-    site_FD <- mFD::alpha.fd.multidim(
-      sp_faxes_coord   = fe_faxes_coord[ , c("PC1", "PC2", "PC3", "PC4", "PC5")],
-      asb_sp_w         = as.matrix(site_asb_sp_df),
-      ind_vect         = fd_indices,
-      scaling          = TRUE,
-      check_input      = TRUE,
-      details_returned = TRUE)
-
-    sum_tot_richn <- site_FD$functional_diversity_indices[site, "fric"]
-
-    ## loop on the rows of each site_day:
-    for (j in rownames(accum_FD_df[which(accum_FD_df$site_day == i), ])) {
-
-      accum_FD_df[j, "perc_FD_acc_site"] <- (accum_FD_df[j, "fric"]/sum_tot_richn)*100
-
-    }
-  }
+  # FRic as percentage
+  accum_FD_df$fric <- accum_FD_df$fric*100
 
 
   if (rich_plot == TRUE) {

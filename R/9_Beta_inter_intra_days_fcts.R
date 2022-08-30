@@ -121,12 +121,37 @@ plot.boxplots.beta <- function(beta_df, metric) {
   } # end loop on each pair
 
 
-  # plot:
+  # for plot number 2, add day information for intra/interdays pairs:
+
+  beta_df$pair_day <- rep("none", nrow(beta_df))
+
+  for(i in (1:nrow(beta_df))) {
+
+    if (beta_df$compare[i] == "intraday") {
+
+      beta_df$pair_day[i] <- paste0(beta_df$compare[i], sep = "_",
+                                    stringr::str_sub(beta_df$x1[i], 5, 14))
+
+    }
+
+    if (beta_df$compare[i] == "interday") {
+
+      beta_df$pair_day[i] <- paste0(beta_df$compare[i], sep = "_",
+                                    stringr::str_sub(beta_df$x1[i], 5, 14), sep = "_",
+                                    stringr::str_sub(beta_df$x2[i], 5, 14))
+
+    }
+
+  }
+
+
+
+  # plot 1:
 
   compare_labs <- c("Inter-days", "Intra-day")
   names(compare_labs) <- c("interday", "intraday")
 
-  plot_beta <- ggplot2::ggplot(data = beta_df[which(beta_df$compare %in% c("interday", "intraday")), ],
+  plot_beta1 <- ggplot2::ggplot(data = beta_df[which(beta_df$compare %in% c("interday", "intraday")), ],
 
                                ggplot2::aes(x = site_nm, y = beta, fill = site_nm)) +
 
@@ -156,7 +181,7 @@ plot.boxplots.beta <- function(beta_df, metric) {
 
 
   ggplot2::ggsave(filename = here::here("outputs", paste0("beta_interintra_sites", sep = "_", metric, sep = "", ".pdf")),
-                  plot = plot_beta,
+                  plot = plot_beta1,
                   device = "pdf",
                   scale = 0.9,
                   height = 6000,
@@ -165,7 +190,86 @@ plot.boxplots.beta <- function(beta_df, metric) {
                   dpi = 800)
 
 
-  return(plot_beta)
+  # plot 2:
+
+  compare_labs <- c("Inter-days", "Intra-day")
+  names(compare_labs) <- c("interday", "intraday")
+
+  plot_beta2_NG <- ggplot2::ggplot(data = beta_df[which(beta_df$compare %in% c("interday", "intraday") &
+                                                        beta_df$site_nm == "N'Gouja"), ],
+
+                                ggplot2::aes(x = pair_day, y = beta),
+                                fill = "#80cdc1") +
+
+
+    ggplot2::geom_jitter(alpha = 0.6, color = "#80cdc1") +
+
+    ggplot2::geom_boxplot(alpha = 0.5, outlier.shape = NA) +
+
+    ggplot2::xlab("") +
+
+    ggplot2::ylab(paste0("Videos Beta", sep = " ", metric)) +
+
+    ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90),
+                   panel.background = ggplot2::element_rect(fill = "white",
+                                                            colour = "grey90"),
+                   panel.grid.major = ggplot2::element_line(colour = "grey90")) +
+
+
+    ggplot2::scale_x_discrete(labels= c("Inter ; Day 1 - Day 2", "Inter ; Day 1 - Day 3",
+                                        "Inter ; Day 2 - Day 3",
+                                        "Intra ; Day 1" , "Intra ; Day 2",
+                                        "Intra ; Day 3"))
+
+  plot_beta2_B <- ggplot2::ggplot(data = beta_df[which(beta_df$compare %in% c("interday", "intraday") &
+                                                          beta_df$site_nm == "Boueni"), ],
+
+                                   ggplot2::aes(x = pair_day, y = beta),
+                                   fill = "#bf812d") +
+
+
+    ggplot2::geom_jitter(alpha = 0.6, color = "#bf812d") +
+
+    ggplot2::geom_boxplot(alpha = 0.5, outlier.shape = NA) +
+
+    ggplot2::xlab("") +
+
+    ggplot2::ylab(paste0("Videos Beta", sep = " ", metric)) +
+
+    ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90),
+                   panel.background = ggplot2::element_rect(fill = "white",
+                                                            colour = "grey90"),
+                   panel.grid.major = ggplot2::element_line(colour = "grey90")) +
+
+
+    ggplot2::scale_x_discrete(labels= c("Inter ; Day 1 - Day 2", "Inter ; Day 1 - Day 3",
+                                        "Inter ; Day 2 - Day 3",
+                                        "Intra ; Day 1" , "Intra ; Day 2",
+                                        "Intra ; Day 3"))
+
+  plot_NG <- plot_beta2_NG +
+    ggplot2::ggtitle("N'Gouja")
+
+  plot_B <- plot_beta2_B +
+    ggplot2::ggtitle("Boueni")
+
+  plot_beta2_both <- (plot_NG + plot_B) +
+    patchwork::plot_layout(byrow = TRUE, heights = c(1, 1), widths = c(1, 1),
+                           ncol = 2, nrow = 1, guides = "collect")
+
+
+
+  ggplot2::ggsave(filename = here::here("outputs", paste0("beta_divide_days", sep = "_", metric, sep = "", ".pdf")),
+                  plot = plot_beta2_both,
+                  device = "pdf",
+                  scale = 0.9,
+                  height = 6000,
+                  width = 10000,
+                  units = "px",
+                  dpi = 800)
+
+
+  return(list(plot_beta1, plot_beta2_both))
 
 
 }

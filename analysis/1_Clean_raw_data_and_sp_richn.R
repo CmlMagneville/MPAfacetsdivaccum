@@ -334,7 +334,7 @@ sp_nm_all <- sp_nm_all[which(! sp_nm_all %in% c("time", "video_nm"))]
 # get sp name:
 sort(sp_nm_all)
 
-# get species nb: 154
+# get species nb: 150
 length(sp_nm_all)
 
 
@@ -348,7 +348,7 @@ sp_nm_NG <- sp_nm_NG[which(! sp_nm_NG %in% c("time", "video_nm"))]
 
 sort(sp_nm_NG)
 
-# get species number: 129 species in MPA (Octopus cyanea only seen in NG)
+# get species number: 127 species in MPA (Octopus cyanea only seen in NG)
 # (Chelonia mydas seen on both sites)
 length(sp_nm_NG)
 
@@ -363,6 +363,6 @@ sp_nm_B <- sp_nm_B[which(! sp_nm_B %in% c("time", "video_nm"))]
 
 sort(sp_nm_B)
 
-# get species number: 112 species in Fished Area
+# get species number: 111 species in Fished Area
 length(sp_nm_B)
 

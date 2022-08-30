@@ -114,8 +114,6 @@ saveRDS(beta_FD_df, here::here("transformed_data", "beta_FD_df.rds"))
 
 
 
-# Step 4: Plot boxplots beta intra and inter days for each facet ####
-
 
 # Call data:
 beta_TD_df <- readRDS(here::here("transformed_data", "beta_TD_df.rds"))
@@ -124,13 +122,18 @@ beta_FD_df <- readRDS(here::here("transformed_data", "beta_FD_df.rds"))
 
 
 # Plot and save for TD:
-plot.boxplots.beta(beta_df = beta_TD_df, metric = "TD")
+plot_TD <- plot.boxplots.beta(beta_df = beta_TD_df, metric = "TD")
 
 # Plot and save for PD:
-plot.boxplots.beta(beta_df = beta_PD_df, metric = "PD")
+plot_PD <- plot.boxplots.beta(beta_df = beta_PD_df, metric = "PD")
 
 # Plot and save for FD:
-plot.boxplots.beta(beta_df = beta_PD_df, metric = "FD")
+plot_FD <- plot.boxplots.beta(beta_df = beta_PD_df, metric = "FD")
+
+# assemble:
+  (plot_TD[[2]] + plot_PD[[2]] +
+      plot_FD[[2]]) +
+  patchwork::plot_layout(nrow = 1, ncol = 4)
 
 
 
@@ -313,5 +316,15 @@ pcoa_plot <- ggplot2::ggplot() +
 
 
 
+
+# Step 6: Plot beta intra (all days separatly) and inter days (between all pairs of days) ####
+
+
+# Call data:
+beta_TD_df <- readRDS(here::here("transformed_data", "beta_TD_df.rds"))
+beta_PD_df <- readRDS(here::here("transformed_data", "beta_PD_df.rds"))
+beta_FD_df <- readRDS(here::here("transformed_data", "beta_FD_df.rds"))
+
+# Add intraday and interday column:
 
 

@@ -229,6 +229,8 @@ compute.pd.day.accum <- function(basic_accum_df,
     }
   }
 
+  # PD as percentage:
+  accum_PD_df$accum_PD <- accum_PD_df$accum_PD*100
 
   if (rich_plot == TRUE) {
 

@@ -95,8 +95,7 @@ plot_lose_sp_B_FF <- plot_lose_sp_B[[3]] +
 
 plot_lose_sp_FSpe_FDis <- (plot_lose_sp_NG_FF + plot_lose_sp_B_FF) +
   patchwork::plot_layout(byrow = TRUE, heights = c(1, 1), widths = c(1, 1),
-                         ncol = 2, nrow = 1, guides = "collect") +
-  patchwork::plot_annotation(tag_levels = "A")
+                         ncol = 2, nrow = 1, guides = "collect")
 
 
 # save FRIC PD plot:

@@ -17,20 +17,21 @@
 plot.intra.day.accum <- function(TD_accum_df,
                                  PD_accum_df,
                                  FD_accum_df,
+                                 hline_df,
                                  facets_colors,
                                  linewidth) {
 
 
   # create a dataframe with info: site, day, video_nb, fric, td, pd:
-  complete_plot_df <- TD_accum_df[, c(ncol(TD_accum_df) - 4,
-                                      ncol(TD_accum_df) - 6,
+  complete_plot_df <- TD_accum_df[, c(ncol(TD_accum_df) - 5,
                                       ncol(TD_accum_df) - 7,
+                                      ncol(TD_accum_df) - 8,
                                       ncol(TD_accum_df))]
   colnames(complete_plot_df)[ncol(complete_plot_df)] <- "TD"
 
   # add FD and PD information:
-  complete_plot_df$FD <- FD_accum_df$perc_FD_acc_day
-  complete_plot_df$PD <- PD_accum_df$perc_PD_acc_day
+  complete_plot_df$FD <- FD_accum_df$fric
+  complete_plot_df$PD <- PD_accum_df$accum_PD
 
 
   # now merge TD, FD and PD columns -> metric:
@@ -46,7 +47,6 @@ plot.intra.day.accum <- function(TD_accum_df,
   final_plot_df$metric <- as.factor(final_plot_df$metric)
 
 
-
   # plot!
   accum_day_plot <- ggplot2::ggplot(final_plot_df) +
 
@@ -54,6 +54,10 @@ plot.intra.day.accum <- function(TD_accum_df,
                                     color = metric,
                                     linetype = day),
                        size = 0.9) +
+
+    ggplot2::geom_hline(data = hline_df, ggplot2::aes(yintercept = hline_value),
+                        color = "grey70",
+                        size = linewidth) +
 
     ggplot2::facet_grid(metric ~ site) +
 
@@ -77,7 +81,7 @@ plot.intra.day.accum <- function(TD_accum_df,
 
     ggplot2::xlab("") +
 
-    ggplot2::ylab("")
+    ggplot2::ylab("Percentage of diversity")
 
   # save:
   ggplot2::ggsave(filename = here::here("outputs", "facets_accum_day_plot.pdf"),

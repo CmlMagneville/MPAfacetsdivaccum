@@ -110,6 +110,10 @@ beta_PD
 PD_values <- picante::pd(site_asb_sp_df, phylo, include.root=FALSE)
 PD_values
 
+# And compute relative values according to total PD of both sites:
+site_asb_sp_df[nrow(site_asb_sp_df) + 1, ] <- rep(1, ncol(site_asb_sp_df))
+PD_values_all <- picante::pd(site_asb_sp_df, phylo, include.root=FALSE)
+
 
 # Compute PD for each day:
 day_asb_sp_df <- readRDS(here::here("transformed_data", "asb_sp_site_day.rds"))
@@ -138,3 +142,6 @@ kruskal.test(NG_PD, B_PD)
 NG_TD <- PD_values_day$SR[c(1:3)]
 B_TD <- PD_values_day$SR[c(4:6)]
 kruskal.test(NG_TD, B_TD)
+
+
+

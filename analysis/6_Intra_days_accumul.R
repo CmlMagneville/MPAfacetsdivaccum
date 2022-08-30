@@ -79,14 +79,12 @@ saveRDS(TD_accum_df, here::here("transformed_data", "TD_intraday_accum.rds"))
 basic_accum_df <- readRDS(here::here("transformed_data", "basic_accumul_df.rds"))
 tr_cat <- readRDS(here::here("transformed_data", "tr_cat_df.rds"))
 sp_tr <- readRDS(here::here("transformed_data", "sp_tr_final.rds"))
-site_asb_sp_df <- readRDS(here::here("transformed_data", "site_asb_df.rds"))
 
 # compute the FD accumul df (and save the FRic day variation plot):
 FD_accum <- compute.fd.day.accum(basic_fd_accum_df = basic_accum_df,
                                  sp_tr = sp_tr,
                                  tr_cat = tr_cat,
                                  fd_indices = c("fric"),
-                                 site_asb_df = site_asb_df,
                                  rich_plot = TRUE)
 
 FD_accum_df <- FD_accum[[2]]
@@ -115,6 +113,7 @@ saveRDS(PD_accum_df, here::here("transformed_data", "PD_intraday_accum.rds"))
 
 
 # Step 6: Plot intra-day accumulation of the three facets for each day, separing sites ####
+# Represent the percentage of total bioidvresity of the studied site and its accumulation #
 
 
 
@@ -127,9 +126,25 @@ PD_accum_df <- readRDS(here::here("transformed_data", "PD_intraday_accum.rds"))
 facets_colors <- c("#fdae61", "#abdda4", "#2b83ba")
 linewidth <- 0.9
 
+# Compute a df with values obtained from analysis before: maximal values of ...
+# ... each facets for each site:
+hline_df <- as.data.frame(matrix(ncol = 3, nrow = 6))
+colnames(hline_df) <- c("site", "metric", "hline_value")
+
+# B - TD
+hline_df[1, ] <- c("Boueni", "TD", 74)
+hline_df[2, ] <- c("N'Gouja", "TD", 84.67)
+hline_df[3, ] <- c("Boueni", "FD", 57.76)
+hline_df[4, ] <- c("N'Gouja", "FD", 90.70)
+hline_df[5, ] <- c("N'Gouja", "PD", 90.45)
+hline_df[6, ] <- c("Boueni", "PD", 78.47)
+hline_df$hline_value <- as.numeric(hline_df$hline_value)
+
+
 # plot (save):
 plot.intra.day.accum(TD_accum_df,
                      PD_accum_df,
                      FD_accum_df,
+                     hline_df,
                      facets_colors,
                      linewidth)
