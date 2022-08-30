@@ -79,12 +79,14 @@ saveRDS(TD_accum_df, here::here("transformed_data", "TD_intraday_accum.rds"))
 basic_accum_df <- readRDS(here::here("transformed_data", "basic_accumul_df.rds"))
 tr_cat <- readRDS(here::here("transformed_data", "tr_cat_df.rds"))
 sp_tr <- readRDS(here::here("transformed_data", "sp_tr_final.rds"))
+site_asb_sp_df <- readRDS(here::here("transformed_data", "site_asb_df.rds"))
 
 # compute the FD accumul df (and save the FRic day variation plot):
 FD_accum <- compute.fd.day.accum(basic_fd_accum_df = basic_accum_df,
                                  sp_tr = sp_tr,
                                  tr_cat = tr_cat,
                                  fd_indices = c("fric"),
+                                 site_asb_df = site_asb_df,
                                  rich_plot = TRUE)
 
 FD_accum_df <- FD_accum[[2]]
