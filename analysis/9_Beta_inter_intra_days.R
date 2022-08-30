@@ -130,10 +130,6 @@ plot_PD <- plot.boxplots.beta(beta_df = beta_PD_df, metric = "PD")
 # Plot and save for FD:
 plot_FD <- plot.boxplots.beta(beta_df = beta_PD_df, metric = "FD")
 
-# assemble:
-  (plot_TD[[2]] + plot_PD[[2]] +
-      plot_FD[[2]]) +
-  patchwork::plot_layout(nrow = 1, ncol = 4)
 
 
 
@@ -227,35 +223,28 @@ beta_PD_df <- readRDS(here::here("transformed_data", "beta_PD_df.rds"))
 beta_FD_df <- readRDS(here::here("transformed_data", "beta_FD_df.rds"))
 
 
-# Link the three facets on a single df and name each video pair:
-# easy as dataframes have same rows:
-colnames(beta_TD_df)[3] <- "beta_TD"
-colnames(beta_PD_df)[3] <- "beta_PD"
-colnames(beta_FD_df)[3] <- "beta_FD"
-beta_all_df <- cbind(beta_TD_df, beta_FD_df$beta_FD, beta_PD_df$beta_PD)
-colnames(beta_all_df)[8] <- "beta_FD"
-colnames(beta_all_df)[9] <- "beta_PD"
 
 # only keep inter and intra comparisons:
-beta_all_small_df <- beta_all_df
-beta_all_small_df <- beta_all_small_df[which((beta_all_small_df$same_site == TRUE & beta_all_small_df$same_video == TRUE) |
-                          (beta_all_small_df$same_day == TRUE)), ]
-rownames(beta_all_small_df) <- paste0("pair", sep = "_", c(1:nrow(beta_all_small_df)))
+beta_facet_df <- beta_TD_df
+
+beta_facet_df <- beta_facet_df[which((beta_facet_df$same_site == TRUE & beta_facet_df$same_video == TRUE) |
+                          (beta_facet_df$same_day == TRUE)), ]
+rownames(beta_facet_df) <- paste0("pair", sep = "_", c(1:nrow(beta_facet_df)))
 # ok it has the right number of rows: 3366 = 198 (interday) + 3168 (intraday) ...
 # ... 198 = 33 videos * 3 days combinations * 2 sites
 # ... 3168 = combination of two videos on 33 videos * 3 days = 1056 * 3
 
-beta_all_small_df$site_nm <- as.factor(beta_all_small_df$site_nm)
+beta_facet_df$site_nm <- as.factor(beta_facet_df$site_nm)
 
 
 # Compute the permdisp test for video beta TD:
 
 ## Get a distance matrix:
-dist_TD <- reshape2::acast(beta_all_small_df[, c(1,2,3)], x1 ~ x2, value.var='beta_TD', margins=FALSE)
-dist_TD <- as.dist(dist_TD)
+dist <- reshape2::acast(beta_facet_df[, c(1,2,3)], x1 ~ x2, value.var='beta', margins=FALSE)
+dist <- as.dist(dist)
 
 ## Compute the dispersion:
-dispersion <- vegan::betadisper(dist_TD, group = beta_all_small_df$site_nm)
+dispersion <- vegan::betadisper(dist, group = beta_facet_df$site_nm)
 pmod <- vegan::permutest(dispersion, pairwise = TRUE, permutations = 99)
 plot(dispersion, hull=TRUE, ellipse=TRUE)
 
