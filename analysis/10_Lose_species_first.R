@@ -46,7 +46,7 @@ plot_lose_sp_NG <- lose.species.div.plot(rarcom_df_site,
                                          site_color,
                                          site)
 plot_lose_sp_NG_df <- plot_lose_sp_NG[[1]]
-
+saveRDS(plot_lose_sp_NG, here::here("transformed_data", "plot_lose_sp_NG.rds"))
 
 # Step 3: Compute Boueni species lost species plot ####
 
@@ -65,25 +65,53 @@ plot_lose_sp_B <- lose.species.div.plot(rarcom_df_site,
                                          site_color,
                                          site)
 plot_lose_sp_B_df <- plot_lose_sp_B[[1]]
+saveRDS(plot_lose_sp_B, here::here("transformed_data", "plot_lose_sp_B.rds"))
 
 
 # Step 3: Combine the two plots with patchwork ####
 
-plot_lose_sp_NG <- plot_lose_sp_NG[[2]] +
+
+# FRic and PD
+
+plot_lose_sp_NG_FP <- plot_lose_sp_NG[[2]] +
   ggplot2::ggtitle("N'Gouja")
 
-plot_lose_sp_B <- plot_lose_sp_B[[2]] +
+plot_lose_sp_B_FP <- plot_lose_sp_B[[2]] +
   ggplot2::ggtitle("Boueni")
 
-plot_lose_sp <- (plot_lose_sp_NG + plot_lose_sp_B) +
+plot_lose_sp_FRic_PD <- (plot_lose_sp_NG_FP + plot_lose_sp_B_FP) +
   patchwork::plot_layout(byrow = TRUE, heights = c(1, 1), widths = c(1, 1),
-                         ncol = 1, nrow = 2, guides = "collect") +
+                         ncol = 2, nrow = 1, guides = "collect") +
   patchwork::plot_annotation(tag_levels = "A")
 
 
-# save:
-ggplot2::ggsave(filename = here::here("outputs", "Sp_loss_PD_FD.pdf"),
-                plot = plot_lose_sp,
+# FSpe and FDis:
+
+plot_lose_sp_NG_FF <- plot_lose_sp_NG[[3]] +
+  ggplot2::ggtitle("N'Gouja")
+
+plot_lose_sp_B_FF <- plot_lose_sp_B[[3]] +
+  ggplot2::ggtitle("Boueni")
+
+plot_lose_sp_FSpe_FDis <- (plot_lose_sp_NG_FF + plot_lose_sp_B_FF) +
+  patchwork::plot_layout(byrow = TRUE, heights = c(1, 1), widths = c(1, 1),
+                         ncol = 2, nrow = 1, guides = "collect") +
+  patchwork::plot_annotation(tag_levels = "A")
+
+
+# save FRIC PD plot:
+ggplot2::ggsave(filename = here::here("outputs", "Sp_loss_PD_FRic.pdf"),
+                plot = plot_lose_sp_FRic_PD,
+                device = "pdf",
+                scale = 1,
+                height = 8000,
+                width = 10000,
+                units = "px",
+                dpi = 800)
+
+# save FSpe FDis plot:
+ggplot2::ggsave(filename = here::here("outputs", "Sp_loss_FDis_FSpe.pdf"),
+                plot = plot_lose_sp_FSpe_FDis,
                 device = "pdf",
                 scale = 1,
                 height = 8000,

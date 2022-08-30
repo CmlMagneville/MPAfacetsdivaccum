@@ -606,25 +606,64 @@ lose.species.div.plot <- function(rarcom_df_site,
                                              "FDis",
                                              "FSpe"))
 
-  # plot rare and common (should add mediam and conf interval of randoms when pb solved):
-  plot_lose_sp <- ggplot2::ggplot(data = plot_all_lose_df,
+  # plot rare and common (should add mediam and conf interval of randoms when pb solved): only FRic and Faith's PD:
+  plot_lose_sp_1 <- ggplot2::ggplot(data = plot_all_lose_df[which(plot_all_lose_df$ind %in% c("FRic", "Faith's PD")), ],
                                   ggplot2::aes(x = Species_loss)) +
 
-    ggplot2::geom_line(data = plot_all_lose_df,
+    ggplot2::geom_line(data = plot_all_lose_df[which(plot_all_lose_df$ind %in% c("FRic", "Faith's PD")), ],
                        ggplot2::aes(y = values, group = metric,
                                              linetype = metric),
                                 size = 0.9,
                                 colour = site_color) +
 
-    ggplot2::geom_ribbon(data = plot_random_med_df,
+    ggplot2::geom_ribbon(data = plot_random_med_df[which(plot_random_med_df$ind %in% c("FRic", "Faith's PD")), ],
                          ggplot2::aes(x = Species_loss,
                                     ymin = lower_ci, ymax = higher_ci),
                          alpha = 0.3, fill = site_color) +
 
     ggplot2::facet_grid(. ~ ind) +
 
-    ggplot2::scale_linetype_manual(values = c("solid",
-                                              "dashed",
+    ggplot2::ylim(c(0, 0.95)) +
+
+    ggplot2::scale_linetype_manual(values = c("dashed",
+                                              "solid",
+                                              "dotted"),
+                                   labels = c("Lose common species first",
+                                              "Lose rarest species first",
+                                              "Lose random species first")) +
+
+    ggplot2::theme(axis.text.x = ggplot2::element_blank(),
+                   axis.ticks.x = ggplot2::element_blank(),
+                   panel.background = ggplot2::element_rect(fill = "white",
+                                                            colour = "white"),
+                   panel.grid.major.x = ggplot2::element_line(colour = "white"),
+                   panel.grid.major.y = ggplot2::element_line(colour = "grey90")) +
+
+    ggplot2::ylab("Diversities values") +
+
+    ggplot2::xlab("Species loss")
+
+  #FSpe and FDis:
+  plot_lose_sp_2 <- ggplot2::ggplot(data = plot_all_lose_df[which(plot_all_lose_df$ind %in% c("FDis", "FSpe")), ],
+                                    ggplot2::aes(x = Species_loss)) +
+
+    ggplot2::geom_line(data = plot_all_lose_df[which(plot_all_lose_df$ind %in% c("FDis", "FSpe")), ],
+                       ggplot2::aes(y = values, group = metric,
+                                    linetype = metric),
+                       size = 0.9,
+                       colour = site_color) +
+
+    ggplot2::geom_ribbon(data = plot_random_med_df[which(plot_random_med_df$ind %in% c("FDis", "FSpe")), ],
+                         ggplot2::aes(x = Species_loss,
+                                      ymin = lower_ci, ymax = higher_ci),
+                         alpha = 0.3, fill = site_color) +
+
+    ggplot2::facet_grid(. ~ ind) +
+
+    ggplot2::ylim(c(0, 0.75)) +
+
+    ggplot2::scale_linetype_manual(values = c("dashed",
+                                              "solid",
                                               "dotted"),
                                    labels = c("Lose common species first",
                                               "Lose rarest species first",
@@ -642,8 +681,9 @@ lose.species.div.plot <- function(rarcom_df_site,
     ggplot2::xlab("Species loss")
 
 
-
-  return(list(plot_all_lose_df, plot_lose_sp))
+  return(list(plot_all_lose_df,
+              "plot_lose_sp_FRic_PD" = plot_lose_sp_1,
+              "plot_lose_sp_Fspe_FDis" = plot_lose_sp_2))
 
 
 }
