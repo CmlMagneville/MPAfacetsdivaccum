@@ -331,7 +331,7 @@ dispersion <- vegan::betadisper(dist, group = beta_env_df$site_day)
 pmod <- vegan::permutest(dispersion, pairwise = TRUE, permutations = 99)
 plot(dispersion, hull=TRUE, ellipse=TRUE)
 
-# dispersion significant for TD: no permanova
+# dispersion significant for TD, FD, PD: no permanova
 
 
 # permanova:
