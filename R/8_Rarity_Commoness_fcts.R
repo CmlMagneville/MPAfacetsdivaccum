@@ -814,7 +814,7 @@ plot.rarity.fspe <- function(sp_dist_gravcenter,
 
 
   # plot N'Gouja's data:
-  NG_rar_fspe_plot <- ggplot2::ggplot(data = fspe_rarcom_df[which(rarcom_df$site == "N'Gouja"), ],
+  NG_rar_fspe_plot <- ggplot2::ggplot(data = fspe_rarcom_df[which(fspe_rarcom_df$site == "N'Gouja"), ],
                                       ggplot2::aes(x = rarity, y = relat_dist_to_grav)) +
 
     ggplot2::geom_boxplot(color = "#80cdc1", fill = "#80cdc1", alpha = 0.3,
@@ -838,7 +838,7 @@ plot.rarity.fspe <- function(sp_dist_gravcenter,
                    panel.grid.major = ggplot2::element_line(colour = "grey90"))
 
   # plot Boueni's data:
-  B_rar_fspe_plot <- ggplot2::ggplot(data = fspe_rarcom_df[which(rarcom_df$site == "Boueni"), ],
+  B_rar_fspe_plot <- ggplot2::ggplot(data = fspe_rarcom_df[which(fspe_rarcom_df$site == "Boueni"), ],
                                       ggplot2::aes(x = rarity, y = relat_dist_to_grav)) +
 
     ggplot2::geom_boxplot(color = "#bf812d", fill = "#bf812d", alpha = 0.3) +
@@ -881,7 +881,7 @@ plot.rarity.fspe <- function(sp_dist_gravcenter,
                   units = "px",
                   dpi = 800)
 
-  return(list(rarcom_df, both_plot))
+  return(list(fspe_rarcom_df, both_plot))
 
 
 }

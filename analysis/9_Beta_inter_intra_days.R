@@ -137,7 +137,7 @@ plot_FD <- plot.boxplots.beta(beta_df = beta_PD_df, metric = "FD")
 
 # change facets name to have different facets:
 # H0: not stat different
-beta_df <- beta_FD_df
+beta_df <- beta_TD_df
 
 # Is the variation in N'Gouja significantly superior to the variation in B?
 wilcox.test(beta_df[which(beta_df[, "site_nm"] == "N'Gouja"), "beta"],
@@ -222,34 +222,120 @@ beta_TD_df <- readRDS(here::here("transformed_data", "beta_TD_df.rds"))
 beta_PD_df <- readRDS(here::here("transformed_data", "beta_PD_df.rds"))
 beta_FD_df <- readRDS(here::here("transformed_data", "beta_FD_df.rds"))
 
-
-
-# only keep inter and intra comparisons:
-beta_facet_df <- beta_TD_df
-
-beta_facet_df <- beta_facet_df[which((beta_facet_df$same_site == TRUE & beta_facet_df$same_video == TRUE) |
-                          (beta_facet_df$same_day == TRUE)), ]
-rownames(beta_facet_df) <- paste0("pair", sep = "_", c(1:nrow(beta_facet_df)))
-# ok it has the right number of rows: 3366 = 198 (interday) + 3168 (intraday) ...
+# For information:
+# 3366 = 198 (interday) + 3168 (intraday) ...
 # ... 198 = 33 videos * 3 days combinations * 2 sites
 # ... 3168 = combination of two videos on 33 videos * 3 days = 1056 * 3
 
+
+# TD - change beta_facet_df for other facets:
+beta_facet_df <- beta_PD_df
 beta_facet_df$site_nm <- as.factor(beta_facet_df$site_nm)
+beta_facet_df$x1 <- as.character(beta_facet_df$x1)
+beta_facet_df$x2 <- as.character(beta_facet_df$x2)
 
-
-# Compute the permdisp test for video beta TD:
 
 ## Get a distance matrix:
-dist <- reshape2::acast(beta_facet_df[, c(1,2,3)], x1 ~ x2, value.var='beta', margins=FALSE)
+dist <- as.data.frame(matrix(nrow = length(unique(c(beta_facet_df$x1,
+                                                    beta_facet_df$x2))),
+                             ncol =  length(unique(c(beta_facet_df$x1,
+                                                     beta_facet_df$x2)))))
+colnames(dist) <- sort(unique(c(beta_facet_df$x1,
+                                beta_facet_df$x2)))
+
+rownames(dist) <- sort(unique(c(beta_facet_df$x1,
+                                beta_facet_df$x2)))
+
+for (i in (rownames(dist))) {
+
+  for (j in (colnames(dist))) {
+
+    # if the case has not been filled yet:
+    if (is.na(dist[which(rownames(dist) == i),
+                   which(colnames(dist) == j)])) {
+
+        # if it is the same video:
+        if (i == j) {
+          value <- 0
+        }
+
+        else {
+
+          # if first video in x1 column:
+          if (i %in% unique(beta_facet_df$x1)) {
+            # if the second video is in the x2 column:
+            if (j %in% unique(beta_facet_df[which(beta_facet_df$x1 == i), "x2"])) {
+              value <- beta_facet_df[which(beta_facet_df$x1 == i & beta_facet_df$x2 == j),
+                                     "beta"]
+            }
+          }
+
+          # if first video in x2 column:
+          if (i %in% unique(beta_facet_df$x2)) {
+            # if the second video is in the second column:
+            if (j %in% unique(beta_facet_df[which(beta_facet_df$x2 == i), "x1"])) {
+              value <- beta_facet_df[which(beta_facet_df$x1 == j & beta_facet_df$x2 == i),
+                                     "beta"]
+            }
+          }
+
+
+
+        }
+
+        dist[which(rownames(dist) == i),
+             which(colnames(dist) == j)] <- value
+
+        dist[which(rownames(dist) == j),
+             which(colnames(dist) == i)] <- value
+      }
+
+    }
+}
+
 dist <- as.dist(dist)
 
+## Create a new df with variable to test for each video:
+beta_env_df <- as.data.frame(matrix(nrow = length(unique(c(beta_facet_df$x1,
+                                                           beta_facet_df$x2))),
+                                    ncol = 4))
+colnames(beta_env_df) <- c("video_nm", "site", "day", "site_day")
+
+### Fill the columns:
+# video_nm:
+beta_env_df$video_nm <- unique(c(beta_facet_df$x1, beta_facet_df$x2))
+# day:
+beta_env_df$day <- stringr::str_sub(beta_env_df$video_nm, 5, 14)
+# site:
+for (i in (1:nrow(beta_env_df))) {
+
+  if (grepl("03-11-2019", beta_env_df$day[i]) | grepl("05-11-2019", beta_env_df$day[i]) |
+                                               grepl("08-11-2019", beta_env_df$day[i])) {
+    beta_env_df$site[i] <- "N'Gouja"
+  }
+
+  if (grepl("04-11-2019", beta_env_df$day[i]) | grepl("06-11-2019", beta_env_df$day[i]) |
+      grepl("09-11-2019", beta_env_df$day[i])) {
+    beta_env_df$site[i] <- "Boueni"
+  }
+
+}
+# day_site:
+beta_env_df$site_day <- paste0(beta_env_df$site, sep = "_",
+                               beta_env_df$day)
+beta_env_df$site_day <- as.factor(beta_env_df$site_day)
+
+
 ## Compute the dispersion:
-dispersion <- vegan::betadisper(dist, group = beta_facet_df$site_nm)
+dispersion <- vegan::betadisper(dist, group = beta_env_df$site_day)
 pmod <- vegan::permutest(dispersion, pairwise = TRUE, permutations = 99)
 plot(dispersion, hull=TRUE, ellipse=TRUE)
 
+# dispersion significant for TD: no permanova
+
+
 # permanova:
-permanova_results <- vegan::adonis(beta_all_small_df[, c(3, 8, 9)] ~ beta_all_small_df$site_nm, method="bray",perm = 99)
+permanova_results <- vegan::adonis(beta_all_small_df[, c(3, 8, 9)] ~ beta_env_df$site_day, method="bray", perm = 99)
 
 
 # plot:
@@ -304,16 +390,5 @@ pcoa_plot <- ggplot2::ggplot() +
                  panel.grid.major = ggplot2::element_line(colour = "grey90"))
 
 
-
-
-# Step 6: Plot beta intra (all days separatly) and inter days (between all pairs of days) ####
-
-
-# Call data:
-beta_TD_df <- readRDS(here::here("transformed_data", "beta_TD_df.rds"))
-beta_PD_df <- readRDS(here::here("transformed_data", "beta_PD_df.rds"))
-beta_FD_df <- readRDS(here::here("transformed_data", "beta_FD_df.rds"))
-
-# Add intraday and interday column:
 
 
