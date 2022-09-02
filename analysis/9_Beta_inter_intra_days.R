@@ -229,20 +229,48 @@ beta_FD_df <- readRDS(here::here("transformed_data", "beta_FD_df.rds"))
 
 
 # TD :
-permdisp.test(beta_facet_df = beta_TD_df)
+TD_permdisp <- permdisp.test(beta_facet_df = beta_TD_df)
 
 # PD :
-permdisp.test(beta_facet_df = beta_PD_df)
+PD_permdisp <- permdisp.test(beta_facet_df = beta_PD_df)
 
 # FD :
-permdisp.test(beta_facet_df = beta_FD_df)
+FD_permdisp <- permdisp.test(beta_facet_df = beta_FD_df)
 
 
 # dispersion significant for TD, FD, PD: no permanova
 
 
-# permanova:
-permanova_results <- vegan::adonis(beta_all_small_df[, c(3, 8, 9)] ~ beta_env_df$site_day, method="bray", perm = 99)
+# permanova TD:
+# get the df build in the permdisp.test function:
+beta_env_df <- TD_permdisp[[2]]
+dist <- TD_permdisp[[3]]
+
+TD_permanova_results <- vegan::adonis(dist ~ beta_env_df$site, method="bray", perm = 999,
+                                   strata = beta_env_df$day)
+# pas d'effet du site sur les distances TD entre videos
+
+
+# permanova FD:
+# get the df build in the permdisp.test function:
+beta_env_df <- FD_permdisp[[2]]
+dist <- FD_permdisp[[3]]
+
+FD_permanova_results <- vegan::adonis(dist ~ beta_env_df$site, method="bray", perm = 999,
+                                      strata = beta_env_df$day)
+# effet du site sur les distances FD entre videos
+
+
+# permanova PD:
+# get the df build in the permdisp.test function:
+beta_env_df <- PD_permdisp[[2]]
+dist <- PD_permdisp[[3]]
+
+PD_permanova_results <- vegan::adonis(dist ~ beta_env_df$site, method="bray", perm = 999,
+                                      strata = beta_env_df$day)
+# pas d'effet du site sur les distances PD entre videos
+
+
 
 
 # Step 6: Temporal decay beta on intra day data ####
