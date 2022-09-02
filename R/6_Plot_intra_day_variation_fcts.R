@@ -44,7 +44,10 @@ plot.intra.day.accum <- function(TD_accum_df,
   final_plot_df$day <- as.factor(final_plot_df$day)
   final_plot_df$video_nb <- ordered(final_plot_df$video_nb, levels = paste0(rep("vid_", 33),
                                                                                  c(1:33)))
+
+
   final_plot_df$metric <- as.factor(final_plot_df$metric)
+  final_plot_df$metric <- factor(final_plot_df$metric, levels = c("TD", "FD", "PD"))
 
 
   # plot!
@@ -59,7 +62,7 @@ plot.intra.day.accum <- function(TD_accum_df,
                         color = "grey70",
                         size = linewidth) +
 
-    ggplot2::facet_grid(metric ~ site) +
+    ggplot2::facet_grid(forcats::fct_relevel(metric,'TD','FD','PD') ~ site) +
 
     ggplot2::scale_colour_manual(values = facets_colors,
                                  name = "Metric") +
