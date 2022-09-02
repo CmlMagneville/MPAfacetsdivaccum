@@ -73,11 +73,9 @@ saveRDS(plot_lose_sp_B, here::here("transformed_data", "plot_lose_sp_B.rds"))
 
 # FRic and PD
 
-plot_lose_sp_NG_FP <- plot_lose_sp_NG[[2]] +
-  ggplot2::ggtitle("N'Gouja")
+plot_lose_sp_NG_FP <- plot_lose_sp_NG[[2]]
 
-plot_lose_sp_B_FP <- plot_lose_sp_B[[2]] +
-  ggplot2::ggtitle("Boueni")
+plot_lose_sp_B_FP <- plot_lose_sp_B[[2]]
 
 plot_lose_sp_FRic_PD <- (plot_lose_sp_NG_FP + plot_lose_sp_B_FP) +
   patchwork::plot_layout(byrow = TRUE, heights = c(1, 1), widths = c(1, 1),
@@ -87,11 +85,9 @@ plot_lose_sp_FRic_PD <- (plot_lose_sp_NG_FP + plot_lose_sp_B_FP) +
 
 # FSpe and FDis:
 
-plot_lose_sp_NG_FF <- plot_lose_sp_NG[[3]] +
-  ggplot2::ggtitle("N'Gouja")
+plot_lose_sp_NG_FF <- plot_lose_sp_NG[[3]]
 
-plot_lose_sp_B_FF <- plot_lose_sp_B[[3]] +
-  ggplot2::ggtitle("Boueni")
+plot_lose_sp_B_FF <- plot_lose_sp_B[[3]]
 
 plot_lose_sp_FSpe_FDis <- (plot_lose_sp_NG_FF + plot_lose_sp_B_FF) +
   patchwork::plot_layout(byrow = TRUE, heights = c(1, 1), widths = c(1, 1),

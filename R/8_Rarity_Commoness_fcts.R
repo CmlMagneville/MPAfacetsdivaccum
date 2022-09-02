@@ -228,7 +228,8 @@ plot.rarcom <- function(rarcom_df, sites_colors) {
 
   plot_both <- (rarcom_plot_NG + rarcom_plot_B) +
     patchwork::plot_layout(byrow = TRUE, heights = c(1, 1), widths = c(1, 1),
-                           ncol = 1, nrow = 2, guides = "collect")
+                           ncol = 1, nrow = 2, guides = "collect") +
+    patchwork::plot_annotation(tag_levels = "A")
 
   ggplot2::ggsave(filename = here::here("outputs", "rar_comm_vid.pdf"),
                   plot = plot_both,
