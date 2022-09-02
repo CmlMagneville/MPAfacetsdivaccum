@@ -467,6 +467,6 @@ permdisp.test <- function(beta_facet_df) {
   plot <- plot(dispersion, hull=TRUE, ellipse=TRUE)
 
 
-  return(list(pmod, plot))
+  return(list(pmod, beta_env_df, dist, plot))
 
 }

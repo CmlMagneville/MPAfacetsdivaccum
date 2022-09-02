@@ -452,15 +452,18 @@ plot.inter.day.accum <- function(TD_accum_df,
 
   plot_richness <- (plot_TD + plot_FRic + plot_PD) +
     patchwork::plot_layout(byrow = TRUE, heights = c(1, 1), widths = c(1, 1),
-                           ncol = 3, nrow = 1, guides = "collect")
+                           ncol = 3, nrow = 1, guides = "collect") +
+    patchwork::plot_annotation(tag_levels = "A")
 
   plot_fd_ind <- (plot_FDis + plot_FSpe + plot_FDiv) +
     patchwork::plot_layout(byrow = TRUE, heights = c(1, 1), widths = c(1, 1),
-                           ncol = 3, nrow = 1, guides = "collect")
+                           ncol = 3, nrow = 1, guides = "collect") +
+    patchwork::plot_annotation(tag_levels = "A")
 
   plot_fide <- (plot_FIde + plot_FIde2 + plot_FIde3 + plot_FIde4) +
     patchwork::plot_layout(byrow = TRUE, heights = c(1, 1), widths = c(1, 1),
-                           ncol = 2, nrow = 2, guides = "collect")
+                           ncol = 2, nrow = 2, guides = "collect") +
+    patchwork::plot_annotation(tag_levels = "A")
 
 
 
