@@ -180,3 +180,22 @@ fric_random_B_loss - fric_rare_B_loss
 # ... a supplemental loss of 1.73% of FRic when compared to random species loss
 
 
+# PD: Compute the PD loss when loosing the first 20% species:
+
+# N'Gouja:
+NG_nb_sp <- length(unique(plot_lose_sp_NG_df$Species_loss)) - 1
+NG_20 <- floor(0.2*NG_nb_sp)
+PD_rare_NG <- plot_lose_sp_NG_df[which(plot_lose_sp_NG_df$ind == "Faith's PD" & plot_lose_sp_NG_df$metric == "rares"), ]
+PD_rare_NG <- PD_rare_NG[order(PD_rare_NG$Species_loss), ]
+PD_loss_NG <- (PD_rare_NG[1, "values"] - PD_rare_NG[NG_20, "values"])
+
+# Boueni:
+B_nb_sp <- length(unique(plot_lose_sp_B_df$Species_loss)) - 1
+B_20 <- floor(0.2*B_nb_sp)
+PD_rare_B <- plot_lose_sp_B_df[which(plot_lose_sp_B_df$ind == "Faith's PD" & plot_lose_sp_B_df$metric == "rares"), ]
+PD_rare_B <- PD_rare_B[order(PD_rare_B$Species_loss), ]
+PD_loss_B <- (PD_rare_B[1, "values"] - PD_rare_B[B_20, "values"])
+
+
+
+

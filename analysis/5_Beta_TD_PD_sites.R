@@ -78,6 +78,9 @@ saveRDS(site_asb_sp_df, here::here("transformed_data", "site_asb_sp_df.rds"))
 beta_TD <- betapart::beta.pair(site_asb_sp_df, index.family = "jaccard")
 beta_TD
 
+beta_TD_day <- betapart::beta.pair(asb_sp_df, index.family = "jaccard")
+beta_TD_day
+
 
 # Step 3: Compute beta PD ####
 
@@ -97,14 +100,30 @@ site_asb_sp_df <- dplyr::rename(site_asb_sp_df, "Canthigaster_coronata" = "Canth
 site_asb_sp_df <- dplyr::rename(site_asb_sp_df, "Labropsis_australis" = "Labropsis_xanthonota")
 site_asb_sp_df <- dplyr::rename(site_asb_sp_df, "Ctenochaetus_striatus" = "Ac_Cten_dark")
 
+# idem in the asb_sp_df (for days variation):
+asb_sp_df <- dplyr::rename(asb_sp_df, "Gomphosus_varius" = "Gomphosus_caeruleus")
+asb_sp_df <- dplyr::rename(asb_sp_df, "Scolopsis_bilineata" = "Scolopsis_frenata")
+asb_sp_df <- dplyr::rename(asb_sp_df, "Scolopsis_bimaculata" = "Scolopsis_ghanam")
+asb_sp_df <- dplyr::rename(asb_sp_df, "Cetoscarus_bicolor" = "Cetoscarus_ocellatus")
+asb_sp_df <- dplyr::rename(asb_sp_df, "Scarus_altipinnis" = "Scarus_falcipinnis")
+asb_sp_df <- dplyr::rename(asb_sp_df, "Scarus_oviceps" = "Scarus_scaber")
+asb_sp_df <- dplyr::rename(asb_sp_df, "Tylosurus_crocodilus_crocodilus" = "Tylosurus_crocodilus")
+asb_sp_df <- dplyr::rename(asb_sp_df, "Chlorurus_microrhinos" = "Chlorurus_strongylocephalus")
+asb_sp_df <- dplyr::rename(asb_sp_df, "Canthigaster_coronata" = "Canthigaster_cyanospilota")
+asb_sp_df <- dplyr::rename(asb_sp_df, "Labropsis_australis" = "Labropsis_xanthonota")
+asb_sp_df <- dplyr::rename(asb_sp_df, "Ctenochaetus_striatus" = "Ac_Cten_dark")
 
-sp_nm_all <- colnames(site_asb_sp_df)
+
+sp_nm_all <- colnames(asb_sp_df)
 
 phylo <- fishtree::fishtree_phylogeny(species = sp_nm_all)
 
 # Compute beta PD:
 beta_PD <- betapart::phylo.beta.pair(site_asb_sp_df, phylo, index.family = "jaccard")
 beta_PD
+
+beta_PD_day <- betapart::phylo.beta.pair(asb_sp_df, phylo, index.family = "jaccard")
+beta_PD_day
 
 # Compute PD for each site:
 PD_values <- picante::pd(site_asb_sp_df, phylo, include.root=FALSE)

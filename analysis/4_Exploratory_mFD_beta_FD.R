@@ -306,6 +306,14 @@ alpha_fd_indices_day <- mFD::alpha.fd.multidim(
 
 alpha_fd_indices_day$functional_diversity_indices
 
+# Compute beta between days:
+beta_fd_indices_day <- mFD::beta.fd.multidim(
+  sp_faxes_coord   = sp_faxes_coord[ , c("PC1", "PC2", "PC3", "PC4", "PC5")],
+  asb_sp_occ       = asb_sp_df,
+  check_input      = TRUE,
+  beta_family      = c("Jaccard"),
+  details_returned = TRUE)
+
 
 # Test differences in FRic between sites using day scale:
 NG_FD <- alpha_fd_indices_day$functional_diversity_indices[c(1:3), 3]

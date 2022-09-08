@@ -29,8 +29,9 @@ rarcom_df <- rarcom.computation(basic_accum_df)
 saveRDS(rarcom_df, here::here("transformed_data", "rarcom_df.rds"))
 
 
-# Compute figures: ( rare = super_ rare, medium = rare, common = common)
+# Compute figures: ( rare = super_ rare, medium = rare, common = common):
 
+# Percentage of super rare/rare/common species per site:
 perc_rare_sp_NG <- (nrow(rarcom_df[which(rarcom_df$site == "N'Gouja" & rarcom_df$rarity == "super rare"), ])/
   nrow(rarcom_df[which(rarcom_df$site == "N'Gouja"), ]))*100
 perc_common_sp_NG <- (nrow(rarcom_df[which(rarcom_df$site == "N'Gouja" & rarcom_df$rarity == "common"), ])/
@@ -51,6 +52,19 @@ perc_unique_sp_NG <- (nrow(rarcom_df[which(rarcom_df$site == "N'Gouja" & rarcom_
 perc_unique_sp_B <- (nrow(rarcom_df[which(rarcom_df$site == "Boueni" & rarcom_df$site_presence == "Boueni only"), ])/
                         nrow(rarcom_df[which(rarcom_df$site == "Boueni"), ]))*100
 
+# Number of common species present in both sites (ie > 25 % of both sites):
+comm <- rarcom_df[which(rarcom_df$site_presence == "both" & rarcom_df$perc_vid_occ >= 25), ]
+# only count species which are in double:
+nb_comm_bothsites <- nrow(comm) - length(unique(comm$species_nm))
+# compute proportion:
+(nb_comm_bothsites / length(unique(rarcom_df$species_nm)))*100
+
+# Number of common species present in both sites (ie > 75 % of both sites):
+rare <- rarcom_df[which(rarcom_df$site_presence == "both" & rarcom_df$perc_vid_occ >= 75), ]
+# only count species which are in double:
+nb_rare_bothsites <- nrow(rare) - length(unique(rare$species_nm))
+# compute proportion:
+(nb_rare_bothsites / length(unique(rarcom_df$species_nm)))*100
 
 # Plot (and save) for each site species occurrence:
 sites_colors <- c("grey85", "#bf812d", "#80cdc1")
