@@ -214,7 +214,7 @@ wilcox.test(beta_df[which(beta_df[, "same_video"] == TRUE & beta_df[, "same_site
 # yes inter > intra in Boueni
 
 
-# Step 5: PERMDISP on beta between videos ####
+# Step 5: PERMDISP and PERMANOVA on beta between videos ####
 
 
 # Call data:
@@ -319,5 +319,145 @@ ggplot2::ggsave(filename = here::here("outputs", "Temp_decay_all.pdf"),
                 scale = 1,
                 height = 9000,
                 width = 14000,
+                units = "px",
+                dpi = 800)
+
+
+# Step 7: Plot TD, FD and PD based on video dissimilarities ####
+
+
+# Call data:
+beta_TD_df <- readRDS(here::here("transformed_data", "beta_TD_df.rds"))
+beta_PD_df <- readRDS(here::here("transformed_data", "beta_PD_df.rds"))
+beta_FD_df <- readRDS(here::here("transformed_data", "beta_FD_df.rds"))
+
+
+# TD - Get the coordinates of videos along PCoA axis:
+TD_permdisp <- permdisp.test(beta_facet_df = beta_TD_df)
+coord_TD <- as.data.frame(TD_permdisp[[4]]$sites)
+
+# PD :
+PD_permdisp <- permdisp.test(beta_facet_df = beta_PD_df)
+coord_PD <- as.data.frame(PD_permdisp[[4]]$sites)
+
+# FD :
+FD_permdisp <- permdisp.test(beta_facet_df = beta_FD_df)
+coord_FD <- as.data.frame(FD_permdisp[[4]]$sites)
+
+# Add a column to tell whether videos belong to N'Gouja or Boueni for 3 coord dfs:
+coord_TD$site <- rep("N'Gouja", nrow(coord_TD))
+coord_FD$site <- rep("N'Gouja", nrow(coord_FD))
+coord_PD$site <- rep("N'Gouja", nrow(coord_PD))
+
+# Fill this new column:
+# TD
+for (i in (1:nrow(coord_TD))) {
+
+  nm_vid <- rownames(coord_TD)[i]
+
+  if (stringr::str_detect(nm_vid, "04-11-2019") |
+      stringr::str_detect(nm_vid, "06-11-2019") |
+      stringr::str_detect(nm_vid, "09-11-2019")) {
+
+    coord_TD$site[i] <- "Boueni"
+  }
+
+}
+
+# FD
+for (i in (1:nrow(coord_FD))) {
+
+  nm_vid <- rownames(coord_FD)[i]
+
+  if (stringr::str_detect(nm_vid, "04-11-2019") |
+      stringr::str_detect(nm_vid, "06-11-2019") |
+      stringr::str_detect(nm_vid, "09-11-2019")) {
+
+    coord_FD$site[i] <- "Boueni"
+  }
+
+}
+
+# PD
+for (i in (1:nrow(coord_PD))) {
+
+  nm_vid <- rownames(coord_PD)[i]
+
+  if (stringr::str_detect(nm_vid, "04-11-2019") |
+      stringr::str_detect(nm_vid, "06-11-2019") |
+      stringr::str_detect(nm_vid, "09-11-2019")) {
+
+    coord_PD$site[i] <- "Boueni"
+  }
+
+}
+
+
+
+# plot TD:
+TD_pcoa_plot <- ggplot2::ggplot() +
+
+  # add interday dots in black:
+  ggplot2::geom_point(data = coord_TD,
+                      ggplot2::aes(x = PCoA1, y = PCoA2, color = site)) +
+
+  ggplot2::scale_colour_manual(values = c("#bf812d",
+                                          "#80cdc1"),
+                               name = "Site") +
+
+  ggplot2::theme(panel.background = ggplot2::element_rect(fill = "white",
+                                                          colour = "white"),
+                 panel.grid.major = ggplot2::element_line(colour = "grey90"))
+
+# plot FD:
+FD_pcoa_plot <- ggplot2::ggplot() +
+
+  # add interday dots in black:
+  ggplot2::geom_point(data = coord_FD,
+                      ggplot2::aes(x = PCoA1, y = PCoA2, color = site)) +
+
+  ggplot2::scale_colour_manual(values = c("#bf812d",
+                                          "#80cdc1"),
+                               name = "Site") +
+
+  ggplot2::theme(panel.background = ggplot2::element_rect(fill = "white",
+                                                          colour = "white"),
+                 panel.grid.major = ggplot2::element_line(colour = "grey90"))
+
+# plot PD:
+PD_pcoa_plot <- ggplot2::ggplot() +
+
+  # add interday dots in black:
+  ggplot2::geom_point(data = coord_PD,
+                      ggplot2::aes(x = PCoA1, y = PCoA2, color = site)) +
+
+  ggplot2::scale_colour_manual(values = c("#bf812d",
+                                          "#80cdc1"),
+                               name = "Site") +
+
+  ggplot2::theme(panel.background = ggplot2::element_rect(fill = "white",
+                                                          colour = "white"),
+                 panel.grid.major = ggplot2::element_line(colour = "grey90"))
+
+# Add plots together:
+TD_pcoa_plot <- TD_pcoa_plot +
+  ggplot2::ggtitle("TD")
+
+FD_pcoa_plot <- FD_pcoa_plot +
+  ggplot2::ggtitle("FD")
+
+PD_pcoa_plot <- PD_pcoa_plot +
+  ggplot2::ggtitle("PD")
+
+pcoa_all <- (TD_pcoa_plot + FD_pcoa_plot + PD_pcoa_plot) +
+  patchwork::plot_layout(byrow = TRUE, heights = c(1, 1), widths = c(1, 1),
+                         ncol = 3, nrow = 1, guides = "collect")
+
+ggplot2::ggsave(filename = here::here("outputs", "pcoa_all.pdf"),
+                plot = pcoa_all,
+                device = "pdf",
+                scale = 1,
+                height = 5000,
+                width = 11000,
                 units = "px",
                 dpi = 800)
