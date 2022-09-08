@@ -148,3 +148,143 @@ plot.intra.day.accum(TD_accum_df,
                      hline_df,
                      facets_colors,
                      linewidth)
+
+
+# Step 7: Compute interesting papers ####
+
+
+# Load data:
+TD_accum_df <- readRDS(here::here("transformed_data", "TD_intraday_accum.rds"))
+FD_accum_df <- readRDS(here::here("transformed_data", "FD_intraday_accum.rds"))
+PD_accum_df <- readRDS(here::here("transformed_data", "PD_intraday_accum.rds"))
+
+
+# Compute the mean increase of TD per day:
+# (end - begining / end) * 100
+# N'Gouja:
+NG_03 <- ((TD_accum_df$perc_TD_acc_site[which(TD_accum_df$day == "03-11-2019" &
+                                            TD_accum_df$video_nb == "vid_33")] -
+          TD_accum_df$perc_TD_acc_site[which(TD_accum_df$day == "03-11-2019" &
+                                            TD_accum_df$video_nb == "vid_1")]) /
+          TD_accum_df$perc_TD_acc_site[which(TD_accum_df$day == "03-11-2019" &
+                                            TD_accum_df$video_nb == "vid_33")])*100
+NG_05 <- ((TD_accum_df$perc_TD_acc_site[which(TD_accum_df$day == "05-11-2019" &
+                                                TD_accum_df$video_nb == "vid_33")] -
+             TD_accum_df$perc_TD_acc_site[which(TD_accum_df$day == "05-11-2019" &
+                                                  TD_accum_df$video_nb == "vid_1")]) /
+            TD_accum_df$perc_TD_acc_site[which(TD_accum_df$day == "05-11-2019" &
+                                                 TD_accum_df$video_nb == "vid_33")])*100
+NG_08 <- ((TD_accum_df$perc_TD_acc_site[which(TD_accum_df$day == "08-11-2019" &
+                                                TD_accum_df$video_nb == "vid_33")] -
+             TD_accum_df$perc_TD_acc_site[which(TD_accum_df$day == "08-11-2019" &
+                                                  TD_accum_df$video_nb == "vid_1")]) /
+            TD_accum_df$perc_TD_acc_site[which(TD_accum_df$day == "08-11-2019" &
+                                                 TD_accum_df$video_nb == "vid_33")])*100
+# Boueni:
+B_04 <- ((TD_accum_df$perc_TD_acc_site[which(TD_accum_df$day == "04-11-2019" &
+                                                TD_accum_df$video_nb == "vid_33")] -
+             TD_accum_df$perc_TD_acc_site[which(TD_accum_df$day == "04-11-2019" &
+                                                  TD_accum_df$video_nb == "vid_1")]) /
+            TD_accum_df$perc_TD_acc_site[which(TD_accum_df$day == "04-11-2019" &
+                                                 TD_accum_df$video_nb == "vid_33")])*100
+B_06 <- ((TD_accum_df$perc_TD_acc_site[which(TD_accum_df$day == "06-11-2019" &
+                                                TD_accum_df$video_nb == "vid_33")] -
+             TD_accum_df$perc_TD_acc_site[which(TD_accum_df$day == "06-11-2019" &
+                                                  TD_accum_df$video_nb == "vid_1")]) /
+            TD_accum_df$perc_TD_acc_site[which(TD_accum_df$day == "06-11-2019" &
+                                                 TD_accum_df$video_nb == "vid_33")])*100
+B_09 <- ((TD_accum_df$perc_TD_acc_site[which(TD_accum_df$day == "09-11-2019" &
+                                                TD_accum_df$video_nb == "vid_33")] -
+             TD_accum_df$perc_TD_acc_site[which(TD_accum_df$day == "09-11-2019" &
+                                                  TD_accum_df$video_nb == "vid_1")]) /
+            TD_accum_df$perc_TD_acc_site[which(TD_accum_df$day == "09-11-2019" &
+                                                 TD_accum_df$video_nb == "vid_33")])*100
+mean(c(NG_03, NG_05, NG_08, B_04, B_06, B_09))
+sd(c(NG_03, NG_05, NG_08, B_04, B_06, B_09))
+
+# Compute the mean increase of FD per day:
+# (end - begining / end) * 100
+# N'Gouja:
+NG_03 <- ((FD_accum_df$fric[which(FD_accum_df$day == "03-11-2019" &
+                                                FD_accum_df$video_nb == "vid_33")] -
+             FD_accum_df$fric[which(FD_accum_df$day == "03-11-2019" &
+                                                  FD_accum_df$video_nb == "vid_1")]) /
+            FD_accum_df$fric[which(FD_accum_df$day == "03-11-2019" &
+                                                 FD_accum_df$video_nb == "vid_33")])*100
+NG_05 <- ((FD_accum_df$fric[which(FD_accum_df$day == "05-11-2019" &
+                                                FD_accum_df$video_nb == "vid_33")] -
+             FD_accum_df$fric[which(FD_accum_df$day == "05-11-2019" &
+                                                  FD_accum_df$video_nb == "vid_1")]) /
+            FD_accum_df$fric[which(FD_accum_df$day == "05-11-2019" &
+                                                 FD_accum_df$video_nb == "vid_33")])*100
+NG_08 <- ((FD_accum_df$fric[which(FD_accum_df$day == "08-11-2019" &
+                                                FD_accum_df$video_nb == "vid_33")] -
+             FD_accum_df$fric[which(FD_accum_df$day == "08-11-2019" &
+                                                  FD_accum_df$video_nb == "vid_1")]) /
+            FD_accum_df$fric[which(FD_accum_df$day == "08-11-2019" &
+                                                 FD_accum_df$video_nb == "vid_33")])*100
+# Boueni:
+B_04 <- ((FD_accum_df$fric[which(FD_accum_df$day == "04-11-2019" &
+                                               FD_accum_df$video_nb == "vid_33")] -
+            FD_accum_df$fric[which(FD_accum_df$day == "04-11-2019" &
+                                                 FD_accum_df$video_nb == "vid_1")]) /
+           FD_accum_df$fric[which(FD_accum_df$day == "04-11-2019" &
+                                                FD_accum_df$video_nb == "vid_33")])*100
+B_06 <- ((FD_accum_df$fric[which(FD_accum_df$day == "06-11-2019" &
+                                               FD_accum_df$video_nb == "vid_33")] -
+            FD_accum_df$fric[which(FD_accum_df$day == "06-11-2019" &
+                                                 FD_accum_df$video_nb == "vid_1")]) /
+           FD_accum_df$fric[which(FD_accum_df$day == "06-11-2019" &
+                                                FD_accum_df$video_nb == "vid_33")])*100
+B_09 <- ((FD_accum_df$fric[which(FD_accum_df$day == "09-11-2019" &
+                                               FD_accum_df$video_nb == "vid_33")] -
+            FD_accum_df$fric[which(FD_accum_df$day == "09-11-2019" &
+                                                 FD_accum_df$video_nb == "vid_1")]) /
+           FD_accum_df$fric[which(FD_accum_df$day == "09-11-2019" &
+                                                FD_accum_df$video_nb == "vid_33")])*100
+mean(c(NG_03, NG_05, NG_08, B_04, B_06, B_09))
+sd(c(NG_03, NG_05, NG_08, B_04, B_06, B_09))
+
+
+# Compute the mean increase of PD per day:
+# (end - begining / end) * 100
+# N'Gouja:
+NG_03 <- ((PD_accum_df$accum_PD[which(PD_accum_df$day == "03-11-2019" &
+                                    PD_accum_df$video_nb == "vid_33")] -
+             PD_accum_df$accum_PD[which(PD_accum_df$day == "03-11-2019" &
+                                      PD_accum_df$video_nb == "vid_1")]) /
+            PD_accum_df$accum_PD[which(PD_accum_df$day == "03-11-2019" &
+                                     PD_accum_df$video_nb == "vid_33")])*100
+NG_05 <- ((PD_accum_df$accum_PD[which(PD_accum_df$day == "05-11-2019" &
+                                    PD_accum_df$video_nb == "vid_33")] -
+             PD_accum_df$accum_PD[which(PD_accum_df$day == "05-11-2019" &
+                                      PD_accum_df$video_nb == "vid_1")]) /
+            PD_accum_df$accum_PD[which(PD_accum_df$day == "05-11-2019" &
+                                     PD_accum_df$video_nb == "vid_33")])*100
+NG_08 <- ((PD_accum_df$accum_PD[which(PD_accum_df$day == "08-11-2019" &
+                                    PD_accum_df$video_nb == "vid_33")] -
+             PD_accum_df$accum_PD[which(PD_accum_df$day == "08-11-2019" &
+                                      PD_accum_df$video_nb == "vid_1")]) /
+            PD_accum_df$accum_PD[which(PD_accum_df$day == "08-11-2019" &
+                                     PD_accum_df$video_nb == "vid_33")])*100
+# Boueni:
+B_04 <- ((PD_accum_df$accum_PD[which(PD_accum_df$day == "04-11-2019" &
+                                   PD_accum_df$video_nb == "vid_33")] -
+            PD_accum_df$accum_PD[which(PD_accum_df$day == "04-11-2019" &
+                                     PD_accum_df$video_nb == "vid_1")]) /
+           PD_accum_df$accum_PD[which(PD_accum_df$day == "04-11-2019" &
+                                    PD_accum_df$video_nb == "vid_33")])*100
+B_06 <- ((PD_accum_df$accum_PD[which(PD_accum_df$day == "06-11-2019" &
+                                   PD_accum_df$video_nb == "vid_33")] -
+            PD_accum_df$accum_PD[which(PD_accum_df$day == "06-11-2019" &
+                                     PD_accum_df$video_nb == "vid_1")]) /
+           PD_accum_df$accum_PD[which(PD_accum_df$day == "06-11-2019" &
+                                    PD_accum_df$video_nb == "vid_33")])*100
+B_09 <- ((PD_accum_df$accum_PD[which(PD_accum_df$day == "09-11-2019" &
+                                   PD_accum_df$video_nb == "vid_33")] -
+            PD_accum_df$accum_PD[which(PD_accum_df$day == "09-11-2019" &
+                                     PD_accum_df$video_nb == "vid_1")]) /
+           PD_accum_df$accum_PD[which(PD_accum_df$day == "09-11-2019" &
+                                    PD_accum_df$video_nb == "vid_33")])*100
+mean(c(NG_03, NG_05, NG_08, B_04, B_06, B_09))
+sd(c(NG_03, NG_05, NG_08, B_04, B_06, B_09))
