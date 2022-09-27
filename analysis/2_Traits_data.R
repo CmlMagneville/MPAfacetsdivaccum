@@ -103,7 +103,7 @@ setdiff(sp_nm_all, sp_tr4$Latin_name)
 # Scarus caudofasciatus # SERF db: "OM","S4","Mob", "Day", "LargeG", "Bottom", "Scarus_caudofasciatus"
 # Cephalopholis nigripinnis # SERF db: "FC","S3","Sed", "Both", "Sol", "Bottom", "Cephalopholis_nigripinnis"
 
-# Add missing species:
+# Add missing species from the SERF DB:
 
 S_frenata <- c("IM", "S3", "Mob", "Day", "SmallG", "Bottom", "Scolopsis_frenata")
 S_ferrugineus <- c("OM","S4","Mob", "Day", "Sol", "Bottom", "Scarus_ferrugineus")

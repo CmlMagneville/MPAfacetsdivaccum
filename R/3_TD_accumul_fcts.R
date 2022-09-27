@@ -458,7 +458,7 @@ compute.td.interday.accum <- function(basic_accum_df, rich_plot = TRUE) {
 
 
     ## loop on species:
-    for (j in (1:(ncol(basic_df) - 13))) {
+    for (j in (1:(ncol(basic_df) - 6))) {
 
 
       # set the rownames to basic:
