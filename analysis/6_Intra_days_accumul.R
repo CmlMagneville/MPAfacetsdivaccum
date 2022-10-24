@@ -122,7 +122,7 @@ FD_accum <- compute.fd.day.accum(basic_fd_accum_df = basic_accum_df,
 FD_accum_df <- FD_accum[[2]]
 
 # save the TD_accum_df:
-saveRDS(FD_accum_df, here::here("transformed_data", "FD_intraday_hour_accum.rds"))
+saveRDS(FD_accum_df, here::here("transformed_data", "FD_intraday_accum.rds"))
 
 
 
