@@ -42,15 +42,15 @@ plot.inter.day.accum <- function(TD_accum_df,
 
   # now merge TD, FD and PD columns -> metric:
   final_plot_df <- reshape2::melt(complete_plot_df,
-                                  id.vars = c("day_nb", "site", "day", "video_nb"),
+                                  id.vars = c("day_nb", "site", "day", "hour_nb"),
                                   variable.name = 'metric', value.name = 'values')
 
   # right class:
   final_plot_df$site <- as.factor(final_plot_df$site)
   final_plot_df$day <- as.factor(final_plot_df$day)
   final_plot_df$day <- as.factor(final_plot_df$day_nb)
-  final_plot_df$video_nb <- ordered(final_plot_df$video_nb, levels = paste0(rep("vid_", 33),
-                                                                            c(1:33)))
+  final_plot_df$hour_nb <- ordered(final_plot_df$hour_nb, levels = paste0(rep("vid_", 9),
+                                                                            c(1:9)))
   final_plot_df$metric <- as.factor(final_plot_df$metric)
 
 

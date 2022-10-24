@@ -39,8 +39,8 @@ create.complete.df <- function(dfs_list, days_vect) {
 
   # create the dataframe which will contain all data:
   complete_df <- as.data.frame(matrix(nrow = 1, ncol = nb_sp + 3))
-  colnames(complete_df) <- c(sort(nm_sp_all[which(! nm_sp_all %in% c("hour", "hour_nm"))]),
-                             "hour_nb", "day", "hour_id")
+  colnames(complete_df) <- c(sort(nm_sp_all[which(! nm_sp_all %in% c("video_nm", "time_vid_df"))]),
+                             "video_nb", "day", "video_id")
 
 
   # make a loop on each site_day :
@@ -49,20 +49,20 @@ create.complete.df <- function(dfs_list, days_vect) {
     # get each video information:
     for (j in (1:nrow(dfs_list[[i]]))) {
 
-      hour_nb <- j
+      video_nb <- j
       day <- days_vect[i]
-      hour_id <- paste0("hour", sep = "_", day, sep = "_", hour_nb)
+      video_id <- paste0("video", sep = "_", day, sep = "_", video_nb)
 
      # fill the new df with video and day informations:
      complete_df[nrow(complete_df) + 1,] <- c(rep(0, ncol(complete_df) - 3),
-                                              hour_nb, day, hour_id)
+                                              video_nb, day, video_id)
 
      # add 1 where a given species is seen:
      studied_df <- dfs_list[[i]]
 
      ## get the names of the species which are seen on the studied video:
      sp_seen <- colnames(studied_df[, which(studied_df[j, ] != 0)])
-     sp_seen <- sp_seen[which(! sp_seen %in% c("hour", "hour_nm"))]
+     sp_seen <- sp_seen[which(! sp_seen %in% c("video", "video_nm"))]
 
      ## add 1:
      complete_df[nrow(complete_df), which(colnames(complete_df) %in% sp_seen)] <- rep(1, length(sp_seen))
@@ -114,19 +114,19 @@ compute.td.day.accum <- function(basic_accum_df, rich_plot = TRUE) {
 
   ## add sp richness column
   basic_df$richn <- apply(basic_df[, which(! colnames(basic_df) %in%
-                                             c("hour_nb", "day", "hour_id", "site"))],
+                                             c("video_nb", "day", "video_id", "site"))],
                           1, sum)
 
   # express species richness as a proportion of total species richness ...
   # ... so its expressed as FRic (and PD):
   tot_sp_richn <- ncol(basic_df[, which(! colnames(basic_df) %in%
-                                          c("hour_nb", "day", "hour_id", "site"))])
+                                          c("video_nb", "day", "video_id", "site"))])
   basic_df$richn <- basic_df$richn / tot_sp_richn
 
-  ## rename hour_nb from 1, 2 -> hour_1, hour_2 and give right levels:
-  basic_df$hour_nb <- paste0(rep("hour_", nrow(basic_df)), sep = "", basic_df$hour_nb)
-  basic_df$hour_nb  <- as.factor(basic_df$hour_nb)
-  basic_df$hour_nb <- ordered(basic_df$hour_nb, levels = paste0(rep("hour_", 9),
+  ## rename video_nb from 1, 2 -> video_1, video_2 and give right levels:
+  basic_df$video_nb <- paste0(rep("video_", nrow(basic_df)), sep = "", basic_df$video_nb)
+  basic_df$video_nb  <- as.factor(basic_df$video_nb)
+  basic_df$video_nb <- ordered(basic_df$video_nb, levels = paste0(rep("video_", 9),
                                                                   c(1:9)))
 
   ## site is a factor:
@@ -139,10 +139,10 @@ compute.td.day.accum <- function(basic_accum_df, rich_plot = TRUE) {
 
     richn_var <- ggplot2::ggplot(data = basic_df) +
 
-      ggplot2::geom_boxplot(ggplot2::aes(y = richn, x = hour_nb),
+      ggplot2::geom_boxplot(ggplot2::aes(y = richn, x = video_nb),
                             color = "grey70", fill = "grey80", alpha = 0.5) +
 
-      ggplot2::geom_jitter(ggplot2::aes(y = richn, x = hour_nb,
+      ggplot2::geom_jitter(ggplot2::aes(y = richn, x = video_nb,
                            color = site, fill = site),
                            width = 0.1) +
 
@@ -214,8 +214,8 @@ compute.td.day.accum <- function(basic_accum_df, rich_plot = TRUE) {
 
   ## first compute the sum of new species seen on each video:
   accum_TD_df$sum_accum <- apply(accum_TD_df[,
-                        which(! colnames(accum_TD_df) %in% c("hour_nb",
-                                                             "day", "hour_id",
+                        which(! colnames(accum_TD_df) %in% c("video_nb",
+                                                             "day", "video_id",
                                                              "site", "richn",
                                                              "site_day"))],
                                 1,
@@ -225,7 +225,7 @@ compute.td.day.accum <- function(basic_accum_df, rich_plot = TRUE) {
 
 
   ## create a new column that will contain the percentage of new species ...
-  # ... seen on each hour -> TD accumul with 100% at the end of the day ...
+  # ... seen on each video -> TD accumul with 100% at the end of the day ...
   # ... all the species richness seen during the day_site is seen at the ...
   # ... end of the day_site obviously ;) :
   accum_TD_df$perc_TD_acc_day <- rep(0, nrow(accum_TD_df))
@@ -246,29 +246,29 @@ compute.td.day.accum <- function(basic_accum_df, rich_plot = TRUE) {
 
       k <- k + 1
 
-      # if first hour of the site_day, then no value to add:
+      # if first video of the site_day, then no value to add:
       if (k == 1) {
         accum_TD_df[j, "perc_TD_acc_day"] <- accum_TD_df[j, "sum_accum"] / tot_sp_richn
         accum_TD_df[j, "perc_TD_acc_day"] <- (accum_TD_df[j, "perc_TD_acc_day"]/sum_tot_richn)*100
       }
 
-      # if it is not the first hour, then must add accumulated sp_richn of the hours before:
+      # if it is not the first video, then must add accumulated sp_richn of the videos before:
       else {
 
-        # get the rowname of the hour before: and of the first hour of the site_day:
-        rown_hour_before <- rownames(accum_TD_df[which(accum_TD_df$site_day == i &
-                                                      accum_TD_df$hour_nb == paste0("hour", sep = "_", k-1)), ])
-        rown_first_hour <- rownames(accum_TD_df[which(accum_TD_df$site_day == i &
-                                                       accum_TD_df$hour_nb == paste0("hour", sep = "_", 1)), ])
+        # get the rowname of the video before: and of the first video of the site_day:
+        rown_video_before <- rownames(accum_TD_df[which(accum_TD_df$site_day == i &
+                                                      accum_TD_df$video_nb == paste0("video", sep = "_", k-1)), ])
+        rown_first_video <- rownames(accum_TD_df[which(accum_TD_df$site_day == i &
+                                                       accum_TD_df$video_nb == paste0("video", sep = "_", 1)), ])
 
-        # compute the accumulated species richness up to the studied hour:
+        # compute the accumulated species richness up to the studied video:
         accum_TD_df[j, "perc_TD_acc_day"] <- accum_TD_df[j, "sum_accum"] +
-                             sum(accum_TD_df[c(rown_first_hour:(rown_hour_before)), "sum_accum"])
+                             sum(accum_TD_df[c(rown_first_video:(rown_video_before)), "sum_accum"])
 
         # express as percentage of total sp richn (as FRic):
         accum_TD_df[j, "perc_TD_acc_day"] <- accum_TD_df[j, "perc_TD_acc_day"]/tot_sp_richn
 
-        # compute the percentage of species richness accumulated up to the studied hour:
+        # compute the percentage of species richness accumulated up to the studied video:
         accum_TD_df[j, "perc_TD_acc_day"] <- (accum_TD_df[j, "perc_TD_acc_day"]/sum_tot_richn)*100
       }
 
@@ -277,7 +277,7 @@ compute.td.day.accum <- function(basic_accum_df, rich_plot = TRUE) {
 
 
   ## create a new column that will contain the percentage of new species ...
-  # ... seen on each hour -> TD accumul with 100% being the total TD seen on ...
+  # ... seen on each video -> TD accumul with 100% being the total TD seen on ...
   # ... both sites:
   accum_TD_df$perc_TD_acc_site <- rep(0, nrow(accum_TD_df))
 
@@ -304,14 +304,14 @@ compute.td.day.accum <- function(basic_accum_df, rich_plot = TRUE) {
       else {
 
         # get the rowname of the video before: and of the first video of the site_day:
-        rown_hour_before <- rownames(accum_TD_df[which(accum_TD_df$site_day == i &
-                                                        accum_TD_df$hour_nb == paste0("hour", sep = "_", k-1)), ])
-        rown_first_hour <- rownames(accum_TD_df[which(accum_TD_df$site_day == i &
-                                                       accum_TD_df$hour_nb == paste0("hour", sep = "_", 1)), ])
+        rown_video_before <- rownames(accum_TD_df[which(accum_TD_df$site_day == i &
+                                                        accum_TD_df$video_nb == paste0("video", sep = "_", k-1)), ])
+        rown_first_video <- rownames(accum_TD_df[which(accum_TD_df$site_day == i &
+                                                       accum_TD_df$video_nb == paste0("video", sep = "_", 1)), ])
 
         # compute the accumulated species richness up to the studied video:
         accum_TD_df[j, "perc_TD_acc_site"] <- accum_TD_df[j, "sum_accum"] +
-          sum(accum_TD_df[c(rown_first_hour:(rown_hour_before)), "sum_accum"])
+          sum(accum_TD_df[c(rown_first_video:(rown_video_before)), "sum_accum"])
 
         # express as percentage of total sp richn (as FRic):
         accum_TD_df[j, "perc_TD_acc_site"] <- (accum_TD_df[j, "perc_TD_acc_site"]/tot_sp_richn)*100
@@ -380,20 +380,20 @@ compute.td.interday.accum <- function(basic_accum_df, rich_plot = TRUE) {
 
   ## add sp richness column
   basic_df$richn <- apply(basic_df[, which(! colnames(basic_df) %in%
-                                             c("video_nb", "day", "vid_id", "site"))],
+                                             c("video_nb", "day", "video_id", "site"))],
                           1, sum)
 
   # express species richness as a proportion of total species richness ...
   # ... so its expressed as FRic (and PD):
   tot_sp_richn <- ncol(basic_df[, which(! colnames(basic_df) %in%
-                                          c("video_nb", "day", "vid_id", "site"))])
+                                          c("video_nb", "day", "video_id", "site"))])
   basic_df$richn <- basic_df$richn / tot_sp_richn
 
-  ## rename video_nb from 1, 2 -> vid_1, vid_2 and give right levels:
-  basic_df$video_nb <- paste0(rep("vid_", nrow(basic_df)), sep = "", basic_df$video_nb)
+  ## rename video_nb from 1, 2 -> video_1, video_2 and give right levels:
+  basic_df$video_nb <- paste0(rep("video_", nrow(basic_df)), sep = "", basic_df$video_nb)
   basic_df$video_nb  <- as.factor(basic_df$video_nb)
-  basic_df$video_nb <- ordered(basic_df$video_nb, levels = paste0(rep("vid_", 33),
-                                                                  c(1:33)))
+  basic_df$video_nb <- ordered(basic_df$video_nb, levels = paste0(rep("video_", 9),
+                                                                  c(1:9)))
 
   ## site is a factor:
   basic_df$site <- as.factor(basic_df$site)
@@ -433,12 +433,11 @@ compute.td.interday.accum <- function(basic_accum_df, rich_plot = TRUE) {
                      panel.grid.major = ggplot2::element_line(colour = "grey90")) +
 
 
-      ggplot2::scale_x_discrete(labels= c("7:30", "", "8:00", "", "8:40", "",
-                                          "9:15", "", "9:45", "", "10:20", "",
-                                          "10:55", "", "11:40", "", "12:20", "",
-                                          "12:55", "", "13:40", "", "14:25", "",
-                                          "15:00", "", "15:45", "", "16:30", "",
-                                          "17:00", "", "17:30")) +
+      ggplot2::scale_x_discrete(labels= c("8:00-8:59", "9:00-9:59",
+                                          "10:00-10:59", "11:00-11:59",
+                                          "12:00-12:59", "13:00-13:59",
+                                          "14:00-14:59", "15:00-15:59",
+                                          "16:00-17:59")) +
 
       ggplot2::ylab("Proportion of total species richness") +
 
@@ -487,7 +486,7 @@ compute.td.interday.accum <- function(basic_accum_df, rich_plot = TRUE) {
 
   accum_TD_df$accum_TD <- apply(accum_TD_df[,
                                              which(! colnames(accum_TD_df) %in% c("video_nb",
-                                                                                  "day", "vid_id",
+                                                                                  "day", "video_id",
                                                                                   "site", "richn",
                                                                                   "day_nb"))],
                                  1,
@@ -497,7 +496,7 @@ compute.td.interday.accum <- function(basic_accum_df, rich_plot = TRUE) {
   ## Express accumul TD as a proportion of the total sp richness (equivalent to FRic):
   tot_TD_value <- ncol(accum_TD_df[,
                                    which(! colnames(accum_TD_df) %in% c("video_nb",
-                                                                        "day", "vid_id",
+                                                                        "day", "video_id",
                                                                         "site", "richn",
                                                                         "day_nb", "accum_TD"))])
   accum_TD_df$accum_TD <- accum_TD_df$accum_TD / tot_TD_value

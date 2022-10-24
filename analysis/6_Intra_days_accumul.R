@@ -18,41 +18,41 @@
 
 # Call the raw dfs at the hour scale:
 
-presabs_hour_03_A1 <- readRDS(here::here("transformed_data", "pres_abs_hour_final_A1_03.rds"))
-presabs_hour_04_A1 <- readRDS(here::here("transformed_data", "pres_abs_hour_final_A1_04.rds"))
-presabs_hour_05_A1 <- readRDS(here::here("transformed_data", "pres_abs_hour_final_A1_05.rds"))
-presabs_hour_06_A1 <- readRDS(here::here("transformed_data", "pres_abs_hour_final_A1_06.rds"))
-presabs_hour_08_A1 <- readRDS(here::here("transformed_data", "pres_abs_hour_final_A1_08.rds"))
-presabs_hour_09_A1 <- readRDS(here::here("transformed_data", "pres_abs_hour_final_A1_09.rds"))
+presabs_03_A1 <- readRDS(here::here("transformed_data", "pres_abs_vid_final_A1_03.rds"))
+presabs_04_A1 <- readRDS(here::here("transformed_data", "pres_abs_vid_final_A1_04.rds"))
+presabs_05_A1 <- readRDS(here::here("transformed_data", "pres_abs_vid_final_A1_05.rds"))
+presabs_06_A1 <- readRDS(here::here("transformed_data", "pres_abs_vid_final_A1_06.rds"))
+presabs_08_A1 <- readRDS(here::here("transformed_data", "pres_abs_vid_final_A1_08.rds"))
+presabs_09_A1 <- readRDS(here::here("transformed_data", "pres_abs_vid_final_A1_09.rds"))
 
-presabs_hour_03_C2 <- readRDS(here::here("transformed_data", "pres_abs_hour_final_C2_03.rds"))
-presabs_hour_04_C2 <- readRDS(here::here("transformed_data", "pres_abs_hour_final_C2_04.rds"))
-presabs_hour_05_C2 <- readRDS(here::here("transformed_data", "pres_abs_hour_final_C2_05.rds"))
-presabs_hour_06_C2 <- readRDS(here::here("transformed_data", "pres_abs_hour_final_C2_06.rds"))
-presabs_hour_08_C2 <- readRDS(here::here("transformed_data", "pres_abs_hour_final_C2_08.rds"))
-presabs_hour_09_C2 <- readRDS(here::here("transformed_data", "pres_abs_hour_final_C2_09.rds"))
+presabs_03_C2 <- readRDS(here::here("transformed_data", "pres_abs_vid_final_C2_03.rds"))
+presabs_04_C2 <- readRDS(here::here("transformed_data", "pres_abs_vid_final_C2_04.rds"))
+presabs_05_C2 <- readRDS(here::here("transformed_data", "pres_abs_vid_final_C2_05.rds"))
+presabs_06_C2 <- readRDS(here::here("transformed_data", "pres_abs_vid_final_C2_06.rds"))
+presabs_08_C2 <- readRDS(here::here("transformed_data", "pres_abs_vid_final_C2_08.rds"))
+presabs_09_C2 <- readRDS(here::here("transformed_data", "pres_abs_vid_final_C2_09.rds"))
 
 
 # Compte dfs for each day and save them:
-NG_03_hour <- merge.cam.vid.df(list_df = list(presabs_hour_03_A1, presabs_hour_03_C2),
-                               scale = "hour")
-NG_05_hour <- merge.cam.vid.df(list_df = list(presabs_hour_05_A1, presabs_hour_05_C2),
-                               scale = "hour")
-NG_08_hour <- merge.cam.vid.df(list_df = list(presabs_hour_08_A1, presabs_hour_08_C2),
-                               scale = "hour")
-B_04_hour <- merge.cam.vid.df(list_df = list(presabs_hour_04_A1, presabs_hour_04_C2),
-                              scale = "hour")
-B_06_hour <- merge.cam.vid.df(list_df = list(presabs_hour_06_A1, presabs_hour_06_C2),
-                              scale = "hour")
-B_09_hour <- merge.cam.vid.df(list_df = list(presabs_hour_09_A1, presabs_hour_09_C2),
-                              scale = "hour")
+NG_03 <- merge.cam.vid.df(list_df = list(presabs_03_A1, presabs_03_C2),
+                               scale = "video")
+NG_05 <- merge.cam.vid.df(list_df = list(presabs_05_A1, presabs_05_C2),
+                               scale = "video")
+NG_08 <- merge.cam.vid.df(list_df = list(presabs_08_A1, presabs_08_C2),
+                               scale = "video")
+B_04 <- merge.cam.vid.df(list_df = list(presabs_04_A1, presabs_04_C2),
+                              scale = "video")
+B_06 <- merge.cam.vid.df(list_df = list(presabs_06_A1, presabs_06_C2),
+                              scale = "video")
+B_09 <- merge.cam.vid.df(list_df = list(presabs_09_A1, presabs_09_C2),
+                              scale = "video")
 
-saveRDS(NG_03_hour, here::here("transformed_data", "presabs_hour_NG_03.rds"))
-saveRDS(NG_05_hour, here::here("transformed_data", "presabs_hour_NG_05.rds"))
-saveRDS(NG_08_hour, here::here("transformed_data", "presabs_hour_NG_08.rds"))
-saveRDS(B_04_hour, here::here("transformed_data", "presabs_hour_B_04.rds"))
-saveRDS(B_06_hour, here::here("transformed_data", "presabs_hour_B_06.rds"))
-saveRDS(B_09_hour, here::here("transformed_data", "presabs_hour_B_09.rds"))
+saveRDS(NG_03, here::here("transformed_data", "presabs_NG_03.rds"))
+saveRDS(NG_05, here::here("transformed_data", "presabs_NG_05.rds"))
+saveRDS(NG_08, here::here("transformed_data", "presabs_NG_08.rds"))
+saveRDS(B_04, here::here("transformed_data", "presabs_B_04.rds"))
+saveRDS(B_06, here::here("transformed_data", "presabs_B_06.rds"))
+saveRDS(B_09, here::here("transformed_data", "presabs_B_09.rds"))
 
 
 
@@ -62,8 +62,8 @@ saveRDS(B_09_hour, here::here("transformed_data", "presabs_hour_B_09.rds"))
 # Create a dataframe with species columns, days, video names and unique ID:
 
 # argument for the function:
-dfs_list <- list(NG_03_hour, B_04_hour, NG_05_hour, B_06_hour, NG_08_hour,
-                 B_09_hour)
+dfs_list <- list(NG_03, B_04, NG_05, B_06, NG_08,
+                 B_09)
 
 days_vect <- c("03-11-2019", "04-11-2019", "05-11-2019", "06-11-2019",
                "08-11-2019", "09-11-2019")
@@ -72,7 +72,7 @@ days_vect <- c("03-11-2019", "04-11-2019", "05-11-2019", "06-11-2019",
 presabs_day_site_df <- create.complete.df(dfs_list, days_vect)
 
 nrow(presabs_day_site_df)
-## 9 hours * 6 days = 54 rows ok
+## 33 hours * 6 days = 198 rows ok
 
 
 # add site information (the first 9 rows are NG then Boueni etc):
@@ -82,19 +82,19 @@ presabs_day_site_df$site <- rep("Boueni", nrow(presabs_day_site_df))
 
 ## and then add N'Gouja:
 rownames(presabs_day_site_df) <- c(1:nrow(presabs_day_site_df))
-presabs_day_site_df[c(1:9), "site"] <- "N'Gouja"
-presabs_day_site_df[c(19:27), "site"] <- "N'Gouja"
-presabs_day_site_df[c(37:45), "site"] <- "N'Gouja"
+presabs_day_site_df[which(presabs_day_site_df$day %in%
+                            c("03-11-2019", "05-11-2019",
+                              "08-11-2019")), "site"] <- "N'Gouja"
 
 # save this df:
-saveRDS(presabs_day_site_df, here::here("transformed_data", "basic_accumul_hour_df.rds"))
+saveRDS(presabs_day_site_df, here::here("transformed_data", "basic_accumul_df.rds"))
 
 
-# Step 3: Compute TD accumulation ####
+# Step 3: Compute TD accumulation #### REDO THE FCT TO VIDEO FORMAT
 
 
 # load the basic df:
-basic_accum_df <- readRDS(here::here("transformed_data", "basic_accumul_hour_df.rds"))
+basic_accum_df <- readRDS(here::here("transformed_data", "basic_accumul_df.rds"))
 
 # compute the TD accumul df (and save the sp richness day variation plot):
 TD_accum <- compute.td.day.accum(basic_accum_df, rich_plot = TRUE)
@@ -105,10 +105,10 @@ saveRDS(TD_accum_df, here::here("transformed_data", "TD_intraday_accum.rds"))
 
 
 
-# Step 4: Compute FD accumulation ####
+# Step 4: Compute FD accumulation #### REDO THE FCT TO VIDEO FORMAT
 
 
-basic_accum_df <- readRDS(here::here("transformed_data", "basic_accumul_hour_df.rds"))
+basic_accum_df <- readRDS(here::here("transformed_data", "basic_accumul_df.rds"))
 tr_cat <- readRDS(here::here("transformed_data", "tr_cat_df.rds"))
 sp_tr <- readRDS(here::here("transformed_data", "sp_tr_final.rds"))
 
@@ -126,12 +126,12 @@ saveRDS(FD_accum_df, here::here("transformed_data", "FD_intraday_accum.rds"))
 
 
 
-# Step 5: Compute PD accumulation ####
+# Step 5: Compute PD accumulation #### REDO THE FCT TO VIDEO FORMAT
 
 
 # First call data needed:
 
-basic_accum_df <- readRDS(here::here("transformed_data", "basic_accumul_hour_df.rds"))
+basic_accum_df <- readRDS(here::here("transformed_data", "basic_accumul_df.rds"))
 
 # compute the PD accumul df (and save the FRic day variation plot):
 PD_accum <- compute.pd.day.accum(basic_accum_df = basic_accum_df,
@@ -147,7 +147,7 @@ saveRDS(PD_accum_df, here::here("transformed_data", "PD_intraday_accum.rds"))
 # Step 6: Plot intra-day accumulation of the three facets for each day, separing sites ####
 # Represent the percentage of total bioidvresity of the studied site and its accumulation #
 
-
+# REDO THE FCT TO VIDEO FORMAT
 
 # Load data:
 TD_accum_df <- readRDS(here::here("transformed_data", "TD_intraday_accum.rds"))

@@ -591,3 +591,48 @@ saveRDS(presabs_hour_09_A1, here::here("transformed_data", "pres_abs_hour_final_
 saveRDS(presabs_hour_09_C2, here::here("transformed_data", "pres_abs_hour_final_C2_09.rds"))
 
 
+## Total:
+sp_nm_all <- unique(c(colnames(presabs_hour_03_A1), colnames(presabs_hour_03_C2),
+                      colnames(presabs_hour_04_A1), colnames(presabs_hour_04_C2),
+                      colnames(presabs_hour_05_A1), colnames(presabs_hour_05_C2),
+                      colnames(presabs_hour_06_A1), colnames(presabs_hour_06_C2),
+                      colnames(presabs_hour_08_A1), colnames(presabs_hour_08_C2),
+                      colnames(presabs_hour_09_A1), colnames(presabs_hour_09_C2)))
+
+# remove time and video name info:
+sp_nm_all <- sp_nm_all[which(! sp_nm_all %in% c("hour", "hour_nm"))]
+
+# get sp name:
+sort(sp_nm_all)
+
+# get species nb: 148
+length(sp_nm_all)
+
+
+## MPA - N'Gouja:
+sp_nm_NG <- unique(c(colnames(presabs_hour_03_A1), colnames(presabs_hour_03_C2),
+                     colnames(presabs_hour_05_A1), colnames(presabs_hour_05_C2),
+                     colnames(presabs_hour_08_A1), colnames(presabs_hour_08_C2)))
+
+# remove time and video name info:
+sp_nm_NG <- sp_nm_NG[which(! sp_nm_NG %in% c("hour", "hour_nm"))]
+
+sort(sp_nm_NG)
+
+# get species number: 127 species in MPA (Octopus cyanea only seen in NG)
+# (Chelonia mydas seen on both sites)
+length(sp_nm_NG)
+
+
+## Fished Area - Boueni: (raie pastenague vue le 09 a Boueni, pas comprise dans les 113 sp)
+sp_nm_B <- unique(c(colnames(presabs_hour_04_A1), colnames(presabs_hour_04_C2),
+                    colnames(presabs_hour_06_A1), colnames(presabs_hour_06_C2),
+                    colnames(presabs_hour_09_A1), colnames(presabs_hour_09_C2)))
+
+# remove time and video name info:
+sp_nm_B <- sp_nm_B[which(! sp_nm_B %in% c("hour", "hour_nm"))]
+
+sort(sp_nm_B)
+
+# get species number: 109 species in Fished Area
+length(sp_nm_B)
