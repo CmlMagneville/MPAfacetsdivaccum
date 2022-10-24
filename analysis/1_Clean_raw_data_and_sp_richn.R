@@ -11,7 +11,7 @@
 ##
 ###############################################################################
 
-# A - For dataat the video scale ####
+# A - For data at the video scale ####
 
 # Step 1: call the 12 tables showing species occurrences in videos ####
 ## two cameras, 6 days / site, 2 sites
