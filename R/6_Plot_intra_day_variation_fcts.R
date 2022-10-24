@@ -50,6 +50,10 @@ plot.intra.day.accum <- function(TD_accum_df,
   final_plot_df$metric <- factor(final_plot_df$metric, levels = c("TD", "PD", "FD"))
   final_plot_df$metric <- ordered(final_plot_df$metric, levels = c("TD", "PD", "FD"))
 
+  # build labels for sites:
+  sites_labs <- c("Slightly Protected", "Fully Protected")
+  names(sites_labs) <- c("Boueni", "N'Gouja")
+
 
   # plot!
   accum_day_plot <- ggplot2::ggplot(final_plot_df) +
@@ -63,7 +67,8 @@ plot.intra.day.accum <- function(TD_accum_df,
                         color = "grey70",
                         size = linewidth) +
 
-    ggplot2::facet_grid(forcats::fct_relevel(metric,'TD','PD','FD') ~ site) +
+    ggplot2::facet_grid(forcats::fct_relevel(metric,'TD','PD','FD') ~ site,
+                        labeller = ggplot2::labeller(site = sites_labs)) +
 
     ggplot2::scale_colour_manual(values = facets_colors,
                                  name = "Metric") +
