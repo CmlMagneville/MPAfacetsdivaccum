@@ -17,13 +17,22 @@
 
 
 
-merge.cam.vid.df <- function(list_df) {
+merge.cam.vid.df <- function(list_df, scale) {
 
 
   # create a df which will contain data from the two dataframes ...
   # ... but first is the first pres abs df and will be completed:
   merged_df <- list_df[[1]]
-  time_vid_df <- merged_df[, c(ncol(merged_df) - 1, ncol(merged_df))]
+  time_vid_df <- merged_df[, ncol(merged_df)]
+
+
+  # if the df ius at the hour scale, then add a column with nothing ...
+  # ... interesting just to have two columns to remove as if the ...
+  # ... scale is the video one:
+  if (scale == "hour") {
+    merged_df$new <- rep(0, nrow(merged_df))
+  }
+
   merged_df <- merged_df[, -c(ncol(merged_df) - 1, ncol(merged_df))]
 
   # loop on each other dataframe that should be merged (in Mayotte1 paper ...
@@ -35,23 +44,54 @@ merge.cam.vid.df <- function(list_df) {
     # ... merged df than add values (same nb of rows reflecting videos) ...
     # ... if the column doesn't exist in the merged_df then add it:
 
-    for (j in (1:(ncol(list_df[[i]]) - 2))) {
+    # if scale is video than 2 last columns not to look at:
+    if (scale == "video") {
 
-      sp_nm <- colnames(list_df[[i]])[j]
+      for (j in (1:(ncol(list_df[[i]]) - 2))) {
+
+        sp_nm <- colnames(list_df[[i]])[j]
 
 
-      # if species already in the merged_df:
-      if (sp_nm %in% colnames(merged_df)) {
-        merged_df[, sp_nm] <- merged_df[, sp_nm] + list_df[[i]][, j]
-      }
+        # if species already in the merged_df:
+        if (sp_nm %in% colnames(merged_df)) {
+          merged_df[, sp_nm] <- merged_df[, sp_nm] + list_df[[i]][, j]
+        }
 
-      # if species not in the merged_df:
-      if (! sp_nm %in% colnames(merged_df)) {
-        merged_df <- tibble::add_column(merged_df, new_sp = list_df[[i]][, j])
-        colnames(merged_df)[ncol(merged_df)] <- sp_nm
-      }
+        # if species not in the merged_df:
+        if (! sp_nm %in% colnames(merged_df)) {
+          merged_df <- tibble::add_column(merged_df, new_sp = list_df[[i]][, j])
+          colnames(merged_df)[ncol(merged_df)] <- sp_nm
+        }
 
-   } # end loop on columns (species)
+      } # end loop on columns (species)
+
+    } # end loop if scale is video
+
+
+    # if scale is hour than 1 last column not to look at:
+    if (scale == "hour") {
+
+      for (j in (1:(ncol(list_df[[i]]) - 1))) {
+
+        sp_nm <- colnames(list_df[[i]])[j]
+
+
+        # if species already in the merged_df:
+        if (sp_nm %in% colnames(merged_df)) {
+          merged_df[, sp_nm] <- merged_df[, sp_nm] + list_df[[i]][, j]
+        }
+
+        # if species not in the merged_df:
+        if (! sp_nm %in% colnames(merged_df)) {
+          merged_df <- tibble::add_column(merged_df, new_sp = list_df[[i]][, j])
+          colnames(merged_df)[ncol(merged_df)] <- sp_nm
+        }
+
+      } # end loop on columns (species)
+
+    } # end if scale is hour
+
+
 
   } # end loop on dfs
 
@@ -61,10 +101,20 @@ merge.cam.vid.df <- function(list_df) {
   merged_occurrence_df <- merged_df
   merged_occurrence_df[merged_occurrence_df > 1] <- 1
 
-  # re-add time and vido information and rename video info:
+  # re-add time and video information and rename video info:
   merged_occurrence_df <- cbind(merged_occurrence_df, time_vid_df)
-  merged_occurrence_df$video_nm <- rep(paste0("vid", sep = "_",
-                                              c(1:nrow(merged_occurrence_df))))
+
+  if (scale == "video") {
+    merged_occurrence_df$video_nm <- rep(paste0("vid", sep = "_",
+                                                c(1:nrow(merged_occurrence_df))))
+  }
+
+  if (scale == "hour") {
+    merged_occurrence_df$hour_nm <- rep(paste0("hour", sep = "_",
+                                                c(1:nrow(merged_occurrence_df))))
+    colnames(merged_occurrence_df)[ncol(merged_occurrence_df) - 1] <- "hour"
+  }
+
 
   # return the dataframe containing the data from the n dfs (n cam) ...
   # ... of the studied day with only 0 or 1: at a given given video, does ...

@@ -33,12 +33,18 @@ presabs_09_C2 <- readRDS(here::here("transformed_data", "pres_abs_vid_final_C2_0
 
 
 # Compte dfs for each day and save them:
-NG_03 <- merge.cam.vid.df(list_df = list(presabs_03_A1, presabs_03_C2))
-NG_05 <- merge.cam.vid.df(list_df = list(presabs_05_A1, presabs_05_C2))
-NG_08 <- merge.cam.vid.df(list_df = list(presabs_08_A1, presabs_08_C2))
-B_04 <- merge.cam.vid.df(list_df = list(presabs_04_A1, presabs_04_C2))
-B_06 <- merge.cam.vid.df(list_df = list(presabs_06_A1, presabs_06_C2))
-B_09 <- merge.cam.vid.df(list_df = list(presabs_09_A1, presabs_09_C2))
+NG_03 <- merge.cam.vid.df(list_df = list(presabs_03_A1, presabs_03_C2),
+                          scale = "video")
+NG_05 <- merge.cam.vid.df(list_df = list(presabs_05_A1, presabs_05_C2),
+                          scale = "video")
+NG_08 <- merge.cam.vid.df(list_df = list(presabs_08_A1, presabs_08_C2),
+                          scale = "video")
+B_04 <- merge.cam.vid.df(list_df = list(presabs_04_A1, presabs_04_C2),
+                         scale = "video")
+B_06 <- merge.cam.vid.df(list_df = list(presabs_06_A1, presabs_06_C2),
+                         scale = "video")
+B_09 <- merge.cam.vid.df(list_df = list(presabs_09_A1, presabs_09_C2),
+                         scale = "video")
 
 saveRDS(NG_03, here::here("transformed_data", "presabs_NG_03.rds"))
 saveRDS(NG_05, here::here("transformed_data", "presabs_NG_05.rds"))
