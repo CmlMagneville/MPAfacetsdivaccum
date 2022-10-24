@@ -160,11 +160,11 @@ compute.td.day.accum <- function(basic_accum_df, rich_plot = TRUE) {
                      panel.grid.major = ggplot2::element_line(colour = "grey")) +
 
 
-      ggplot2::scale_x_discrete(labels= c("7:30-8:29", "8:30-9:29",
-                                          "9:30-10:29", "10:30-11:29",
-                                          "11:30-12:29", "12:30-13:29",
-                                          "13:30-14:29", "14:30-15:29",
-                                          "15:30-16:30")) +
+      ggplot2::scale_x_discrete(labels= c("8:00-8:59", "9:00-9:59",
+                                          "10:00-10:59", "11:00-11:59",
+                                          "12:00-12:59", "13:00-13:59",
+                                          "14:00-14:59", "15:00-15:59",
+                                          "16:00-17:59")) +
 
       ggplot2::ylab("Proportion of total species richness") +
 
