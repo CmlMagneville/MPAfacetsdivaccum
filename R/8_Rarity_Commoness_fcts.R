@@ -179,56 +179,60 @@ plot.rarcom <- function(rarcom_df, sites_colors) {
   ## NG:
   rarcom_plot_NG <- ggplot2::ggplot(data = rarcom_df[which(rarcom_df$site == "N'Gouja"), ]) +
 
-    ggplot2::geom_bar(ggplot2::aes(x = reorder(species_nm, - vid_occ_nb), y = (vid_occ_nb/99)*100,
+    ggplot2::geom_bar(ggplot2::aes(y = reorder(species_nm, - vid_occ_nb), x = (vid_occ_nb/99)*100,
                                    fill = site_presence),
                       stat = "identity") +
 
-    ggplot2:: geom_hline(yintercept = 5, linetype = "dashed", color = "black") +
+    ggplot2:: geom_vline(xintercept = 5, linetype = "dashed", color = "black") +
 
-    ggplot2:: geom_hline(yintercept = 25, linetype = "dashed", color = "black") +
+    ggplot2:: geom_vline(xintercept = 25, linetype = "dashed", color = "black") +
 
     ggplot2::scale_fill_manual(values = c(sites_colors[1],
                                           sites_colors[3]),
-                               name = "Site presence") +
+                               name = "Site presence",
+                               labels = c("Both", "Fully Protected")) +
 
-    ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90, size = 8),
+    ggplot2::theme(axis.text.y = ggplot2::element_text(size = 6,
+                                                       face = "italic"),
                    panel.background = ggplot2::element_rect(fill = "white",
                                                             colour = "grey90"),
                    panel.grid.major = ggplot2::element_line(colour = "grey90")) +
 
-    ggplot2::ylab("Percentage of occurrence in the videos") +
+    ggplot2::xlab("Temporal occurrence (%)") +
 
-    ggplot2::xlab("")
+    ggplot2::ylab("")
 
   # B:
   rarcom_plot_B <- ggplot2::ggplot(data = rarcom_df[which(rarcom_df$site == "Boueni"), ]) +
 
-    ggplot2::geom_bar(ggplot2::aes(x = reorder(species_nm, - vid_occ_nb), y = (vid_occ_nb/99)*100,
+    ggplot2::geom_bar(ggplot2::aes(y = reorder(species_nm, - vid_occ_nb), x = (vid_occ_nb/99)*100,
                                    fill = site_presence),
                       stat = "identity") +
 
-    ggplot2:: geom_hline(yintercept = 5, linetype = "dashed", color = "black") +
+    ggplot2:: geom_vline(xintercept = 5, linetype = "dashed", color = "black") +
 
-    ggplot2:: geom_hline(yintercept = 25, linetype = "dashed", color = "black") +
+    ggplot2:: geom_vline(xintercept = 25, linetype = "dashed", color = "black") +
 
 
     ggplot2::scale_fill_manual(values = c(sites_colors[1],
                                           sites_colors[2]),
-                               name = "Site presence") +
+                               name = "Site presence",
+                               labels = c("Both", "Slightly Protected")) +
 
-    ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90, size = 8),
+    ggplot2::theme(axis.text.y = ggplot2::element_text(size = 6,
+                                                       face = "italic"),
                    panel.background = ggplot2::element_rect(fill = "white",
                                                             colour = "grey90"),
                    panel.grid.major = ggplot2::element_line(colour = "grey90")) +
 
-    ggplot2::ylab("Percentage of occurrence in the videos") +
+    ggplot2::xlab("Temporal occurrence (%)") +
 
-    ggplot2::xlab("")
+    ggplot2::ylab("")
 
 
   plot_both <- (rarcom_plot_NG + rarcom_plot_B) +
     patchwork::plot_layout(byrow = TRUE, heights = c(1, 1), widths = c(1, 1),
-                           ncol = 1, nrow = 2, guides = "collect") +
+                           ncol = 2, nrow = 1, guides = "collect") +
     patchwork::plot_annotation(tag_levels = "A")
 
   ggplot2::ggsave(filename = here::here("outputs", "rar_comm_vid.pdf"),

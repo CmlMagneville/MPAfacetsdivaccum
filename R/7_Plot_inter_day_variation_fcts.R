@@ -42,15 +42,15 @@ plot.inter.day.accum <- function(TD_accum_df,
 
   # now merge TD, FD and PD columns -> metric:
   final_plot_df <- reshape2::melt(complete_plot_df,
-                                  id.vars = c("day_nb", "site", "day", "hour_nb"),
+                                  id.vars = c("day_nb", "site", "day", "video_nb"),
                                   variable.name = 'metric', value.name = 'values')
 
   # right class:
   final_plot_df$site <- as.factor(final_plot_df$site)
   final_plot_df$day <- as.factor(final_plot_df$day)
   final_plot_df$day <- as.factor(final_plot_df$day_nb)
-  final_plot_df$hour_nb <- ordered(final_plot_df$hour_nb, levels = paste0(rep("vid_", 9),
-                                                                            c(1:9)))
+  final_plot_df$video_nb <- ordered(final_plot_df$video_nb, levels = paste0(rep("video_", 33),
+                                                                            c(1:33)))
   final_plot_df$metric <- as.factor(final_plot_df$metric)
 
 
@@ -75,7 +75,9 @@ plot.inter.day.accum <- function(TD_accum_df,
 
     ggplot2::scale_colour_manual(values = c("#bf812d",
                                             "#80cdc1"),
-                                 name = "Site") +
+                                 name = "Site",
+                                 labels = c("Slightly Protected",
+                                            "Fully Protected")) +
 
     ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90),
                    panel.background = ggplot2::element_rect(fill = "white",
@@ -114,7 +116,9 @@ plot.inter.day.accum <- function(TD_accum_df,
 
     ggplot2::scale_colour_manual(values = c("#bf812d",
                                             "#80cdc1"),
-                                 name = "Site") +
+                                 name = "Site",
+                                 labels = c("Slightly Protected",
+                                            "Fully Protected")) +
 
     ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90),
                    panel.background = ggplot2::element_rect(fill = "white",
@@ -153,7 +157,9 @@ plot.inter.day.accum <- function(TD_accum_df,
 
     ggplot2::scale_colour_manual(values = c("#bf812d",
                                             "#80cdc1"),
-                                 name = "Site") +
+                                 name = "Site",
+                                 labels = c("Slightly Protected",
+                                            "Fully Protected")) +
 
     ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90),
                    panel.background = ggplot2::element_rect(fill = "white",
@@ -192,7 +198,9 @@ plot.inter.day.accum <- function(TD_accum_df,
 
     ggplot2::scale_colour_manual(values = c("#bf812d",
                                             "#80cdc1"),
-                                 name = "Site") +
+                                 name = "Site",
+                                 labels = c("Slightly Protected",
+                                            "Fully Protected")) +
 
     ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90),
                    panel.background = ggplot2::element_rect(fill = "white",
@@ -231,7 +239,9 @@ plot.inter.day.accum <- function(TD_accum_df,
 
     ggplot2::scale_colour_manual(values = c("#bf812d",
                                             "#80cdc1"),
-                                 name = "Site") +
+                                 name = "Site",
+                                 labels = c("Slightly Protected",
+                                            "Fully Protected")) +
 
     ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90),
                    panel.background = ggplot2::element_rect(fill = "white",
@@ -270,7 +280,9 @@ plot.inter.day.accum <- function(TD_accum_df,
 
     ggplot2::scale_colour_manual(values = c("#bf812d",
                                             "#80cdc1"),
-                                 name = "Site") +
+                                 name = "Site",
+                                 labels = c("Slightly Protected",
+                                            "Fully Protected")) +
 
     ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90),
                    panel.background = ggplot2::element_rect(fill = "white",
@@ -309,7 +321,9 @@ plot.inter.day.accum <- function(TD_accum_df,
 
     ggplot2::scale_colour_manual(values = c("#bf812d",
                                             "#80cdc1"),
-                                 name = "Site") +
+                                 name = "Site",
+                                 labels = c("Slightly Protected",
+                                            "Fully Protected")) +
 
     ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90),
                    panel.background = ggplot2::element_rect(fill = "white",
@@ -348,7 +362,9 @@ plot.inter.day.accum <- function(TD_accum_df,
 
     ggplot2::scale_colour_manual(values = c("#bf812d",
                                             "#80cdc1"),
-                                 name = "Site") +
+                                 name = "Site",
+                                 labels = c("Slightly Protected",
+                                            "Fully Protected")) +
 
     ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90),
                    panel.background = ggplot2::element_rect(fill = "white",
@@ -387,7 +403,9 @@ plot.inter.day.accum <- function(TD_accum_df,
 
     ggplot2::scale_colour_manual(values = c("#bf812d",
                                             "#80cdc1"),
-                                 name = "Site") +
+                                 name = "Site",
+                                 labels = c("Slightly Protected",
+                                            "Fully Protected")) +
 
     ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90),
                    panel.background = ggplot2::element_rect(fill = "white",
@@ -426,7 +444,9 @@ plot.inter.day.accum <- function(TD_accum_df,
 
     ggplot2::scale_colour_manual(values = c("#bf812d",
                                             "#80cdc1"),
-                                 name = "Site") +
+                                 name = "Site",
+                                 labels = c("Slightly Protected",
+                                            "Fully Protected")) +
 
     ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90),
                    panel.background = ggplot2::element_rect(fill = "white",
@@ -450,7 +470,7 @@ plot.inter.day.accum <- function(TD_accum_df,
 
   # Assemble the 3 plots to return:
 
-  plot_richness <- (plot_TD + plot_FRic + plot_PD) +
+  plot_richness <- (plot_TD + plot_PD + plot_FRic) +
     patchwork::plot_layout(byrow = TRUE, heights = c(1, 1), widths = c(1, 1),
                            ncol = 3, nrow = 1, guides = "collect") +
     patchwork::plot_annotation(tag_levels = "A")
