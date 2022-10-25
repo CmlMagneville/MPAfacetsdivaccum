@@ -299,6 +299,57 @@ ggplot2::ggsave(filename = here::here("outputs", "global_rarity_tree.pdf"),
 
 
 
+# Compute the phylogenetic D to see if super rare and rare species have a ...
+# ... phylogenetic random distrib or if they are clumped in the phylogeny:
+
+# Boueni: rare and super rare in the same group
+rarcom_df_B <- rarcom_df[which(rarcom_df$site == "Boueni"), ]
+rarcom_df_B$rarity[which(rarcom_df_B$rarity %in% c("rare", "super rare"))] <- "rare"
+caper::phylo.d(data = rarcom_df_B[, c("species_nm", "rarity")],
+               phy = phylo,
+               names.col = species_nm,
+               binvar = rarity)
+# D = 0.77
+# closely related species were not necessarily more similar in their
+# degree of ecological rarity than distantly related species
+
+# NGouja: rare and super rare in the same group
+rarcom_df_NG <- rarcom_df[which(rarcom_df$site == "N'Gouja"), ]
+rarcom_df_NG$rarity[which(rarcom_df_NG$rarity %in% c("rare", "super rare"))] <- "rare"
+caper::phylo.d(data = rarcom_df_NG[, c("species_nm", "rarity")],
+               phy = phylo,
+               names.col = species_nm,
+               binvar = rarity)
+# D = 0.84
+# closely related species were not necessarily more similar in their
+# degree of ecological rarity than distantly related species
+
+
+# Boueni: rare and common in the same group
+rarcom_df_B <- rarcom_df[which(rarcom_df$site == "Boueni"), ]
+rarcom_df_B$rarity[which(rarcom_df_B$rarity %in% c("rare", "common"))] <- "common"
+caper::phylo.d(data = rarcom_df_B[, c("species_nm", "rarity")],
+               phy = phylo,
+               names.col = species_nm,
+               binvar = rarity)
+# D = 1.018
+# closely related species were not necessarily more similar in their
+# degree of ecological rarity than distantly related species
+
+# NGouja: rare and super rare in the same group
+rarcom_df_NG <- rarcom_df[which(rarcom_df$site == "N'Gouja"), ]
+rarcom_df_NG$rarity[which(rarcom_df_NG$rarity %in% c("rare", "common"))] <- "common"
+caper::phylo.d(data = rarcom_df_NG[, c("species_nm", "rarity")],
+               phy = phylo,
+               names.col = species_nm,
+               binvar = rarity)
+# D = 0.85
+# closely related species were not necessarily more similar in their
+# degree of ecological rarity than distantly related species
+
+
+
+
 # Step 5: Plot the functional specialisation of each rare/common species and Test ####
 
 
