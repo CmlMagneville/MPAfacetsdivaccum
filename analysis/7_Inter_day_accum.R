@@ -17,7 +17,7 @@
 # load the basic_accum_df (created and saved in 6_Intra_days_accumul.R):
 basic_accum_df <- readRDS(here::here("transformed_data", "basic_accumul_df.rds"))
 
-# compute interday accum REDO THE FCT TO VIDEO FORMAT
+# compute interday accum
 TD_interday_accum <- compute.td.interday.accum(basic_accum_df, rich_plot = TRUE)
 TD_interday_df <- TD_interday_accum[[2]]
 
@@ -27,14 +27,14 @@ saveRDS(TD_interday_df, here::here("transformed_data", "TD_interday_accum.rds"))
 
 # TEST:
 
-# Get the dataframe with species richness on each hour (3*9 values per site):
+# Get the dataframe with species richness on each hour (3*33 values per site):
 TD_hour_df <- TD_interday_accum[[3]]
 
 # Get interesting values on which the T-test is done:
 NG_TD <- TD_hour_df$richn[which(TD_hour_df$site == "N'Gouja")]
-length(NG_TD) # 27 ok :)
+length(NG_TD) # 99 ok :)
 B_TD <- TD_hour_df$richn[which(TD_hour_df$site == "Boueni")]
-length(B_TD) # 27 ok :)
+length(B_TD) # 99 ok :)
 
 test_df <- cbind(c(rep("N'Gouja", length(NG_TD)), rep("Boueni", length(B_TD))),
                  c(NG_TD, B_TD), c(1:2*length(NG_TD)))
@@ -64,7 +64,7 @@ kruskal.test(NG_TD, B_TD)
 # load the fe basic_accumul_df and data needed for FD accumul fct:
 tr_cat <- readRDS(here::here("transformed_data", "tr_cat_df.rds"))
 sp_tr <- readRDS(here::here("transformed_data", "sp_tr_final.rds"))
-basic_accum_df <- readRDS(here::here("transformed_data", "basic_accumul_hour_df.rds"))
+basic_accum_df <- readRDS(here::here("transformed_data", "basic_accumul_df.rds"))
 
 
 # arguments:
@@ -85,14 +85,14 @@ saveRDS(FD_interday_df, here::here("transformed_data", "FD_interday_accum.rds"))
 
 # TEST:
 
-# Get the dataframe with species richness on each video (3*9 values per site):
+# Get the dataframe with species richness on each video (3*33 values per site):
 FD_vid_df <- FD_interday_accum[[3]]
 
 # Get interesting values on which the T-test is done:
 NG_FD <- FD_vid_df$fric[which(FD_vid_df$site == "N'Gouja")]
-length(NG_FD) # 27 ok :)
+length(NG_FD) # 99 ok :)
 B_FD <- FD_vid_df$fric[which(FD_vid_df$site == "Boueni")]
-length(B_FD) # 27 ok :)
+length(B_FD) # 99 ok :)
 
 test_df <- cbind(c(rep("N'Gouja", length(NG_FD)), rep("Boueni", length(B_FD))),
                  c(NG_FD, B_FD), c(1:2*length(NG_FD)))
@@ -113,11 +113,11 @@ kruskal.test(NG_FD, B_FD)
 
 
 
-# Step 3: Compute PD interday accumulation #### REDO THE FCT TO VIDEO FORMAT
+# Step 3: Compute PD interday accumulation
 
 
 # load the basic_accum_df (created and saved in 6_Intra_days_accumul.R):
-basic_accum_df <- readRDS(here::here("transformed_data", "basic_accumul_hour_df.rds"))
+basic_accum_df <- readRDS(here::here("transformed_data", "basic_accumul_df.rds"))
 
 # compute:
 PD_interday_accum <- compute.pd.interday.accum(basic_accum_df,
@@ -129,14 +129,14 @@ saveRDS(PD_interday_df, here::here("transformed_data", "PD_interday_accum.rds"))
 
 # TEST:
 
-# Get the dataframe with species richness on each hour (3*9 values per site):
+# Get the dataframe with species richness on each hour (3*33 values per site):
 PD_vid_df <- PD_interday_accum[[3]]
 
 # Get interesting values on which the T-test is done:
-NG_PD <- PD_vid_df$hour_PD[which(PD_vid_df$site == "N'Gouja")]
-length(NG_PD) # 27 ok :)
-B_PD <- PD_vid_df$hour_PD[which(PD_vid_df$site == "Boueni")]
-length(B_PD) # 27 ok :)
+NG_PD <- PD_vid_df$video_PD[which(PD_vid_df$site == "N'Gouja")]
+length(NG_PD) # 99 ok :)
+B_PD <- PD_vid_df$video_PD[which(PD_vid_df$site == "Boueni")]
+length(B_PD) # 99 ok :)
 
 test_df <- cbind(c(rep("N'Gouja", length(NG_PD)), rep("Boueni", length(B_PD))),
                  c(NG_PD, B_PD), c(1:2*length(NG_PD)))
