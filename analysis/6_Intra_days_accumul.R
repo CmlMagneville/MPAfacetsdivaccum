@@ -90,7 +90,7 @@ presabs_day_site_df[which(presabs_day_site_df$day %in%
 saveRDS(presabs_day_site_df, here::here("transformed_data", "basic_accumul_df.rds"))
 
 
-# Step 3: Compute TD accumulation #### REDO THE FCT TO VIDEO FORMAT
+# Step 3: Compute TD accumulation
 
 
 # load the basic df:
@@ -105,7 +105,7 @@ saveRDS(TD_accum_df, here::here("transformed_data", "TD_intraday_accum.rds"))
 
 
 
-# Step 4: Compute FD accumulation #### REDO THE FCT TO VIDEO FORMAT
+# Step 4: Compute FD accumulation
 
 
 basic_accum_df <- readRDS(here::here("transformed_data", "basic_accumul_df.rds"))
@@ -126,7 +126,7 @@ saveRDS(FD_accum_df, here::here("transformed_data", "FD_intraday_accum.rds"))
 
 
 
-# Step 5: Compute PD accumulation #### REDO THE FCT TO VIDEO FORMAT
+# Step 5: Compute PD accumulation
 
 
 # First call data needed:
@@ -146,8 +146,6 @@ saveRDS(PD_accum_df, here::here("transformed_data", "PD_intraday_accum.rds"))
 
 # Step 6: Plot intra-day accumulation of the three facets for each day, separing sites ####
 # Represent the percentage of total bioidvresity of the studied site and its accumulation #
-
-# REDO THE FCT TO VIDEO FORMAT
 
 # Load data:
 TD_accum_df <- readRDS(here::here("transformed_data", "TD_intraday_accum.rds"))

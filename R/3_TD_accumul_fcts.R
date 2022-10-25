@@ -126,8 +126,8 @@ compute.td.day.accum <- function(basic_accum_df, rich_plot = TRUE) {
   ## rename video_nb from 1, 2 -> video_1, video_2 and give right levels:
   basic_df$video_nb <- paste0(rep("video_", nrow(basic_df)), sep = "", basic_df$video_nb)
   basic_df$video_nb  <- as.factor(basic_df$video_nb)
-  basic_df$video_nb <- ordered(basic_df$video_nb, levels = paste0(rep("video_", 9),
-                                                                  c(1:9)))
+  basic_df$video_nb <- ordered(basic_df$video_nb, levels = paste0(rep("video_", 33),
+                                                                  c(1:33)))
 
   ## site is a factor:
   basic_df$site <- as.factor(basic_df$site)
@@ -160,11 +160,12 @@ compute.td.day.accum <- function(basic_accum_df, rich_plot = TRUE) {
                      panel.grid.major = ggplot2::element_line(colour = "grey")) +
 
 
-      ggplot2::scale_x_discrete(labels= c("8:00-8:59", "9:00-9:59",
-                                          "10:00-10:59", "11:00-11:59",
-                                          "12:00-12:59", "13:00-13:59",
-                                          "14:00-14:59", "15:00-15:59",
-                                          "16:00-17:59")) +
+      ggplot2::scale_x_discrete(labels= c("7:30", "", "8:00", "", "8:40", "",
+                                          "9:15", "", "9:45", "", "10:20", "",
+                                          "10:55", "", "11:40", "", "12:20", "",
+                                          "12:55", "", "13:40", "", "14:25", "",
+                                          "15:00", "", "15:45", "", "16:30", "",
+                                          "17:00", "", "17:30")) +
 
       ggplot2::ylab("Proportion of total species richness") +
 

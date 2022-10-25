@@ -36,14 +36,14 @@ plot.intra.day.accum <- function(TD_accum_df,
 
   # now merge TD, FD and PD columns -> metric:
   final_plot_df <- reshape2::melt(complete_plot_df,
-                                  id.vars = c("site", "day", "hour_nb"),
+                                  id.vars = c("site", "day", "video_nb"),
                                   variable.name = 'metric', value.name = 'values')
 
   # right class:
   final_plot_df$site <- as.factor(final_plot_df$site)
   final_plot_df$day <- as.factor(final_plot_df$day)
-  final_plot_df$hour_nb <- ordered(final_plot_df$hour_nb, levels = paste0(rep("hour_", 9),
-                                                                                 c(1:9)))
+  final_plot_df$video_nb <- ordered(final_plot_df$video_nb, levels = paste0(rep("video_", 33),
+                                                                                 c(1:33)))
 
 
   final_plot_df$metric <- as.factor(final_plot_df$metric)
@@ -58,7 +58,7 @@ plot.intra.day.accum <- function(TD_accum_df,
   # plot!
   accum_day_plot <- ggplot2::ggplot(final_plot_df) +
 
-    ggplot2::geom_line(ggplot2::aes(x = hour_nb, y = values, group = day,
+    ggplot2::geom_line(ggplot2::aes(x = video_nb, y = values, group = day,
                                     color = metric,
                                     linetype = day),
                        size = 0.9) +
@@ -80,11 +80,12 @@ plot.intra.day.accum <- function(TD_accum_df,
                    strip.text.y = ggplot2::element_text(size = 8),
                    panel.spacing = ggplot2::unit(2, "lines")) +
 
-    ggplot2::scale_x_discrete(labels=  c("8:00-8:59", "9:00-9:59",
-                                         "10:00-10:59", "11:00-11:59",
-                                         "12:00-12:59", "13:00-13:59",
-                                         "14:00-14:59", "15:00-15:59",
-                                         "16:00-17:59")) +
+    ggplot2::scale_x_discrete(labels = c("7:30", "", "8:00", "", "8:40", "",
+                                         "9:15", "", "9:45", "", "10:20", "",
+                                         "10:55", "", "11:40", "", "12:20", "",
+                                         "12:55", "", "13:40", "", "14:25", "",
+                                         "15:00", "", "15:45", "", "16:30", "",
+                                         "17:00", "", "17:30")) +
 
     ggplot2::guides(fill = "none", linetype = "none", color = "none") +
 

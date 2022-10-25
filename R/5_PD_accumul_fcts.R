@@ -69,7 +69,7 @@ compute.pd.day.accum <- function(basic_accum_df,
 
   # add Faith's PD information to the basic_accum_df:
   basic_accum_df <- cbind(basic_accum_df, PD_values$PD)
-  colnames(basic_accum_df)[ncol(basic_accum_df)] <- "hour_PD"
+  colnames(basic_accum_df)[ncol(basic_accum_df)] <- "video_PD"
 
 
   # 3
@@ -89,17 +89,17 @@ compute.pd.day.accum <- function(basic_accum_df,
   tot_PD_value <- tot_PD_value$PD
 
   ## Express video's PD as a proportion of the total PD:
-  basic_accum_df$hour_PD <- basic_accum_df$hour_PD / tot_PD_value
+  basic_accum_df$video_PD <- basic_accum_df$video_PD / tot_PD_value
 
 
   ## Plot PD's variation:
   basic_df <- basic_accum_df
 
-  ## rename hour_nb from 1, 2 -> hour_1, hour_2 and give right levels:
-  basic_df$hour_nb <- paste0(rep("hour_", nrow(basic_df)), sep = "", basic_df$hour_nb)
-  basic_df$hour_nb  <- as.factor(basic_df$hour_nb)
-  basic_df$hour_nb <- ordered(basic_df$hour_nb, levels = paste0(rep("hour_", 9),
-                                                                  c(1:9)))
+  ## rename video_nb from 1, 2 -> video_1, video_2 and give right levels:
+  basic_df$video_nb <- paste0(rep("video_", nrow(basic_df)), sep = "", basic_df$video_nb)
+  basic_df$video_nb  <- as.factor(basic_df$video_nb)
+  basic_df$video_nb <- ordered(basic_df$video_nb, levels = paste0(rep("video_", 33),
+                                                                  c(1:33)))
 
   ## site is a factor:
   basic_df$site <- as.factor(basic_df$site)
@@ -111,10 +111,10 @@ compute.pd.day.accum <- function(basic_accum_df,
 
     richn_var <- ggplot2::ggplot(data = basic_df) +
 
-      ggplot2::geom_boxplot(ggplot2::aes(y = hour_PD, x = hour_nb),
+      ggplot2::geom_boxplot(ggplot2::aes(y = video_PD, x = video_nb),
                             color = "grey70", fill = "grey80", alpha = 0.5) +
 
-      ggplot2::geom_jitter(ggplot2::aes(y = hour_PD, x = hour_nb,
+      ggplot2::geom_jitter(ggplot2::aes(y = video_PD, x = video_nb,
                                         color = site, fill = site),
                            width = 0.1) +
 
@@ -132,11 +132,12 @@ compute.pd.day.accum <- function(basic_accum_df,
                      panel.grid.major = ggplot2::element_line(colour = "grey")) +
 
 
-      ggplot2::scale_x_discrete(labels= c("8:00-8:59", "9:00-9:59",
-                                          "10:00-10:59", "11:00-11:59",
-                                          "12:00-12:59", "13:00-13:59",
-                                          "14:00-14:59", "15:00-15:59",
-                                          "16:00-17:59")) +
+      ggplot2::scale_x_discrete(labels= c("7:30", "", "8:00", "", "8:40", "",
+                                          "9:15", "", "9:45", "", "10:20", "",
+                                          "10:55", "", "11:40", "", "12:20", "",
+                                          "12:55", "", "13:40", "", "14:25", "",
+                                          "15:00", "", "15:45", "", "16:30", "",
+                                          "17:00", "", "17:30")) +
 
       ggplot2::ylab("Proportion of total Faith's PD") +
 
@@ -190,7 +191,7 @@ compute.pd.day.accum <- function(basic_accum_df,
 
   # compute the sp richness accumulation:
 
-  rownames(accum_PD_df) <- accum_PD_df$hour_id
+  rownames(accum_PD_df) <- accum_PD_df$video_id
 
   PD_values <- picante::pd(accum_PD_df[, -c(ncol(accum_PD_df),
                                           ncol(accum_PD_df) - 1,
@@ -218,7 +219,7 @@ compute.pd.day.accum <- function(basic_accum_df,
   ## for each site_day:
   for (i in (unique(accum_PD_df$site_day))) {
 
-    sum_tot_richn <- accum_PD_df[which(accum_PD_df$site_day == i & accum_PD_df$hour_nb == "hour_9"), "accum_PD"]
+    sum_tot_richn <- accum_PD_df[which(accum_PD_df$site_day == i & accum_PD_df$video_nb == "video_33"), "accum_PD"]
 
     ## loop on the rows of each site_day:
     for (j in rownames(accum_PD_df[which(accum_PD_df$site_day == i), ])) {
@@ -293,7 +294,7 @@ compute.pd.interday.accum <- function(basic_accum_df,
 
   # first must compute a sp*asb df:
   sp_asb_df <- basic_accum_df
-  rownames(sp_asb_df) <- sp_asb_df$hour_id
+  rownames(sp_asb_df) <- sp_asb_df$video_id
 
 
   # compute phylo:
@@ -312,7 +313,7 @@ compute.pd.interday.accum <- function(basic_accum_df,
 
   # add Faith's PD information to the basic_accum_df:
   basic_accum_df <- cbind(basic_accum_df, PD_values$PD)
-  colnames(basic_accum_df)[ncol(basic_accum_df)] <- "hour_PD"
+  colnames(basic_accum_df)[ncol(basic_accum_df)] <- "video_PD"
 
 
   # 3
@@ -332,17 +333,17 @@ compute.pd.interday.accum <- function(basic_accum_df,
   tot_PD_value <- tot_PD_value$PD
 
   ## Express hour's PD as a proportion of the total PD:
-  basic_accum_df$hour_PD <- basic_accum_df$hour_PD / tot_PD_value
+  basic_accum_df$video_PD <- basic_accum_df$video_PD / tot_PD_value
 
 
   ## Plot PD's variation:
   basic_df <- basic_accum_df
 
-  ## rename hour_nb from 1, 2 -> hour_1, hour_2 and give right levels:
-  basic_df$hour_nb <- paste0(rep("hour_", nrow(basic_df)), sep = "", basic_df$hour_nb)
-  basic_df$hour_nb  <- as.factor(basic_df$hour_nb)
-  basic_df$hour_nb <- ordered(basic_df$hour_nb, levels = paste0(rep("hour_", 9),
-                                                                  c(1:9)))
+  ## rename video_nb from 1, 2 -> video_1, video_2 and give right levels:
+  basic_df$video_nb <- paste0(rep("video_", nrow(basic_df)), sep = "", basic_df$video_nb)
+  basic_df$video_nb  <- as.factor(basic_df$video_nb)
+  basic_df$video_nb <- ordered(basic_df$video_nb, levels = paste0(rep("video_", 33),
+                                                                  c(1:33)))
 
   ## site is a factor:
   basic_df$site <- as.factor(basic_df$site)
@@ -361,7 +362,7 @@ compute.pd.interday.accum <- function(basic_accum_df,
 
     richn_var <- ggplot2::ggplot(data = basic_df) +
 
-      ggplot2::geom_line(ggplot2::aes(y = hour_PD, x = hour_nb, group = day_nb,
+      ggplot2::geom_line(ggplot2::aes(y = video_PD, x = video_nb, group = day_nb,
                                       color = site, fill = site),
                          size = 0.9) +
 
@@ -381,11 +382,12 @@ compute.pd.interday.accum <- function(basic_accum_df,
                      panel.grid.major = ggplot2::element_line(colour = "grey90")) +
 
 
-      ggplot2::scale_x_discrete(labels= c("8:00-8:59", "9:00-9:59",
-                                          "10:00-10:59", "11:00-11:59",
-                                          "12:00-12:59", "13:00-13:59",
-                                          "14:00-14:59", "15:00-15:59",
-                                          "16:00-17:59")) +
+      ggplot2::scale_x_discrete(labels= c("7:30", "", "8:00", "", "8:40", "",
+                                          "9:15", "", "9:45", "", "10:20", "",
+                                          "10:55", "", "11:40", "", "12:20", "",
+                                          "12:55", "", "13:40", "", "14:25", "",
+                                          "15:00", "", "15:45", "", "16:30", "",
+                                          "17:00", "", "17:30")) +
 
       ggplot2::ylab("Proportion of total phylogenetic richness") +
 
@@ -437,7 +439,7 @@ compute.pd.interday.accum <- function(basic_accum_df,
 
   # compute the sp richness accumulation:
 
-  rownames(accum_PD_df) <- accum_PD_df$hour_id
+  rownames(accum_PD_df) <- accum_PD_df$video_id
 
   PD_values <- picante::pd(accum_PD_df[, -c(ncol(accum_PD_df),
                                             ncol(accum_PD_df) - 1,
