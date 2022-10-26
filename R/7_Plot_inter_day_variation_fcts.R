@@ -571,7 +571,7 @@ plot.delta.alpha.inter.day.accum <- function(TD_accum_df,
   final_plot_df$site <- as.factor(final_plot_df$site)
   final_plot_df$day <- as.factor(final_plot_df$day)
   final_plot_df$day <- as.factor(final_plot_df$day_nb)
-  final_plot_df$video_nb <- ordered(final_plot_df$video_nb, levels = paste0(rep("vid_", 33),
+  final_plot_df$video_nb <- ordered(final_plot_df$video_nb, levels = paste0(rep("video_", 33),
                                                                             c(1:33)))
   final_plot_df$metric <- as.factor(final_plot_df$metric)
 

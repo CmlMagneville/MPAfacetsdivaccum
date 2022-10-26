@@ -399,7 +399,116 @@ plots_alpha_site <- mFD::alpha.multidim.plot(
   save_file                = FALSE,
   check_input              = TRUE)
 
-fric_site_plot <- plots_alpha_site$fric$patchwork
+fric_site_plot_PC124 <- (plots_alpha_site$fric$PC1_PC2 + plots_alpha_site$fric$caption +
+                  plots_alpha_site$fric$PC1_PC4) +
+  patchwork::plot_layout(byrow = TRUE, heights = c(1, 1), widths = c(1, 1),
+                         ncol = 2, nrow = 2, guides = "collect")
+
+# now I have to build the PC3-PC5 so we can have a graph with all the dimensions:
+
+# Compute the range of functional axes:
+range_sp_coord  <- range(sp_faxes_coord)
+
+# Based on the range of species coordinates values, compute a nice range ...
+# ... for functional axes:
+range_faxes <- range_sp_coord +
+  c(-1, 1) * (range_sp_coord[2] - range_sp_coord[1]) * 0.05
+range_faxes
+
+# get species coordinates along the two studied axes:
+sp_faxes_coord_xy <- sp_faxes_coord[, c("PC3", "PC5")]
+
+# Plot background with grey backrgound:
+plot_k <- mFD::background.plot(range_faxes = range_faxes,
+                               faxes_nm = c("PC3", "PC5"),
+                               color_bg = "grey95")
+
+# Retrieve vertices coordinates along the two studied functional axes:
+vert <- mFD::vertices(sp_faxes_coord = sp_faxes_coord_xy,
+                      order_2D = FALSE,
+                      check_input = TRUE)
+
+plot_k <- mFD::pool.plot(ggplot_bg = plot_k,
+                               sp_coord2D = sp_faxes_coord_xy,
+                               vertices_nD = vert,
+                               plot_pool = FALSE,
+                               color_pool = "grey50",
+                               fill_pool = NA,
+                               alpha_ch =  0.8,
+                               color_ch = NA,
+                               fill_ch = "white",
+                               shape_pool = 3,
+                               size_pool = 0.7,
+                               shape_vert = 3,
+                               size_vert = 0.7,
+                               color_vert = "grey50",
+                               fill_vert = "grey50")
+
+# Boueni:
+## filter species from B:
+sp_filter_B <- mFD::sp.filter(asb_nm = c("Boueni"),
+                                    sp_faxes_coord = sp_faxes_coord_xy,
+                                    asb_sp_w = site_asb_df)
+## get species coordinates (B):
+sp_faxes_coord_B <- sp_filter_B$`species coordinates`
+
+
+# NGouja:
+## filter species from NG:
+sp_filter_NG <- mFD::sp.filter(asb_nm = c("N'Gouja"),
+                                    sp_faxes_coord = sp_faxes_coord_xy,
+                                    asb_sp_w = site_asb_df)
+## get species coordinates (basket_6):
+sp_faxes_coord_NG <- sp_filter_NG$`species coordinates`
+
+#B:
+vert_nm_B <- mFD::vertices(sp_faxes_coord = sp_faxes_coord_B,
+                                 order_2D = TRUE,
+                                 check_input = TRUE)
+
+# NG:
+vert_nm_NG <- mFD::vertices(sp_faxes_coord = sp_faxes_coord_NG,
+                                 order_2D = TRUE,
+                                 check_input = TRUE)
+
+plot_PC3_PC5 <- mFD::fric.plot(ggplot_bg = plot_k,
+                           asb_sp_coord2D = list("N'Gouja" = sp_faxes_coord_NG,
+                                                 "Boueni" = sp_faxes_coord_B),
+                           asb_vertices_nD = list("N'Gouja" = vert_nm_NG,
+                                                  "Boueni" = vert_nm_B),
+
+                           plot_sp = TRUE,
+
+                           color_ch = c("N'Gouja" = "#80cdc1",
+                                        "Boueni" = "#bf812d"),
+                           fill_ch = c("N'Gouja" = "#80cdc1",
+                                       "Boueni" = "#bf812d"),
+                           alpha_ch = c("N'Gouja" = 0.6,
+                                        "Boueni" = 0.3),
+
+                           shape_sp = c("N'Gouja" = 21,
+                                        "Boueni" = 21),
+                           size_sp = c("N'Gouja" = 0.8,
+                                       "Boueni" = 0.8),
+                           color_sp = c("N'Gouja" = "#80cdc1",
+                                        "Boueni" = "#bf812d"),
+                           fill_sp = c("N'Gouja" = "#80cdc1",
+                                       "Boueni" = "#bf812d"),
+
+                           shape_vert = c("N'Gouja" = 21,
+                                          "Boueni" = 21),
+                           size_vert = c("N'Gouja" = 0.8,
+                                         "Boueni" = 0.8),
+                           color_vert = c("N'Gouja" = "#80cdc1",
+                                          "Boueni" = "#bf812d"),
+                           fill_vert = c("N'Gouja" = "#80cdc1",
+                                         "Boueni" = "#bf812d"))
+
+
+fric_site_plot <- (plots_alpha_site$fric$PC1_PC2 + plots_alpha_site$fric$caption +
+                           plots_alpha_site$fric$PC1_PC4 + plot_PC3_PC5) +
+  patchwork::plot_layout(byrow = TRUE, heights = c(1, 1), widths = c(1, 1),
+                         ncol = 2, nrow = 2, guides = "collect")
 
 ggplot2::ggsave(filename = here::here("outputs/FRic_sites.pdf"),
                 plot = fric_site_plot,
