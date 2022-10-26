@@ -299,9 +299,34 @@ ggplot2::ggsave(filename = here::here("outputs", "global_rarity_tree.pdf"),
 
 
 
+# Step 5 - D phylogenetic index  ####
+
+# Create the global phylo:
+rarcom_df <- readRDS(here::here("transformed_data", "rarcom_df.rds"))
+
+# Rename species with their sister species for some so can be found ...
+# ... in the phylogenetic tree:
+
+rarcom_df[which(rarcom_df$species_nm == "Gomphosus_caeruleus"), "species_nm"] <- "Gomphosus_varius"
+rarcom_df[which(rarcom_df$species_nm == "Scolopsis_frenata"), "species_nm"] <- "Scolopsis_bilineata"
+rarcom_df[which(rarcom_df$species_nm == "Scolopsis_ghanam"), "species_nm"] <- "Scolopsis_bimaculata"
+rarcom_df[which(rarcom_df$species_nm == "Cetoscarus_ocellatus"), "species_nm"] <- "Cetoscarus_bicolor"
+rarcom_df[which(rarcom_df$species_nm == "Scarus_falcipinnis"), "species_nm"] <- "Scarus_altipinnis"
+rarcom_df[which(rarcom_df$species_nm == "Scarus_scaber"), "species_nm"] <- "Scarus_oviceps"
+rarcom_df[which(rarcom_df$species_nm == "Tylosurus_crocodilus"), "species_nm"] <- "Tylosurus_crocodilus_crocodilus"
+rarcom_df[which(rarcom_df$species_nm == "Chlorurus_strongylocephalus"), "species_nm"] <- "Chlorurus_microrhinos"
+rarcom_df[which(rarcom_df$species_nm == "Canthigaster_cyanospilota"), "species_nm"] <- "Canthigaster_coronata"
+rarcom_df[which(rarcom_df$species_nm == "Labropsis_xanthonota"), "species_nm"] <- "Labropsis_australis"
+rarcom_df[which(rarcom_df$species_nm == "Ac_Cten_dark"), "species_nm"] <- "Ctenochaetus_striatus"
+
+# get global phylo:
+sp_nm_all <- unique(rar_com_df$species_nm)
+phylo <- fishtree::fishtree_phylogeny(species = sp_nm_all)
+
 # Compute the phylogenetic D to see if super rare and rare species have a ...
 # ... phylogenetic random distrib or if they are clumped in the phylogeny:
 
+## WITH THE WHOLE PHYLOGENETIC TREE (NG + B)
 # Boueni: rare and super rare in the same group
 rarcom_df_B <- rarcom_df[which(rarcom_df$site == "Boueni"), ]
 rarcom_df_B$rarity[which(rarcom_df_B$rarity %in% c("rare", "super rare"))] <- "rare"
@@ -347,10 +372,66 @@ caper::phylo.d(data = rarcom_df_NG[, c("species_nm", "rarity")],
 # closely related species were not necessarily more similar in their
 # degree of ecological rarity than distantly related species
 
+## WITH ONE PHYLOGENY FOR EACH SITE
+
+# Create phylogeny Boueni:
+rarcom_df_B <- rarcom_df[which(rarcom_df$site == "Boueni"), ]
+sp_nm_B <- unique(rarcom_df_B$species_nm)
+phylo_B <- fishtree::fishtree_phylogeny(species = sp_nm_B)
+
+# Create phylogeny NGouja:
+rarcom_df_NG <- rarcom_df[which(rarcom_df$site == "N'Gouja"), ]
+sp_nm_NG <- unique(rarcom_df_NG$species_nm)
+phylo_NG <- fishtree::fishtree_phylogeny(species = sp_nm_NG)
 
 
+# Boueni: rare and super rare in the same group
+rarcom_df_B <- rarcom_df[which(rarcom_df$site == "Boueni"), ]
+rarcom_df_B$rarity[which(rarcom_df_B$rarity %in% c("rare", "super rare"))] <- "rare"
+caper::phylo.d(data = rarcom_df_B[, c("species_nm", "rarity")],
+               phy = phylo_B,
+               names.col = species_nm,
+               binvar = rarity)
+# D = 0.73
+# closely related species were not necessarily more similar in their
+# degree of ecological rarity than distantly related species
 
-# Step 5: Plot the functional specialisation of each rare/common species and Test ####
+# NGouja: rare and super rare in the same group
+rarcom_df_NG <- rarcom_df[which(rarcom_df$site == "N'Gouja"), ]
+rarcom_df_NG$rarity[which(rarcom_df_NG$rarity %in% c("rare", "super rare"))] <- "rare"
+caper::phylo.d(data = rarcom_df_NG[, c("species_nm", "rarity")],
+               phy = phylo_NG,
+               names.col = species_nm,
+               binvar = rarity)
+# D = 0.83
+# closely related species were not necessarily more similar in their
+# degree of ecological rarity than distantly related species
+
+
+# Boueni: rare and common in the same group
+rarcom_df_B <- rarcom_df[which(rarcom_df$site == "Boueni"), ]
+rarcom_df_B$rarity[which(rarcom_df_B$rarity %in% c("rare", "common"))] <- "common"
+caper::phylo.d(data = rarcom_df_B[, c("species_nm", "rarity")],
+               phy = phylo_B,
+               names.col = species_nm,
+               binvar = rarity)
+# D = 0.98
+# closely related species were not necessarily more similar in their
+# degree of ecological rarity than distantly related species
+
+# NGouja: rare and super rare in the same group
+rarcom_df_NG <- rarcom_df[which(rarcom_df$site == "N'Gouja"), ]
+rarcom_df_NG$rarity[which(rarcom_df_NG$rarity %in% c("rare", "common"))] <- "common"
+caper::phylo.d(data = rarcom_df_NG[, c("species_nm", "rarity")],
+               phy = phylo_NG,
+               names.col = species_nm,
+               binvar = rarity)
+# D = 0.86
+# closely related species were not necessarily more similar in their
+# degree of ecological rarity than distantly related species
+
+
+# Step 6: Plot the functional specialisation of each rare/common species and Test ####
 
 
 # call site asb fe df:
