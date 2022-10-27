@@ -832,11 +832,11 @@ plot.rarity.fspe <- function(sp_dist_gravcenter,
                                 labels = c("Species shared between sites",
                                            "Species only present in the studied site")) +
 
+    ggplot2::scale_y_continuous(breaks = c(0, 0.25, 0.5, 0.75, 1, 1.1)) +
+
     ggplot2::xlab("") +
 
     ggplot2::ylab("Relative distance to the gravity center of the global pool") +
-
-    ggplot2::ylim(0, 1) +
 
     ggplot2::theme(panel.background = ggplot2::element_rect(fill = "white",
                                                             colour = "grey90"),
@@ -855,11 +855,11 @@ plot.rarity.fspe <- function(sp_dist_gravcenter,
                                 labels = c("Species shared between sites",
                                            "Species only present in the studied site")) +
 
+    ggplot2::scale_y_continuous(breaks = c(0, 0.25, 0.5, 0.75, 1, 1.1)) +
+
     ggplot2::xlab("") +
 
     ggplot2::ylab("Relative distance to the gravity center of the global pool") +
-
-    ggplot2::ylim(0, 1) +
 
     ggplot2::guides(colour = "none", shape = "none")+
 
