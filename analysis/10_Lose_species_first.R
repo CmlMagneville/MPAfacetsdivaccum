@@ -189,6 +189,18 @@ PD_rare_NG <- plot_lose_sp_NG_df[which(plot_lose_sp_NG_df$ind == "Faith's PD" & 
 PD_rare_NG <- PD_rare_NG[order(PD_rare_NG$Species_loss), ]
 PD_loss_NG <- (PD_rare_NG[1, "values"] - PD_rare_NG[NG_20, "values"])
 
+PD_common_NG <- plot_lose_sp_NG_df[which(plot_lose_sp_NG_df$ind == "Faith's PD" & plot_lose_sp_NG_df$metric == "commons"), ]
+PD_common_NG <- PD_common_NG[order(PD_common_NG$Species_loss), ]
+PD_common_NG_loss <- ((PD_common_NG[1, "values"] - PD_common_NG[NG_20, "values"])/PD_common_NG[1, "values"])*100
+
+PD_common_NG_loss - PD_loss_NG
+
+PD_random_NG <- plot_lose_sp_NG_df[which(plot_lose_sp_NG_df$ind == "Faith's PD" & plot_lose_sp_NG_df$metric == "random"), ]
+PD_random_NG <- PD_random_NG[order(PD_random_NG$Species_loss), ]
+PD_random_NG_loss <- ((PD_random_NG[1, "values"] - PD_random_NG[NG_20, "values"])/PD_random_NG[1, "values"])*100
+
+PD_random_NG_loss - PD_loss_NG
+
 # Boueni:
 B_nb_sp <- length(unique(plot_lose_sp_B_df$Species_loss)) - 1
 B_20 <- floor(0.2*B_nb_sp)
@@ -197,5 +209,15 @@ PD_rare_B <- PD_rare_B[order(PD_rare_B$Species_loss), ]
 PD_loss_B <- (PD_rare_B[1, "values"] - PD_rare_B[B_20, "values"])
 
 
+PD_common_B <- plot_lose_sp_B_df[which(plot_lose_sp_B_df$ind == "Faith's PD" & plot_lose_sp_B_df$metric == "commons"), ]
+PD_common_B <- PD_common_B[order(PD_common_B$Species_loss), ]
+PD_common_B_loss <- ((PD_common_B[1, "values"] - PD_common_B[B_20, "values"])/PD_common_B[1, "values"])*100
 
+PD_common_B_loss - PD_loss_B
+
+PD_random_B <- plot_lose_sp_B_df[which(plot_lose_sp_B_df$ind == "Faith's PD" & plot_lose_sp_B_df$metric == "random"), ]
+PD_random_B <- PD_random_B[order(PD_random_B$Species_loss), ]
+PD_random_B_loss <- ((PD_random_B[1, "values"] - PD_random_B[B_20, "values"])/PD_random_B[1, "values"])*100
+
+PD_random_B_loss - PD_loss_B
 

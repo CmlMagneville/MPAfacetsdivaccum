@@ -155,7 +155,7 @@ create.asb.sp.site <- function(list1, list2) {
   ## then gather the two lists and clean:
   sp_all <- c(sp_list1, sp_list2)
   sp_all <- unique(sp_all)
-  sp_all <- sp_all[which(! sp_all %in% c("time", "video_nm"))]
+  sp_all <- sp_all[which(! sp_all %in% c("time_vid_df", "video_nm"))]
 
 
   # Create a dfs that will contains 0, 1 for all species (columns) ...
