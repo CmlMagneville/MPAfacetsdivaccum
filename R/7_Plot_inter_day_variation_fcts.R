@@ -576,6 +576,7 @@ plot.delta.alpha.inter.day.accum <- function(TD_accum_df,
   final_plot_df$metric <- as.factor(final_plot_df$metric)
 
 
+
   # Create new names from facets day_1, day_2 and day_3:
   day_labs <- c("Sampling day 1", "Sampling day 2", "Sampling day 3")
   names(day_labs) <- c("day_1", "day_2", "day_3")
@@ -593,7 +594,7 @@ plot.delta.alpha.inter.day.accum <- function(TD_accum_df,
 
     ggplot2::scale_colour_manual(values = facets_colors,
                                  name = "Delta Metrics",
-                                 labels = c("Dela TD", "Delta FRic", "Delta PD")) +
+                                 labels = c("Species richness", "FRic", "Faith's PD")) +
 
     ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90),
                    panel.background = ggplot2::element_rect(fill = "white",
