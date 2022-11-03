@@ -76,7 +76,7 @@ plot.inter.day.accum <- function(TD_accum_df,
     ggplot2::scale_colour_manual(values = c("#bf812d",
                                             "#80cdc1"),
                                  name = "Site",
-                                 labels = c("Slightly Protected",
+                                 labels = c("Poorly Protected",
                                             "Fully Protected")) +
 
     ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90),
@@ -117,7 +117,7 @@ plot.inter.day.accum <- function(TD_accum_df,
     ggplot2::scale_colour_manual(values = c("#bf812d",
                                             "#80cdc1"),
                                  name = "Site",
-                                 labels = c("Slightly Protected",
+                                 labels = c("Poorly Protected",
                                             "Fully Protected")) +
 
     ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90),
@@ -158,7 +158,7 @@ plot.inter.day.accum <- function(TD_accum_df,
     ggplot2::scale_colour_manual(values = c("#bf812d",
                                             "#80cdc1"),
                                  name = "Site",
-                                 labels = c("Slightly Protected",
+                                 labels = c("Poorly Protected",
                                             "Fully Protected")) +
 
     ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90),
@@ -199,7 +199,7 @@ plot.inter.day.accum <- function(TD_accum_df,
     ggplot2::scale_colour_manual(values = c("#bf812d",
                                             "#80cdc1"),
                                  name = "Site",
-                                 labels = c("Slightly Protected",
+                                 labels = c("Poorly Protected",
                                             "Fully Protected")) +
 
     ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90),
@@ -240,7 +240,7 @@ plot.inter.day.accum <- function(TD_accum_df,
     ggplot2::scale_colour_manual(values = c("#bf812d",
                                             "#80cdc1"),
                                  name = "Site",
-                                 labels = c("Slightly Protected",
+                                 labels = c("Poorly Protected",
                                             "Fully Protected")) +
 
     ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90),
@@ -281,7 +281,7 @@ plot.inter.day.accum <- function(TD_accum_df,
     ggplot2::scale_colour_manual(values = c("#bf812d",
                                             "#80cdc1"),
                                  name = "Site",
-                                 labels = c("Slightly Protected",
+                                 labels = c("Poorly Protected",
                                             "Fully Protected")) +
 
     ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90),
@@ -322,7 +322,7 @@ plot.inter.day.accum <- function(TD_accum_df,
     ggplot2::scale_colour_manual(values = c("#bf812d",
                                             "#80cdc1"),
                                  name = "Site",
-                                 labels = c("Slightly Protected",
+                                 labels = c("Poorly Protected",
                                             "Fully Protected")) +
 
     ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90),
@@ -363,7 +363,7 @@ plot.inter.day.accum <- function(TD_accum_df,
     ggplot2::scale_colour_manual(values = c("#bf812d",
                                             "#80cdc1"),
                                  name = "Site",
-                                 labels = c("Slightly Protected",
+                                 labels = c("Poorly Protected",
                                             "Fully Protected")) +
 
     ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90),
@@ -404,7 +404,7 @@ plot.inter.day.accum <- function(TD_accum_df,
     ggplot2::scale_colour_manual(values = c("#bf812d",
                                             "#80cdc1"),
                                  name = "Site",
-                                 labels = c("Slightly Protected",
+                                 labels = c("Poorly Protected",
                                             "Fully Protected")) +
 
     ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90),
@@ -445,7 +445,7 @@ plot.inter.day.accum <- function(TD_accum_df,
     ggplot2::scale_colour_manual(values = c("#bf812d",
                                             "#80cdc1"),
                                  name = "Site",
-                                 labels = c("Slightly Protected",
+                                 labels = c("Poorly Protected",
                                             "Fully Protected")) +
 
     ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90),
