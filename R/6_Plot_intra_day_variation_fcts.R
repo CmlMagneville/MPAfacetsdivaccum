@@ -39,23 +39,31 @@ plot.intra.day.accum <- function(TD_accum_df,
                                   id.vars = c("site", "day", "video_nb"),
                                   variable.name = 'metric', value.name = 'values')
 
+  # rename TD, PD and FD to have richn names:
+  final_plot_df$metric <- as.character(final_plot_df$metric)
+  final_plot_df$metric[which(final_plot_df$metric == "TD")] <- "Species richness"
+  final_plot_df$metric[which(final_plot_df$metric == "PD")] <- "Faith's PD"
+  final_plot_df$metric[which(final_plot_df$metric == "FD")] <- "FRic"
+  final_plot_df$metric <- as.factor(final_plot_df$metric)
+  final_plot_df$metric <- ordered(final_plot_df$metric,
+                                  levels = c("Species richness",
+                                             "Faith's PD",
+                                             "FRic"))
+
+
+
   # right class:
   final_plot_df$site <- as.factor(final_plot_df$site)
   final_plot_df$day <- as.factor(final_plot_df$day)
   final_plot_df$video_nb <- ordered(final_plot_df$video_nb, levels = paste0(rep("video_", 33),
                                                                                  c(1:33)))
 
-
-  final_plot_df$metric <- as.factor(final_plot_df$metric)
-  final_plot_df$metric <- factor(final_plot_df$metric, levels = c("TD", "PD", "FD"))
-  final_plot_df$metric <- ordered(final_plot_df$metric, levels = c("TD", "PD", "FD"))
-
   # build labels for sites:
-  sites_labs <- c("Slightly Protected", "Fully Protected")
+  sites_labs <- c("Poorly Protected", "Fully Protected")
   names(sites_labs) <- c("Boueni", "N'Gouja")
 
 
-  # plot!
+  # plot:
   accum_day_plot <- ggplot2::ggplot(final_plot_df) +
 
     ggplot2::geom_line(ggplot2::aes(x = video_nb, y = values, group = day,
@@ -67,7 +75,10 @@ plot.intra.day.accum <- function(TD_accum_df,
                         color = "grey70",
                         size = linewidth) +
 
-    ggplot2::facet_grid(forcats::fct_relevel(metric,'TD','PD','FD') ~ site,
+    ggplot2::facet_grid(forcats::fct_relevel(metric,
+                                            c("Species richness",
+                                              "Faith's PD",
+                                              "FRic")) ~ site,
                         labeller = ggplot2::labeller(site = sites_labs)) +
 
     ggplot2::scale_colour_manual(values = facets_colors,

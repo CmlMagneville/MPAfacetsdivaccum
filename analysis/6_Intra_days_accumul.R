@@ -153,7 +153,7 @@ FD_accum_df <- readRDS(here::here("transformed_data", "FD_intraday_accum.rds"))
 PD_accum_df <- readRDS(here::here("transformed_data", "PD_intraday_accum.rds"))
 
 # Add graphic data (TD, FD, PD order):
-facets_colors <- c("#fdae61", "#abdda4", "#2b83ba")
+facets_colors <- c("#fdae61", "#2b83ba", "#abdda4")
 linewidth <- 0.9
 
 # Compute a df with values obtained from analysis before: maximal values of ...
@@ -162,12 +162,12 @@ hline_df <- as.data.frame(matrix(ncol = 3, nrow = 6))
 colnames(hline_df) <- c("site", "metric", "hline_value")
 
 # B - TD
-hline_df[1, ] <- c("Boueni", "TD", 74)
-hline_df[2, ] <- c("N'Gouja", "TD", 84.67)
-hline_df[3, ] <- c("Boueni", "FD", 57.76)
-hline_df[4, ] <- c("N'Gouja", "FD", 90.70)
-hline_df[5, ] <- c("N'Gouja", "PD", 90.45)
-hline_df[6, ] <- c("Boueni", "PD", 78.47)
+hline_df[1, ] <- c("Boueni", "Species richness", 74)
+hline_df[2, ] <- c("N'Gouja", "Species richness", 84.67)
+hline_df[3, ] <- c("Boueni", "FRic", 57.76)
+hline_df[4, ] <- c("N'Gouja", "FRic", 90.70)
+hline_df[5, ] <- c("N'Gouja", "Faith's PD", 90.45)
+hline_df[6, ] <- c("Boueni", "Faith's PD", 78.47)
 hline_df$hline_value <- as.numeric(hline_df$hline_value)
 
 
