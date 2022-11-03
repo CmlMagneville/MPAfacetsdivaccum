@@ -217,7 +217,7 @@ plot.rarcom <- function(rarcom_df, sites_colors) {
     ggplot2::scale_fill_manual(values = c(sites_colors[1],
                                           sites_colors[2]),
                                name = "Site presence",
-                               labels = c("Both", "Slightly Protected")) +
+                               labels = c("Both", "Poorly Protected")) +
 
     ggplot2::theme(axis.text.y = ggplot2::element_text(size = 6,
                                                        face = "italic"),
