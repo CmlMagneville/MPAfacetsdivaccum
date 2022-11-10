@@ -622,7 +622,7 @@ sort(sp_nm_NG)
 # get species number: 127 species in MPA (Octopus cyanea only seen in NG)
 # (Chelonia mydas seen on both sites)
 length(sp_nm_NG)
-
+saveRDS(sp_nm_NG, here::here("transformed_data", "sp_nm_NG.rds"))
 
 ## Fished Area - Boueni: (raie pastenague vue le 09 a Boueni, pas comprise dans les 113 sp)
 sp_nm_B <- unique(c(colnames(presabs_hour_04_A1), colnames(presabs_hour_04_C2),
@@ -636,3 +636,4 @@ sort(sp_nm_B)
 
 # get species number: 109 species in Fished Area
 length(sp_nm_B)
+saveRDS(sp_nm_B, here::here("transformed_data", "sp_nm_B.rds"))
