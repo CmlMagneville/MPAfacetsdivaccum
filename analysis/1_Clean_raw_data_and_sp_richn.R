@@ -130,7 +130,7 @@ sort(sp_nm_B)
 # ... Add Pomacentrus similis and P. caeruleus as P. similis does not belong in Mayotte and ...
 # ... data checked on WAVE
 # ... Aulostomus_maculatus -> Aulostomus chinenesis as A. maculatus only in North America
-
+# ... Remove Epinephelus_malabaricus (camA1 - 05) because not right annotation (1 frame)
 
 
 # 03 - A1:
@@ -188,6 +188,7 @@ presabs_04_C2 <- presabs_04_C2[, which(! colnames(presabs_04_C2) %in% c("Ctenoch
 sort(colnames(presabs_05_A1))
 presabs_05_A1 <- presabs_05_A1[, which(! colnames(presabs_05_A1) %in% c("Chelonia_mydas"))]
 presabs_05_A1 <- presabs_05_A1[, which(! colnames(presabs_05_A1) %in% c("hortulanus_hortulanus"))]
+presabs_05_A1 <- presabs_05_A1[, which(! colnames(presabs_05_A1) %in% c("Epinephelus_malabaricus"))]
 
 presabs_05_A1 <- dplyr::rename(presabs_05_A1, "Pomacentrus_caeruleus" = "Pomacentrus_similis")
 
