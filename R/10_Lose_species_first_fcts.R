@@ -632,9 +632,7 @@ lose.species.div.plot <- function(rarcom_df_site,
                                               "Lose rarest species first",
                                               "Lose random species first")) +
 
-    ggplot2::theme(axis.text.x = ggplot2::element_blank(),
-                   axis.ticks.x = ggplot2::element_blank(),
-                   panel.background = ggplot2::element_rect(fill = "white",
+    ggplot2::theme(panel.background = ggplot2::element_rect(fill = "white",
                                                             colour = "white"),
                    panel.grid.major.x = ggplot2::element_line(colour = "white"),
                    panel.grid.major.y = ggplot2::element_line(colour = "grey90")) +
