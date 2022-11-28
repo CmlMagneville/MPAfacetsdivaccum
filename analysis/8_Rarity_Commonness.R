@@ -115,14 +115,14 @@ rar_com_df <- readRDS(here::here("transformed_data", "rarcom_df.rds"))
 # ... in the phylogenetic tree:
 
 rar_com_df[which(rar_com_df$species_nm == "Gomphosus_caeruleus"), "species_nm"] <- "Gomphosus_varius"
-rar_com_df[which(rar_com_df$species_nm == "Scolopsis_frenata"), "species_nm"] <- "Scolopsis_bilineata"
+# rar_com_df[which(rar_com_df$species_nm == "Scolopsis_frenata"), "species_nm"] <- "Scolopsis_bilineata"
 rar_com_df[which(rar_com_df$species_nm == "Scolopsis_ghanam"), "species_nm"] <- "Scolopsis_bimaculata"
 rar_com_df[which(rar_com_df$species_nm == "Cetoscarus_ocellatus"), "species_nm"] <- "Cetoscarus_bicolor"
 rar_com_df[which(rar_com_df$species_nm == "Scarus_falcipinnis"), "species_nm"] <- "Scarus_altipinnis"
 rar_com_df[which(rar_com_df$species_nm == "Scarus_scaber"), "species_nm"] <- "Scarus_oviceps"
 rar_com_df[which(rar_com_df$species_nm == "Tylosurus_crocodilus"), "species_nm"] <- "Tylosurus_crocodilus_crocodilus"
-rar_com_df[which(rar_com_df$species_nm == "Chlorurus_strongylocephalus"), "species_nm"] <- "Chlorurus_microrhinos"
-rar_com_df[which(rar_com_df$species_nm == "Canthigaster_cyanospilota"), "species_nm"] <- "Canthigaster_coronata"
+# rar_com_df[which(rar_com_df$species_nm == "Chlorurus_strongylocephalus"), "species_nm"] <- "Chlorurus_microrhinos"
+# rar_com_df[which(rar_com_df$species_nm == "Canthigaster_cyanospilota"), "species_nm"] <- "Canthigaster_coronata"
 rar_com_df[which(rar_com_df$species_nm == "Labropsis_xanthonota"), "species_nm"] <- "Labropsis_australis"
 rar_com_df[which(rar_com_df$species_nm == "Ac_Cten_dark"), "species_nm"] <- "Ctenochaetus_striatus"
 
@@ -308,14 +308,14 @@ rarcom_df <- readRDS(here::here("transformed_data", "rarcom_df.rds"))
 # ... in the phylogenetic tree:
 
 rarcom_df[which(rarcom_df$species_nm == "Gomphosus_caeruleus"), "species_nm"] <- "Gomphosus_varius"
-rarcom_df[which(rarcom_df$species_nm == "Scolopsis_frenata"), "species_nm"] <- "Scolopsis_bilineata"
+# rarcom_df[which(rarcom_df$species_nm == "Scolopsis_frenata"), "species_nm"] <- "Scolopsis_bilineata"
 rarcom_df[which(rarcom_df$species_nm == "Scolopsis_ghanam"), "species_nm"] <- "Scolopsis_bimaculata"
 rarcom_df[which(rarcom_df$species_nm == "Cetoscarus_ocellatus"), "species_nm"] <- "Cetoscarus_bicolor"
 rarcom_df[which(rarcom_df$species_nm == "Scarus_falcipinnis"), "species_nm"] <- "Scarus_altipinnis"
 rarcom_df[which(rarcom_df$species_nm == "Scarus_scaber"), "species_nm"] <- "Scarus_oviceps"
 rarcom_df[which(rarcom_df$species_nm == "Tylosurus_crocodilus"), "species_nm"] <- "Tylosurus_crocodilus_crocodilus"
-rarcom_df[which(rarcom_df$species_nm == "Chlorurus_strongylocephalus"), "species_nm"] <- "Chlorurus_microrhinos"
-rarcom_df[which(rarcom_df$species_nm == "Canthigaster_cyanospilota"), "species_nm"] <- "Canthigaster_coronata"
+# rarcom_df[which(rarcom_df$species_nm == "Chlorurus_strongylocephalus"), "species_nm"] <- "Chlorurus_microrhinos"
+# rarcom_df[which(rarcom_df$species_nm == "Canthigaster_cyanospilota"), "species_nm"] <- "Canthigaster_coronata"
 rarcom_df[which(rarcom_df$species_nm == "Labropsis_xanthonota"), "species_nm"] <- "Labropsis_australis"
 rarcom_df[which(rarcom_df$species_nm == "Ac_Cten_dark"), "species_nm"] <- "Ctenochaetus_striatus"
 
