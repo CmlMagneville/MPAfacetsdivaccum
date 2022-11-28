@@ -67,13 +67,13 @@ lose.species.div.plot <- function(rarcom_df_site,
 
   if (site == "NGouja") {
     phylo_rarest_final_df <- dplyr::rename(phylo_rarest_final_df, "Gomphosus_varius" = "Gomphosus_caeruleus")
-    phylo_rarest_final_df <- dplyr::rename(phylo_rarest_final_df, "Scolopsis_bilineata" = "Scolopsis_frenata")
+    # phylo_rarest_final_df <- dplyr::rename(phylo_rarest_final_df, "Scolopsis_bilineata" = "Scolopsis_frenata")
     phylo_rarest_final_df <- dplyr::rename(phylo_rarest_final_df, "Scolopsis_bimaculata" = "Scolopsis_ghanam")
     phylo_rarest_final_df <- dplyr::rename(phylo_rarest_final_df, "Cetoscarus_bicolor" = "Cetoscarus_ocellatus")
     phylo_rarest_final_df <- dplyr::rename(phylo_rarest_final_df, "Scarus_altipinnis" = "Scarus_falcipinnis")
     phylo_rarest_final_df <- dplyr::rename(phylo_rarest_final_df, "Scarus_oviceps" = "Scarus_scaber")
     phylo_rarest_final_df <- dplyr::rename(phylo_rarest_final_df, "Tylosurus_crocodilus_crocodilus" = "Tylosurus_crocodilus")
-    phylo_rarest_final_df <- dplyr::rename(phylo_rarest_final_df, "Chlorurus_microrhinos" = "Chlorurus_strongylocephalus")
+    # phylo_rarest_final_df <- dplyr::rename(phylo_rarest_final_df, "Chlorurus_microrhinos" = "Chlorurus_strongylocephalus")
     phylo_rarest_final_df <- dplyr::rename(phylo_rarest_final_df, "Ctenochaetus_striatus" = "Ac_Cten_dark")
   }
 
@@ -82,21 +82,21 @@ lose.species.div.plot <- function(rarcom_df_site,
     phylo_rarest_final_df <- dplyr::rename(phylo_rarest_final_df, "Cetoscarus_bicolor" = "Cetoscarus_ocellatus")
     phylo_rarest_final_df <- dplyr::rename(phylo_rarest_final_df, "Tylosurus_crocodilus_crocodilus" = "Tylosurus_crocodilus")
     phylo_rarest_final_df <- dplyr::rename(phylo_rarest_final_df, "Ctenochaetus_striatus" = "Ac_Cten_dark")
-    phylo_rarest_final_df <- dplyr::rename(phylo_rarest_final_df, "Canthigaster_coronata" = "Canthigaster_cyanospilota")
+    # phylo_rarest_final_df <- dplyr::rename(phylo_rarest_final_df, "Canthigaster_coronata" = "Canthigaster_cyanospilota")
     phylo_rarest_final_df <- dplyr::rename(phylo_rarest_final_df, "Labropsis_australis" = "Labropsis_xanthonota")
 
   }
 
 
   asb_sp_site <- dplyr::rename(asb_sp_site, "Gomphosus_varius" = "Gomphosus_caeruleus")
-  asb_sp_site <- dplyr::rename(asb_sp_site, "Scolopsis_bilineata" = "Scolopsis_frenata")
+  # asb_sp_site <- dplyr::rename(asb_sp_site, "Scolopsis_bilineata" = "Scolopsis_frenata")
   asb_sp_site <- dplyr::rename(asb_sp_site, "Scolopsis_bimaculata" = "Scolopsis_ghanam")
   asb_sp_site <- dplyr::rename(asb_sp_site, "Cetoscarus_bicolor" = "Cetoscarus_ocellatus")
   asb_sp_site <- dplyr::rename(asb_sp_site, "Scarus_altipinnis" = "Scarus_falcipinnis")
   asb_sp_site <- dplyr::rename(asb_sp_site, "Scarus_oviceps" = "Scarus_scaber")
   asb_sp_site <- dplyr::rename(asb_sp_site, "Tylosurus_crocodilus_crocodilus" = "Tylosurus_crocodilus")
-  asb_sp_site <- dplyr::rename(asb_sp_site, "Chlorurus_microrhinos" = "Chlorurus_strongylocephalus")
-  asb_sp_site <- dplyr::rename(asb_sp_site, "Canthigaster_coronata" = "Canthigaster_cyanospilota")
+  # asb_sp_site <- dplyr::rename(asb_sp_site, "Chlorurus_microrhinos" = "Chlorurus_strongylocephalus")
+  # asb_sp_site <- dplyr::rename(asb_sp_site, "Canthigaster_coronata" = "Canthigaster_cyanospilota")
   asb_sp_site <- dplyr::rename(asb_sp_site, "Labropsis_australis" = "Labropsis_xanthonota")
   asb_sp_site <- dplyr::rename(asb_sp_site, "Ctenochaetus_striatus" = "Ac_Cten_dark")
 
@@ -116,10 +116,10 @@ lose.species.div.plot <- function(rarcom_df_site,
 
   PD_rares <- PD_rarest$PD
   if (site == "NGouja") {
-    PD_rares[c(127, 128)] <- c(0, 0)
+    PD_rares[c(109)] <- 0
   }
   if (site == "Boueni") {
-    PD_rares[c(111, 112)] <- c(0, 0)
+    PD_rares[c(98)] <- 0
   }
 
 
@@ -128,7 +128,7 @@ lose.species.div.plot <- function(rarcom_df_site,
 
     alpha_fd_indices <- mFD::alpha.fd.multidim(
       sp_faxes_coord   = as.matrix(sp_faxes_coord[ , c("PC1", "PC2", "PC3", "PC4", "PC5")]),
-      asb_sp_w         = as.matrix(rarest_final_df[c(1:122), ]),
+      asb_sp_w         = as.matrix(rarest_final_df[c(1:104), ]),
       ind_vect         = c("fdis", "fric",
                            "fspe"),
       scaling          = TRUE,
@@ -141,7 +141,7 @@ lose.species.div.plot <- function(rarcom_df_site,
 
     alpha_fd_indices <- mFD::alpha.fd.multidim(
       sp_faxes_coord   = as.matrix(sp_faxes_coord[ , c("PC1", "PC2", "PC3", "PC4", "PC5")]),
-      asb_sp_w         = as.matrix(rarest_final_df[c(1:106), ]),
+      asb_sp_w         = as.matrix(rarest_final_df[c(1:93), ]),
       ind_vect         = c("fdis", "fric",
                            "fspe"),
       scaling          = TRUE,
@@ -150,13 +150,7 @@ lose.species.div.plot <- function(rarcom_df_site,
 
   }
 
-
-  # asb 121 has NA in FRic...? species in the same FE, not enough points:
   FRic_rares <- alpha_fd_indices$functional_diversity_indices$fric
-
-  if (site == "NGouja") {
-    FRic_rares[122] <- 0
-  }
 
   FRic_rares <- c(FRic_rares, rep(0, 6))
 
@@ -213,13 +207,13 @@ lose.species.div.plot <- function(rarcom_df_site,
 
   if (site == "NGouja") {
     phylo_common_final_df <- dplyr::rename(phylo_common_final_df, "Gomphosus_varius" = "Gomphosus_caeruleus")
-    phylo_common_final_df <- dplyr::rename(phylo_common_final_df, "Scolopsis_bilineata" = "Scolopsis_frenata")
+    # phylo_common_final_df <- dplyr::rename(phylo_common_final_df, "Scolopsis_bilineata" = "Scolopsis_frenata")
     phylo_common_final_df <- dplyr::rename(phylo_common_final_df, "Scolopsis_bimaculata" = "Scolopsis_ghanam")
     phylo_common_final_df <- dplyr::rename(phylo_common_final_df, "Cetoscarus_bicolor" = "Cetoscarus_ocellatus")
     phylo_common_final_df <- dplyr::rename(phylo_common_final_df, "Scarus_altipinnis" = "Scarus_falcipinnis")
     phylo_common_final_df <- dplyr::rename(phylo_common_final_df, "Scarus_oviceps" = "Scarus_scaber")
     phylo_common_final_df <- dplyr::rename(phylo_common_final_df, "Tylosurus_crocodilus_crocodilus" = "Tylosurus_crocodilus")
-    phylo_common_final_df <- dplyr::rename(phylo_common_final_df, "Chlorurus_microrhinos" = "Chlorurus_strongylocephalus")
+    # phylo_common_final_df <- dplyr::rename(phylo_common_final_df, "Chlorurus_microrhinos" = "Chlorurus_strongylocephalus")
     phylo_common_final_df <- dplyr::rename(phylo_common_final_df, "Ctenochaetus_striatus" = "Ac_Cten_dark")
   }
 
@@ -228,7 +222,7 @@ lose.species.div.plot <- function(rarcom_df_site,
     phylo_common_final_df <- dplyr::rename(phylo_common_final_df, "Cetoscarus_bicolor" = "Cetoscarus_ocellatus")
     phylo_common_final_df <- dplyr::rename(phylo_common_final_df, "Tylosurus_crocodilus_crocodilus" = "Tylosurus_crocodilus")
     phylo_common_final_df <- dplyr::rename(phylo_common_final_df, "Ctenochaetus_striatus" = "Ac_Cten_dark")
-    phylo_common_final_df <- dplyr::rename(phylo_common_final_df, "Canthigaster_coronata" = "Canthigaster_cyanospilota")
+    # phylo_common_final_df <- dplyr::rename(phylo_common_final_df, "Canthigaster_coronata" = "Canthigaster_cyanospilota")
     phylo_common_final_df <- dplyr::rename(phylo_common_final_df, "Labropsis_australis" = "Labropsis_xanthonota")
 
   }
@@ -241,10 +235,10 @@ lose.species.div.plot <- function(rarcom_df_site,
 
   PD_commons <- PD_common$PD
   if (site == "NGouja") {
-    PD_commons[c(127, 128)] <- c(0, 0)
+    PD_commons[c(109)] <- 0
   }
   if (site == "Boueni") {
-    PD_commons[c(111, 112)] <- c(0, 0)
+    PD_commons[c(98)] <- 0
   }
 
 
@@ -252,7 +246,7 @@ lose.species.div.plot <- function(rarcom_df_site,
   if (site == "NGouja") {
     alpha_fd_indices <- mFD::alpha.fd.multidim(
       sp_faxes_coord   = as.matrix(sp_faxes_coord[ , c("PC1", "PC2", "PC3", "PC4", "PC5")]),
-      asb_sp_w         = as.matrix(common_final_df[c(1:122), ]),
+      asb_sp_w         = as.matrix(common_final_df[c(1:104), ]),
       ind_vect         = c("fdis", "fric",
                            "fspe"),
       scaling          = TRUE,
@@ -262,7 +256,7 @@ lose.species.div.plot <- function(rarcom_df_site,
   if (site == "Boueni") {
     alpha_fd_indices <- mFD::alpha.fd.multidim(
       sp_faxes_coord   = as.matrix(sp_faxes_coord[ , c("PC1", "PC2", "PC3", "PC4", "PC5")]),
-      asb_sp_w         = as.matrix(common_final_df[c(1:106), ]),
+      asb_sp_w         = as.matrix(common_final_df[c(1:93), ]),
       ind_vect         = c("fdis", "fric",
                            "fspe"),
       scaling          = TRUE,
@@ -271,12 +265,7 @@ lose.species.div.plot <- function(rarcom_df_site,
   }
 
 
-  # asb 121 has NA in FRic...? species in the same FE, not enough points:
   FRic_commons <- alpha_fd_indices$functional_diversity_indices$fric
-
-  if (site == "NGouja") {
-    FRic_commons[122] <- 0
-  }
 
   FRic_commons <- c(FRic_commons, rep(0, 6))
 
@@ -348,13 +337,13 @@ lose.species.div.plot <- function(rarcom_df_site,
 
     if (site == "NGouja") {
       phylo_random_final_df <- dplyr::rename(phylo_random_final_df, "Gomphosus_varius" = "Gomphosus_caeruleus")
-      phylo_random_final_df <- dplyr::rename(phylo_random_final_df, "Scolopsis_bilineata" = "Scolopsis_frenata")
+      # phylo_random_final_df <- dplyr::rename(phylo_random_final_df, "Scolopsis_bilineata" = "Scolopsis_frenata")
       phylo_random_final_df <- dplyr::rename(phylo_random_final_df, "Scolopsis_bimaculata" = "Scolopsis_ghanam")
       phylo_random_final_df <- dplyr::rename(phylo_random_final_df, "Cetoscarus_bicolor" = "Cetoscarus_ocellatus")
       phylo_random_final_df <- dplyr::rename(phylo_random_final_df, "Scarus_altipinnis" = "Scarus_falcipinnis")
       phylo_random_final_df <- dplyr::rename(phylo_random_final_df, "Scarus_oviceps" = "Scarus_scaber")
       phylo_random_final_df <- dplyr::rename(phylo_random_final_df, "Tylosurus_crocodilus_crocodilus" = "Tylosurus_crocodilus")
-      phylo_random_final_df <- dplyr::rename(phylo_random_final_df, "Chlorurus_microrhinos" = "Chlorurus_strongylocephalus")
+      # phylo_random_final_df <- dplyr::rename(phylo_random_final_df, "Chlorurus_microrhinos" = "Chlorurus_strongylocephalus")
       phylo_random_final_df <- dplyr::rename(phylo_random_final_df, "Ctenochaetus_striatus" = "Ac_Cten_dark")
     }
 
@@ -363,7 +352,7 @@ lose.species.div.plot <- function(rarcom_df_site,
       phylo_random_final_df <- dplyr::rename(phylo_random_final_df, "Cetoscarus_bicolor" = "Cetoscarus_ocellatus")
       phylo_random_final_df <- dplyr::rename(phylo_random_final_df, "Tylosurus_crocodilus_crocodilus" = "Tylosurus_crocodilus")
       phylo_random_final_df <- dplyr::rename(phylo_random_final_df, "Ctenochaetus_striatus" = "Ac_Cten_dark")
-      phylo_random_final_df <- dplyr::rename(phylo_random_final_df, "Canthigaster_coronata" = "Canthigaster_cyanospilota")
+      # phylo_random_final_df <- dplyr::rename(phylo_random_final_df, "Canthigaster_coronata" = "Canthigaster_cyanospilota")
       phylo_random_final_df <- dplyr::rename(phylo_random_final_df, "Labropsis_australis" = "Labropsis_xanthonota")
 
     }
@@ -381,10 +370,10 @@ lose.species.div.plot <- function(rarcom_df_site,
 
     PD_randoms <- PD_random$PD
     if (site == "NGouja") {
-      PD_randoms[c(127, 128)] <- c(0, 0)
+      PD_randoms[c(109)] <- 0
     }
     if (site == "Boueni") {
-      PD_randoms[c(111, 112)] <- c(0, 0)
+      PD_randoms[c(98)] <- 0
     }
 
 
@@ -392,7 +381,7 @@ lose.species.div.plot <- function(rarcom_df_site,
     if (site == "NGouja") {
       alpha_fd_indices <- mFD::alpha.fd.multidim(
         sp_faxes_coord   = as.matrix(sp_faxes_coord[ , c("PC1", "PC2", "PC3", "PC4", "PC5")]),
-        asb_sp_w         = as.matrix(random_final_df[c(1:122), ]),
+        asb_sp_w         = as.matrix(random_final_df[c(1:104), ]),
         ind_vect         = c("fdis", "fric",
                              "fspe"),
         scaling          = TRUE,
@@ -402,7 +391,7 @@ lose.species.div.plot <- function(rarcom_df_site,
     if (site == "Boueni") {
       alpha_fd_indices <- mFD::alpha.fd.multidim(
         sp_faxes_coord   = as.matrix(sp_faxes_coord[ , c("PC1", "PC2", "PC3", "PC4", "PC5")]),
-        asb_sp_w         = as.matrix(random_final_df[c(1:106), ]),
+        asb_sp_w         = as.matrix(random_final_df[c(1:93), ]),
         ind_vect         = c("fdis", "fric",
                              "fspe"),
         scaling          = TRUE,
@@ -413,12 +402,6 @@ lose.species.div.plot <- function(rarcom_df_site,
 
 
     FRic_randoms <- alpha_fd_indices$functional_diversity_indices$fric
-
-    if (site == "NGouja") {
-      # asb 121 has NA in FRic...? species in the same FE, not enough points:
-      FRic_randoms[122] <- 0
-    }
-
     FRic_randoms <- c(FRic_randoms, rep(0, 6))
 
     FDis_randoms <- alpha_fd_indices$functional_diversity_indices$fdis
