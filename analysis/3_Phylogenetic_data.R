@@ -72,8 +72,8 @@ phylo <- fishtree::fishtree_phylogeny(species = sp_nm_all)
 sp_nm_all <- c(sp_nm_all, "Gomphosus_varius")
 sp_nm_all <- sp_nm_all[which(sp_nm_all != "Gomphosus_caeruleus")]
 
-sp_nm_all <- c(sp_nm_all, "Scolopsis_bilineata")
-sp_nm_all <- sp_nm_all[which(sp_nm_all != "Scolopsis_frenata")]
+#sp_nm_all <- c(sp_nm_all, "Scolopsis_bilineata")
+#sp_nm_all <- sp_nm_all[which(sp_nm_all != "Scolopsis_frenata")]
 
 sp_nm_all <- c(sp_nm_all, "Scolopsis_bimaculata")
 sp_nm_all <- sp_nm_all[which(sp_nm_all != "Scolopsis_ghanam")]
@@ -99,17 +99,17 @@ sp_nm_all <- sp_nm_all[which(sp_nm_all != "Scarus_scaber")]
 sp_nm_all <- c(sp_nm_all, "Tylosurus_crocodilus_crocodilus")
 sp_nm_all <- sp_nm_all[which(sp_nm_all != "Tylosurus_crocodilus")]
 
-sp_nm_all <- c(sp_nm_all, "Chlorurus_microrhinos")
-sp_nm_all <- sp_nm_all[which(sp_nm_all != "Chlorurus_strongylocephalus")]
+#sp_nm_all <- c(sp_nm_all, "Chlorurus_microrhinos")
+#sp_nm_all <- sp_nm_all[which(sp_nm_all != "Chlorurus_strongylocephalus")]
 
-sp_nm_all <- c(sp_nm_all, "Coris_batuensis")
-sp_nm_all <- sp_nm_all[which(sp_nm_all != "Coris_variegata")]
+#sp_nm_all <- c(sp_nm_all, "Coris_batuensis")
+#sp_nm_all <- sp_nm_all[which(sp_nm_all != "Coris_variegata")]
 
-sp_nm_all <- c(sp_nm_all, "Pomacentrus_caeruleus")
-sp_nm_all <- sp_nm_all[which(sp_nm_all != "Pomacentrus_similis")]
+#sp_nm_all <- c(sp_nm_all, "Pomacentrus_caeruleus")
+#sp_nm_all <- sp_nm_all[which(sp_nm_all != "Pomacentrus_similis")]
 
-sp_nm_all <- c(sp_nm_all, "Canthigaster_coronata")
-sp_nm_all <- sp_nm_all[which(sp_nm_all != "Canthigaster_cyanospilota")]
+#sp_nm_all <- c(sp_nm_all, "Canthigaster_coronata")
+#sp_nm_all <- sp_nm_all[which(sp_nm_all != "Canthigaster_cyanospilota")]
 
 
 # Labropsis xanthonota -> Labropsis australis (esp Labropsis australienne)
