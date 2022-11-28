@@ -66,7 +66,7 @@ sp_nm_all <- sp_nm_all[which(! sp_nm_all %in% c("time", "video_nm"))]
 # get sp name:
 sort(sp_nm_all)
 
-# get species nb: 150
+# get species nb: 130
 length(sp_nm_all)
 
 
@@ -148,11 +148,11 @@ colnames(sp_tr_final)[4] <- "Schooling"
 # ... and other sources (doris, fishbase) to complete:
 
 # same as other Scolpsis sp.:
-sp_tr_final[which(sp_tr_final$Latin_name == "Scolopsis_frenata"), "Diets"] <- "Microinvertivores"
+#sp_tr_final[which(sp_tr_final$Latin_name == "Scolopsis_frenata"), "Diets"] <- "Microinvertivores"
 
 # paper Parravicini et al 2020, Plos Biol:
 sp_tr_final[which(sp_tr_final$Latin_name == "Scarus_ferrugineus"), "Diets"] <- "Herbivores Microvores Detritivores"
-sp_tr_final[which(sp_tr_final$Latin_name == "Cephalopholis_nigripinnis"), "Diets"] <- "Piscivores"
+#sp_tr_final[which(sp_tr_final$Latin_name == "Cephalopholis_nigripinnis"), "Diets"] <- "Piscivores"
 
 # As C. stratus because main species seen:
 sp_tr_final[which(sp_tr_final$Latin_name == "Ac_Cten_dark"), "Diets"] <- "Herbivores Microvores Detritivores"
@@ -163,7 +163,7 @@ sp_tr_final[which(sp_tr_final$Latin_name == "Caesio_lunaris"), "Diets"] <- "Plan
 
 # several sources (fishbase, doris, Australian Museum) as several diet possible:
 sp_tr_final[which(sp_tr_final$Latin_name == "Aulostomus_chinensis"), "Diets"] <- "Piscivores"
-sp_tr_final[which(sp_tr_final$Latin_name == "Canthigaster_cyanospilota"), "Diets"] <- "sessile invertivores"
+#sp_tr_final[which(sp_tr_final$Latin_name == "Canthigaster_cyanospilota"), "Diets"] <- "sessile invertivores"
 
 
 # order the traits:
