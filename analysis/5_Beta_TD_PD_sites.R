@@ -89,27 +89,27 @@ beta_TD_day
 # ... site_asb_sp_df:
 
 site_asb_sp_df <- dplyr::rename(site_asb_sp_df, "Gomphosus_varius" = "Gomphosus_caeruleus")
-site_asb_sp_df <- dplyr::rename(site_asb_sp_df, "Scolopsis_bilineata" = "Scolopsis_frenata")
+# site_asb_sp_df <- dplyr::rename(site_asb_sp_df, "Scolopsis_bilineata" = "Scolopsis_frenata")
 site_asb_sp_df <- dplyr::rename(site_asb_sp_df, "Scolopsis_bimaculata" = "Scolopsis_ghanam")
 site_asb_sp_df <- dplyr::rename(site_asb_sp_df, "Cetoscarus_bicolor" = "Cetoscarus_ocellatus")
 site_asb_sp_df <- dplyr::rename(site_asb_sp_df, "Scarus_altipinnis" = "Scarus_falcipinnis")
 site_asb_sp_df <- dplyr::rename(site_asb_sp_df, "Scarus_oviceps" = "Scarus_scaber")
 site_asb_sp_df <- dplyr::rename(site_asb_sp_df, "Tylosurus_crocodilus_crocodilus" = "Tylosurus_crocodilus")
-site_asb_sp_df <- dplyr::rename(site_asb_sp_df, "Chlorurus_microrhinos" = "Chlorurus_strongylocephalus")
-site_asb_sp_df <- dplyr::rename(site_asb_sp_df, "Canthigaster_coronata" = "Canthigaster_cyanospilota")
+# site_asb_sp_df <- dplyr::rename(site_asb_sp_df, "Chlorurus_microrhinos" = "Chlorurus_strongylocephalus")
+# site_asb_sp_df <- dplyr::rename(site_asb_sp_df, "Canthigaster_coronata" = "Canthigaster_cyanospilota")
 site_asb_sp_df <- dplyr::rename(site_asb_sp_df, "Labropsis_australis" = "Labropsis_xanthonota")
 site_asb_sp_df <- dplyr::rename(site_asb_sp_df, "Ctenochaetus_striatus" = "Ac_Cten_dark")
 
 # idem in the asb_sp_df (for days variation):
 asb_sp_df <- dplyr::rename(asb_sp_df, "Gomphosus_varius" = "Gomphosus_caeruleus")
-asb_sp_df <- dplyr::rename(asb_sp_df, "Scolopsis_bilineata" = "Scolopsis_frenata")
+# asb_sp_df <- dplyr::rename(asb_sp_df, "Scolopsis_bilineata" = "Scolopsis_frenata")
 asb_sp_df <- dplyr::rename(asb_sp_df, "Scolopsis_bimaculata" = "Scolopsis_ghanam")
 asb_sp_df <- dplyr::rename(asb_sp_df, "Cetoscarus_bicolor" = "Cetoscarus_ocellatus")
 asb_sp_df <- dplyr::rename(asb_sp_df, "Scarus_altipinnis" = "Scarus_falcipinnis")
 asb_sp_df <- dplyr::rename(asb_sp_df, "Scarus_oviceps" = "Scarus_scaber")
 asb_sp_df <- dplyr::rename(asb_sp_df, "Tylosurus_crocodilus_crocodilus" = "Tylosurus_crocodilus")
-asb_sp_df <- dplyr::rename(asb_sp_df, "Chlorurus_microrhinos" = "Chlorurus_strongylocephalus")
-asb_sp_df <- dplyr::rename(asb_sp_df, "Canthigaster_coronata" = "Canthigaster_cyanospilota")
+# asb_sp_df <- dplyr::rename(asb_sp_df, "Chlorurus_microrhinos" = "Chlorurus_strongylocephalus")
+# asb_sp_df <- dplyr::rename(asb_sp_df, "Canthigaster_coronata" = "Canthigaster_cyanospilota")
 asb_sp_df <- dplyr::rename(asb_sp_df, "Labropsis_australis" = "Labropsis_xanthonota")
 asb_sp_df <- dplyr::rename(asb_sp_df, "Ctenochaetus_striatus" = "Ac_Cten_dark")
 

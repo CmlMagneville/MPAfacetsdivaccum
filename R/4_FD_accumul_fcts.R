@@ -427,7 +427,7 @@ compute.fd.interday.accum <- function(basic_fd_accum_df,
 
   alpha_fd_indices_accum <- mFD::alpha.fd.multidim(
     sp_faxes_coord   = fe_faxes_coord[ , c("PC1", "PC2", "PC3", "PC4", "PC5")],
-    asb_sp_w         = as.matrix(accum_FD_df[, c(1:150)]),
+    asb_sp_w         = as.matrix(accum_FD_df[, c(1:130)]),
     ind_vect         = fd_indices,
     scaling          = TRUE,
     check_input      = TRUE,
