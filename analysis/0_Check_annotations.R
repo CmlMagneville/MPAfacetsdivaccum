@@ -19,7 +19,7 @@ rar_com_df <- readRDS(here::here("transformed_data", "rarcom_df.rds"))
 
 # Step 2: Get super rare species names ####
 
-superrare_to_check <- rar_com_df$species_nm[which(rar_com_df$rarity == "super rare")]
+superrare_to_check <- unique(rar_com_df$species_nm[which(rar_com_df$rarity == "super rare")])
 
 
 # Step 3: Get the presabs dataframe to build a dataframe with superrare species occurrences ####
