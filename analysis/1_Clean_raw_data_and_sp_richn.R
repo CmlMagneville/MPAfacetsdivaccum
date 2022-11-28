@@ -53,7 +53,7 @@ presabs_06_C2 <- presabs_06_C2[c(1:33), ]
 
 presabs_08_A1 <- presabs_08_A1[c(4:37), ] # 34 videos -> complicated when pooling
 # but no species on the last video:
-apply(presabs_08_A1[, -c(57,58)], 1, sum)
+apply(presabs_08_A1[, -c(54, 55)], 1, sum)
 presabs_08_A1 <- presabs_08_A1[c(1:33), ]
 
 presabs_08_C2 <- presabs_08_C2[c(3:35), ] # 33 videos
@@ -84,9 +84,9 @@ sort(sp_nm_all)
 
 # get species nb:
 length(sp_nm_all)
-# 164 but Chromis_NA, hortulanus_hortulanus (?) and ...
+# 144 but Chromis_NA, hortulanus_hortulanus (?) and ...
 # ... Ac_Cten_dark = A. nigrofuscus + C. striatus + C. binotatus ...
-# ... so only 160 species and 149 fish species (Chelonia mydas)
+# ... so only 139 species and 138 fish species (Chelonia mydas)
 
 
 # get the nb of species on each site:
@@ -100,7 +100,7 @@ sp_nm_NG <- unique(c(colnames(presabs_03_A1), colnames(presabs_03_C2),
 sp_nm_NG <- sp_nm_NG[which(! sp_nm_NG %in% c("time", "video_nm"))]
 length(sp_nm_NG)
 sort(sp_nm_NG)
-# 134 fish species MPA
+# 120 fish species MPA
 
 # Fished Area - Boueni:
 sp_nm_B <- unique(c(colnames(presabs_04_A1), colnames(presabs_04_C2),
@@ -111,7 +111,7 @@ sp_nm_B <- unique(c(colnames(presabs_04_A1), colnames(presabs_04_C2),
 sp_nm_B <- sp_nm_B[which(! sp_nm_B %in% c("time", "video_nm"))]
 length(sp_nm_B)
 sort(sp_nm_B)
-# 119 fish species Fished Area
+# 109 fish species Fished Area
 
 
 ###
@@ -335,7 +335,7 @@ sp_nm_all <- sp_nm_all[which(! sp_nm_all %in% c("time", "video_nm"))]
 # get sp name:
 sort(sp_nm_all)
 
-# get species nb: 150
+# get species nb: 130
 length(sp_nm_all)
 
 
@@ -349,7 +349,7 @@ sp_nm_NG <- sp_nm_NG[which(! sp_nm_NG %in% c("time", "video_nm"))]
 
 sort(sp_nm_NG)
 
-# get species number: 127 species in MPA (Octopus cyanea only seen in NG)
+# get species number: 109 species in MPA (Octopus cyanea only seen in NG)
 # (Chelonia mydas seen on both sites)
 length(sp_nm_NG)
 
@@ -364,7 +364,7 @@ sp_nm_B <- sp_nm_B[which(! sp_nm_B %in% c("time", "video_nm"))]
 
 sort(sp_nm_B)
 
-# get species number: 111 species in Fished Area
+# get species number: 98 species in Fished Area
 length(sp_nm_B)
 
 
