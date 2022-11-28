@@ -124,7 +124,7 @@ sp_dist_df <- mFD::dist.to.df(list(sp_dist = sp_dist))
 sp_dist_df[which(sp_dist_df$sp_dist == 0), ]
 nrow(sp_dist_df[which(sp_dist_df$sp_dist == 0), ])
 
-# 128 species pairs have a fctional distance == 0: so I must group into FEs for the computation of the functional space
+# 102 species pairs have a fctional distance == 0: so I must group into FEs for the computation of the functional space
 # and then transform FE coordinates in the fctional space into species coordinates in the same space
 
 
