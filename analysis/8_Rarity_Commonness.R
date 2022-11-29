@@ -320,7 +320,7 @@ rarcom_df[which(rarcom_df$species_nm == "Labropsis_xanthonota"), "species_nm"] <
 rarcom_df[which(rarcom_df$species_nm == "Ac_Cten_dark"), "species_nm"] <- "Ctenochaetus_striatus"
 
 # get global phylo:
-sp_nm_all <- unique(rar_com_df$species_nm)
+sp_nm_all <- unique(rarcom_df$species_nm)
 phylo <- fishtree::fishtree_phylogeny(species = sp_nm_all)
 
 # Compute the phylogenetic D to see if super rare and rare species have a ...
@@ -334,7 +334,7 @@ caper::phylo.d(data = rarcom_df_B[, c("species_nm", "rarity")],
                phy = phylo,
                names.col = species_nm,
                binvar = rarity)
-# D = 0.77
+# D = 0.79
 # closely related species were not necessarily more similar in their
 # degree of ecological rarity than distantly related species
 
@@ -345,7 +345,7 @@ caper::phylo.d(data = rarcom_df_NG[, c("species_nm", "rarity")],
                phy = phylo,
                names.col = species_nm,
                binvar = rarity)
-# D = 0.84
+# D = 0.83
 # closely related species were not necessarily more similar in their
 # degree of ecological rarity than distantly related species
 
@@ -357,7 +357,7 @@ caper::phylo.d(data = rarcom_df_B[, c("species_nm", "rarity")],
                phy = phylo,
                names.col = species_nm,
                binvar = rarity)
-# D = 1.018
+# D = 1.01
 # closely related species were not necessarily more similar in their
 # degree of ecological rarity than distantly related species
 
@@ -368,7 +368,7 @@ caper::phylo.d(data = rarcom_df_NG[, c("species_nm", "rarity")],
                phy = phylo,
                names.col = species_nm,
                binvar = rarity)
-# D = 0.85
+# D = 0.82
 # closely related species were not necessarily more similar in their
 # degree of ecological rarity than distantly related species
 
@@ -392,7 +392,7 @@ caper::phylo.d(data = rarcom_df_B[, c("species_nm", "rarity")],
                phy = phylo_B,
                names.col = species_nm,
                binvar = rarity)
-# D = 0.73
+# D = 0.80
 # closely related species were not necessarily more similar in their
 # degree of ecological rarity than distantly related species
 
@@ -459,6 +459,50 @@ sp_dist_gravcenter <- alpha_fd_indices_site$details$pool_sp_dist_O / max(alpha_f
 rarfspe <- plot.rarity.fspe(sp_dist_gravcenter,
                             basic_accum_df,
                             rarcom_df)
+
+# other plot (biplot)
+
+plot_distinct_NG <- ggplot2::ggplot(data = rarspe_df[which(rarspe_df$site == "N'Gouja"), ]) +
+     ggplot2::geom_point(ggplot2::aes(x = perc_vid_occ, y = relat_dist_to_grav,
+                                      colour = site_presence)) +
+     ggplot2::theme(panel.background = ggplot2::element_rect(fill = "white",
+                                                          colour = "grey90"),
+                 panel.grid.major = ggplot2::element_line(colour = "grey90")) +
+
+    ggplot2::scale_colour_manual(values = c("grey85", "#80cdc1"),
+                               name = "Site presence") +
+    ggplot2::xlim(c(0, 101)) +
+    ggplot2::xlab("Percentage of occurrence in videos") +
+    ggplot2::ylab("Relative distance to the gravity center of the global pool")
+
+plot_distinct_B <- ggplot2::ggplot(data = rarspe_df[which(rarspe_df$site == "Boueni"), ]) +
+  ggplot2::geom_point(ggplot2::aes(x = perc_vid_occ, y = relat_dist_to_grav,
+                                   colour = site_presence)) +
+  ggplot2::theme(panel.background = ggplot2::element_rect(fill = "white",
+                                                          colour = "grey90"),
+                 panel.grid.major = ggplot2::element_line(colour = "grey90")) +
+
+  ggplot2::scale_colour_manual(values = c("grey85", "#bf812d"),
+                               name = "Site presence") +
+  ggplot2::xlim(c(0, 101)) +
+  ggplot2::xlab("Percentage of occurrence in videos") +
+  ggplot2::ylab("Relative distance to the gravity center of the global pool")
+
+plot_distinct_both <- (plot_distinct_NG + plot_distinct_B) +
+  patchwork::plot_layout(byrow = TRUE, heights = c(1, 1), widths = c(1, 1),
+                         ncol = 2, nrow = 1, guides = "collect") +
+  patchwork::plot_annotation(tag_levels = "A")
+
+# save it:
+ggplot2::ggsave(filename = here::here("outputs", "Biplot_Fspe.pdf"),
+                plot = plot_distinct_both,
+                device = "pdf",
+                scale = 1,
+                height = 5000,
+                width = 11000,
+                units = "px",
+                dpi = 800)
+
 
 
 # TEST
