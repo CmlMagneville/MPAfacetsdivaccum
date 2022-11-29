@@ -187,7 +187,7 @@ NG_nb_sp <- length(unique(plot_lose_sp_NG_df$Species_loss)) - 1
 NG_20 <- floor(0.2*NG_nb_sp)
 PD_rare_NG <- plot_lose_sp_NG_df[which(plot_lose_sp_NG_df$ind == "Faith's PD" & plot_lose_sp_NG_df$metric == "rares"), ]
 PD_rare_NG <- PD_rare_NG[order(PD_rare_NG$Species_loss), ]
-PD_loss_NG <- (PD_rare_NG[1, "values"] - PD_rare_NG[NG_20, "values"])
+PD_loss_NG <- ((PD_rare_NG[1, "values"] - PD_rare_NG[NG_20, "values"]))*100
 
 PD_common_NG <- plot_lose_sp_NG_df[which(plot_lose_sp_NG_df$ind == "Faith's PD" & plot_lose_sp_NG_df$metric == "commons"), ]
 PD_common_NG <- PD_common_NG[order(PD_common_NG$Species_loss), ]
@@ -206,7 +206,7 @@ B_nb_sp <- length(unique(plot_lose_sp_B_df$Species_loss)) - 1
 B_20 <- floor(0.2*B_nb_sp)
 PD_rare_B <- plot_lose_sp_B_df[which(plot_lose_sp_B_df$ind == "Faith's PD" & plot_lose_sp_B_df$metric == "rares"), ]
 PD_rare_B <- PD_rare_B[order(PD_rare_B$Species_loss), ]
-PD_loss_B <- (PD_rare_B[1, "values"] - PD_rare_B[B_20, "values"])
+PD_loss_B <- (PD_rare_B[1, "values"] - PD_rare_B[B_20, "values"])*100
 
 
 PD_common_B <- plot_lose_sp_B_df[which(plot_lose_sp_B_df$ind == "Faith's PD" & plot_lose_sp_B_df$metric == "commons"), ]
