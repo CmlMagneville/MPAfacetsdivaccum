@@ -308,8 +308,8 @@ temp.decay <- function(beta_facet_df, metric) {
   # span across rows to compute the video difference:
   for(i in (1:nrow(beta_intra_df))) {
 
-    vid1 <- as.numeric(stringr::str_sub(beta_intra_df$x1[i], 16, nchar(beta_intra_df$x1[i])))
-    vid2 <- as.numeric(stringr::str_sub(beta_intra_df$x2[i], 16, nchar(beta_intra_df$x2[i])))
+    vid1 <- as.numeric(stringr::str_sub(beta_intra_df$x1[i], 18, nchar(beta_intra_df$x1[i])))
+    vid2 <- as.numeric(stringr::str_sub(beta_intra_df$x2[i], 18, nchar(beta_intra_df$x2[i])))
     beta_intra_df$diff_vid_nb[i] <- abs(vid1 - vid2)
 
   }
@@ -434,29 +434,29 @@ permdisp.test <- function(beta_facet_df) {
   beta_env_df <- as.data.frame(matrix(nrow = length(unique(c(beta_facet_df$x1,
                                                              beta_facet_df$x2))),
                                       ncol = 4))
-  colnames(beta_env_df) <- c("video_nm", "site", "day", "site_day")
+  colnames(beta_env_df) <- c("video_nm", "site_nm", "day", "site_day")
 
   ### Fill the columns:
   # video_nm:
   beta_env_df$video_nm <- unique(c(beta_facet_df$x1, beta_facet_df$x2))
   # day:
-  beta_env_df$day <- stringr::str_sub(beta_env_df$video_nm, 5, 14)
+  beta_env_df$day <- stringr::str_sub(beta_env_df$video_nm, 7, 16)
   # site:
   for (i in (1:nrow(beta_env_df))) {
 
     if (grepl("03-11-2019", beta_env_df$day[i]) | grepl("05-11-2019", beta_env_df$day[i]) |
         grepl("08-11-2019", beta_env_df$day[i])) {
-      beta_env_df$site[i] <- "N'Gouja"
+      beta_env_df$site_nm[i] <- "N'Gouja"
     }
 
     if (grepl("04-11-2019", beta_env_df$day[i]) | grepl("06-11-2019", beta_env_df$day[i]) |
         grepl("09-11-2019", beta_env_df$day[i])) {
-      beta_env_df$site[i] <- "Boueni"
+      beta_env_df$site_nm[i] <- "Boueni"
     }
 
   }
   # day_site:
-  beta_env_df$site_day <- paste0(beta_env_df$site, sep = "_",
+  beta_env_df$site_day <- paste0(beta_env_df$site_nm, sep = "_",
                                  beta_env_df$day)
   beta_env_df$site_day <- as.factor(beta_env_df$site_day)
 

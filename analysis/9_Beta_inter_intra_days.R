@@ -138,7 +138,7 @@ plot_FD <- plot.boxplots.beta(beta_df = beta_FD_df, metric = "FD")
 
 # change facets name to have different facets:
 # H0: not stat different
-beta_df <- beta_PD_df
+beta_df <- beta_FD_df
 
 # Is the variation in N'Gouja significantly superior to the variation in B?
 wilcox.test(beta_df[which(beta_df[, "site_nm"] == "N'Gouja"), "beta"],
@@ -245,12 +245,12 @@ FD_permdisp <- permdisp.test(beta_facet_df = beta_FD_df)
 # permanova TD:
 # get the df build in the permdisp.test function:
 beta_env_df <- TD_permdisp[[2]]
-beta_env_df$site <- as.factor(beta_env_df$site)
+beta_env_df$site_nm <- as.factor(beta_env_df$site_nm)
 beta_env_df$day <- as.factor(beta_env_df$day)
 beta_env_df$site_day <- as.factor(beta_env_df$site_day)
 dist <- TD_permdisp[[3]]
 
-TD_permanova_results <- vegan::adonis(dist ~ site + day,
+TD_permanova_results <- vegan::adonis(dist ~ site_nm + day,
                                       data = beta_env_df,
                                       perm = 999)
 # Significant effect of site and day on PD distances between videos
@@ -259,12 +259,12 @@ TD_permanova_results <- vegan::adonis(dist ~ site + day,
 # permanova FD:
 # get the df build in the permdisp.test function:
 beta_env_df <- FD_permdisp[[2]]
-beta_env_df$site <- as.factor(beta_env_df$site)
+beta_env_df$site_nm <- as.factor(beta_env_df$site_nm)
 beta_env_df$day <- as.factor(beta_env_df$day)
 beta_env_df$site_day <- as.factor(beta_env_df$site_day)
 dist <- FD_permdisp[[3]]
 
-FD_permanova_results <- vegan::adonis(dist ~ site + day,
+FD_permanova_results <- vegan::adonis(dist ~ site_nm + day,
                                       data = beta_env_df,
                                       perm = 999)
 # Significant effect of site and day on FD distances between videos
@@ -273,12 +273,12 @@ FD_permanova_results <- vegan::adonis(dist ~ site + day,
 # permanova PD:
 # get the df build in the permdisp.test function:
 beta_env_df <- PD_permdisp[[2]]
-beta_env_df$site <- as.factor(beta_env_df$site)
+beta_env_df$site_nm <- as.factor(beta_env_df$site_nm)
 beta_env_df$day <- as.factor(beta_env_df$day)
 beta_env_df$site_day <- as.factor(beta_env_df$site_day)
 dist <- PD_permdisp[[3]]
 
-PD_permanova_results <- vegan::adonis(dist ~ site + day,
+PD_permanova_results <- vegan::adonis(dist ~ site_nm + day,
                                       data = beta_env_df,
                                       perm = 999)
 # Significant effect of site and day on PD distances between videos
