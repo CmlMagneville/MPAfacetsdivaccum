@@ -41,8 +41,8 @@ beta.video.clean.df <- function(beta_df) {
   for (i in (1:nrow(beta_df2))) {
 
     # retrieve days informations:
-    day1 <- substr(beta_df2[i, 1], 5, 14)
-    day2 <- substr(beta_df2[i, 2], 5, 14)
+    day1 <- substr(beta_df2[i, 1], 7, 16)
+    day2 <- substr(beta_df2[i, 2], 7, 16)
 
     # retrieve video information:
     nm1 <- substr(beta_df2[i, 1], nchar(as.character(beta_df2[i, 1])) - 7 + 1,

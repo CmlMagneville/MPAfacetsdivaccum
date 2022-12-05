@@ -16,7 +16,7 @@
 
 
 # TD, FD and  PD:
-basic_accum_df <- readRDS(here::here("transformed_data", "basic_accumul_df.rds"))
+basic_accum_df_clean <- readRDS(here::here("transformed_data", "basic_accumul_df.rds"))
 
 # FD:
 sp_faxes_coord <- readRDS(here::here("transformed_data", "sp_faxes_coord.rds"))
@@ -27,9 +27,10 @@ sp_faxes_coord <- readRDS(here::here("transformed_data", "sp_faxes_coord.rds"))
 
 
 # TD:
-basic_accum_df[, -c(151:154)] <- apply(basic_accum_df[, -c(151:154)], 2, as.numeric)
-rownames(basic_accum_df) <- basic_accum_df$vid_id
-basic_accum_df <- basic_accum_df[, -c(151:154)]
+basic_accum_df <- basic_accum_df_clean
+basic_accum_df[, -c(131:134)] <- apply(basic_accum_df[, -c(131:134)], 2, as.numeric)
+rownames(basic_accum_df) <- basic_accum_df$video_id
+basic_accum_df <- basic_accum_df[, -c(131:134)]
 
 beta_TD <- betapart::beta.pair(basic_accum_df, index.family = "jaccard")
 saveRDS(beta_TD, here::here("transformed_data", "beta_TD_videos_dist.rds"))
@@ -63,14 +64,14 @@ saveRDS(beta_PD, here::here("transformed_data", "beta_PD_videos_dist.rds"))
 
 
 # FD:
-basic_fd <- basic_accum_df
-basic_fd[, -c(131:134)] <- apply(basic_fd[, -c(131:134)], 2, as.numeric)
-rownames(basic_fd) <- basic_fd$vid_id
-basic_fd <- basic_fd[, -c(131:134)]
+basic_accum_df <- basic_accum_df_clean
+basic_accum_df[, -c(131:134)] <- apply(basic_accum_df[, -c(131:134)], 2, as.numeric)
+rownames(basic_accum_df) <- basic_accum_df$video_id
+basic_accum_df <- basic_accum_df[, -c(131:134)]
 
 beta_FD <- mFD::beta.fd.multidim(
    sp_faxes_coord   = as.matrix(sp_faxes_coord[ , c("PC1", "PC2", "PC3", "PC4", "PC5")]),
-   asb_sp_occ       = basic_fd,
+   asb_sp_occ       = basic_accum_df,
    check_input      = TRUE,
    beta_family      = c("Jaccard"),
   details_returned = TRUE)
@@ -82,7 +83,7 @@ saveRDS(beta_FD, here::here("transformed_data", "beta_FD_videos_dist.rds"))
 
 
 # Here, we compute 3 dataframes: one for each diversity facets. Each contains ...
-# ... sp1|sp2|value_beta|same_day|same_vid|same_site|site_nm columns (for FD sp = FE) ...
+# ... vid1|vid2|value_beta|same_day|same_vid|same_site|site_nm columns (for FD sp = FE) ...
 # ... if same_day = TRUE and same_video = FALSE -> intraday variation
 # ... if same_day = FALSE and same_video = TRUE and site = same -> interday variation
 
@@ -128,7 +129,7 @@ plot_TD <- plot.boxplots.beta(beta_df = beta_TD_df, metric = "TD")
 plot_PD <- plot.boxplots.beta(beta_df = beta_PD_df, metric = "PD")
 
 # Plot and save for FD:
-plot_FD <- plot.boxplots.beta(beta_df = beta_PD_df, metric = "FD")
+plot_FD <- plot.boxplots.beta(beta_df = beta_FD_df, metric = "FD")
 
 
 
@@ -137,7 +138,7 @@ plot_FD <- plot.boxplots.beta(beta_df = beta_PD_df, metric = "FD")
 
 # change facets name to have different facets:
 # H0: not stat different
-beta_df <- beta_TD_df
+beta_df <- beta_PD_df
 
 # Is the variation in N'Gouja significantly superior to the variation in B?
 wilcox.test(beta_df[which(beta_df[, "site_nm"] == "N'Gouja"), "beta"],
@@ -151,7 +152,7 @@ wilcox.test(beta_df[which(beta_df[, "same_video"] == TRUE & beta_df[, "same_site
 
             beta_df[which(beta_df[, "same_video"] == TRUE & beta_df[, "same_site"] == TRUE
                           & beta_df[, "site_nm"] == "Boueni"), "beta"])
-# pvalue 3.66*10e-9 -> reject H0 so stats different
+# pvalue e-7 -> reject H0 so stats different
 
 # Is the interday beta superior in N'Gouja than in Boueni? yes
 wilcox.test(beta_df[which(beta_df[, "same_video"] == TRUE & beta_df[, "same_site"] == TRUE

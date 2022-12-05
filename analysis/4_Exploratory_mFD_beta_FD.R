@@ -260,7 +260,7 @@ ggplot2::ggsave(filename = here::here("outputs/Correl_tr_faxes.pdf"),
 
 
 big_plot <- mFD::funct.space.plot(
-  sp_faxes_coord  = fe_faxes_coord[ , c("PC1", "PC2", "PC3", "PC4", "PC5")],
+  sp_faxes_coord  = sp_faxes_coord[ , c("PC1", "PC2", "PC3", "PC4", "PC5")],
   faxes           = c("PC1", "PC2", "PC3", "PC4"),
   name_file       = NULL,
   faxes_nm        = NULL,
@@ -536,4 +536,148 @@ beta_fd_indices <- mFD::beta.fd.multidim(
   check_input      = TRUE,
   beta_family      = c("Jaccard"),
   details_returned = TRUE)
+
+
+# Step 13: Where are the species present only in each site? ####
+
+
+# Retrieve the names of fe in each site:
+fe_NG <- colnames(asb_fe_occ[, which(asb_fe_occ[1,] == 1 |
+                                       asb_fe_occ[2,] == 1 |
+                                       asb_fe_occ[3,] == 1)])
+fe_B <- colnames(asb_fe_occ[, which(asb_fe_occ[4,] == 1 |
+                                      asb_fe_occ[5,] == 1 |
+                                      asb_fe_occ[6,] == 1)])
+
+# Retrieve the names of fe being only present in each site:
+unique_NG <- setdiff(fe_NG, fe_B)
+unique_B <- setdiff(fe_B, fe_NG)
+
+# Plot in the functional space (check individual plots):
+unique_NG_plot <- mFD::funct.space.plot(
+  sp_faxes_coord  = fe_faxes_coord[ , c("PC1", "PC2", "PC3", "PC4", "PC5")],
+  faxes           = c("PC1", "PC2", "PC3", "PC4"),
+  name_file       = NULL,
+  faxes_nm        = NULL,
+  range_faxes     = c(NA, NA),
+  color_bg        = "grey95",
+  color_pool      = "darkgreen",
+  fill_pool       = "white",
+  shape_pool      = 21,
+  size_pool       = 1,
+  plot_ch         = TRUE,
+  color_ch        = "black",
+  fill_ch         = "white",
+  alpha_ch        = 0.5,
+  plot_vertices   = TRUE,
+  color_vert      = "blueviolet",
+  fill_vert       = "blueviolet",
+  shape_vert      = 23,
+  size_vert       = 1,
+  plot_sp_nm      = unique_NG,
+  nm_size         = 3,
+  nm_color        = "black",
+  nm_fontface     = "plain",
+  check_input     = TRUE)
+
+unique_B_plot <- mFD::funct.space.plot(
+  sp_faxes_coord  = fe_faxes_coord[ , c("PC1", "PC2", "PC3", "PC4", "PC5")],
+  faxes           = c("PC1", "PC2", "PC3", "PC4"),
+  name_file       = NULL,
+  faxes_nm        = NULL,
+  range_faxes     = c(NA, NA),
+  color_bg        = "grey95",
+  color_pool      = "darkgreen",
+  fill_pool       = "white",
+  shape_pool      = 21,
+  size_pool       = 1,
+  plot_ch         = TRUE,
+  color_ch        = "black",
+  fill_ch         = "white",
+  alpha_ch        = 0.5,
+  plot_vertices   = TRUE,
+  color_vert      = "blueviolet",
+  fill_vert       = "blueviolet",
+  shape_vert      = 23,
+  size_vert       = 1,
+  plot_sp_nm      = unique_B,
+  nm_size         = 3,
+  nm_color        = "black",
+  nm_fontface     = "plain",
+  check_input     = TRUE)
+
+
+# Retrieve the traits of unique species:
+# ... + precisely: the porportion of unique species in each class to compare:
+sp_NG <- colnames(site_asb_df[, which(site_asb_df[1,] == 1)])
+sp_B <- colnames(site_asb_df[, which(site_asb_df[2,] == 1)])
+
+unique_sp_NG <- setdiff(sp_NG, sp_B)
+unique_sp_B <- setdiff(sp_B, sp_NG)
+
+diet_unique_NG <- sp_tr_final[which(rownames(sp_tr_final) %in% unique_sp_NG), ] %>%
+  dplyr::group_by(Diets) %>%
+  dplyr::summarise(nb = n())
+diet_unique_NG$nb <- (diet_unique_NG$nb/length(unique_sp_NG))*100
+
+diet_unique_B <- sp_tr_final[which(rownames(sp_tr_final) %in% unique_sp_B), ] %>%
+  dplyr::group_by(Diets) %>%
+  dplyr::summarise(nb = n())
+diet_unique_B$nb <- (diet_unique_B$nb/length(unique_sp_B))*100
+
+
+homerange_unique_NG <- sp_tr_final[which(rownames(sp_tr_final) %in% unique_sp_NG), ] %>%
+  dplyr::group_by(Home_Range) %>%
+  dplyr::summarise(nb = n())
+homerange_unique_NG$nb <- (homerange_unique_NG$nb/length(unique_sp_NG))*100
+
+homerange_unique_B <- sp_tr_final[which(rownames(sp_tr_final) %in% unique_sp_B), ] %>%
+  dplyr::group_by(Home_Range) %>%
+  dplyr::summarise(nb = n())
+homerange_unique_B$nb <- (homerange_unique_B$nb/length(unique_sp_B))*100
+
+
+size_unique_NG <- sp_tr_final[which(rownames(sp_tr_final) %in% unique_sp_NG), ] %>%
+  dplyr::group_by(Size_Class) %>%
+  dplyr::summarise(nb = n())
+size_unique_NG$nb <- (size_unique_NG$nb/length(unique_sp_NG))*100
+
+size_unique_B <- sp_tr_final[which(rownames(sp_tr_final) %in% unique_sp_B), ] %>%
+  dplyr::group_by(Size_Class) %>%
+  dplyr::summarise(nb = n())
+size_unique_B$nb <- (size_unique_B$nb/length(unique_sp_B))*100
+
+
+act_unique_NG <- sp_tr_final[which(rownames(sp_tr_final) %in% unique_sp_NG), ] %>%
+  dplyr::group_by(Activity) %>%
+  dplyr::summarise(nb = n())
+act_unique_NG$nb <- (act_unique_NG$nb/length(unique_sp_NG))*100
+
+act_unique_B <- sp_tr_final[which(rownames(sp_tr_final) %in% unique_sp_B), ] %>%
+  dplyr::group_by(Activity) %>%
+  dplyr::summarise(nb = n())
+act_unique_B$nb <- (act_unique_B$nb/length(unique_sp_B))*100
+
+
+school_unique_NG <- sp_tr_final[which(rownames(sp_tr_final) %in% unique_sp_NG), ] %>%
+  dplyr::group_by(Schooling) %>%
+  dplyr::summarise(nb = n())
+school_unique_NG$nb <- (school_unique_NG$nb/length(unique_sp_NG))*100
+
+school_unique_B <- sp_tr_final[which(rownames(sp_tr_final) %in% unique_sp_B), ] %>%
+  dplyr::group_by(Schooling) %>%
+  dplyr::summarise(nb = n())
+school_unique_B$nb <- (school_unique_B$nb/length(unique_sp_B))*100
+
+
+levwater_unique_NG <- sp_tr_final[which(rownames(sp_tr_final) %in% unique_sp_NG), ] %>%
+  dplyr::group_by(Level_water) %>%
+  dplyr::summarise(nb = n())
+levwater_unique_NG$nb <- (levwater_unique_NG$nb/length(unique_sp_NG))*100
+
+levwater_unique_B <- sp_tr_final[which(rownames(sp_tr_final) %in% unique_sp_B), ] %>%
+  dplyr::group_by(Level_water) %>%
+  dplyr::summarise(nb = n())
+levwater_unique_B$nb <- (levwater_unique_B$nb/length(unique_sp_B))*100
+
 
