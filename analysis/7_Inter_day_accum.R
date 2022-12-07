@@ -189,8 +189,47 @@ PD_accum_df <- readRDS(here::here("transformed_data", "PD_interday_accum.rds"))
 facets_colors <- c("#fdae61", "#abdda4", "#2b83ba")
 linewidth <- 0.9
 
-plot.delta.alpha.inter.day.accum(TD_accum_df,
+delta_plot <- plot.delta.alpha.inter.day.accum(TD_accum_df,
                                              PD_accum_df,
                                              FD_accum_df,
                                              facets_colors,
                                              linewidth)
+
+
+# Step 6: Plot the beta evolution between N'Gouja and Boueni across days ####
+
+
+# Call data:
+TD_accum_df <- readRDS(here::here("transformed_data", "TD_interday_accum.rds"))
+FD_accum_df <- readRDS(here::here("transformed_data", "FD_interday_accum.rds"))
+PD_accum_df <- readRDS(here::here("transformed_data", "PD_interday_accum.rds"))
+sp_faxes_coord <- readRDS(here::here("transformed_data", "sp_faxes_coord.rds"))
+
+
+# Compute beta between videos from the same range in the sampling campaign:
+# compare vid1 day1 N'Gouja et vid1 day1 Boueni etc.
+beta_accum <- compute.beta.accum(TD_accum_df, PD_accum_df, sp_faxes_coord)
+saveRDS(beta_accum, here::here("transformed_data", "beta_interday_accum.rds"))
+
+
+# Plot the beta variation:
+facets_colors <- c("#fdae61", "#abdda4", "#2b83ba")
+linewidth <- 0.9
+
+beta_plot <- plot.beta.inter.accum(beta_accum, facets_colors, linewidth)
+
+
+all_intervariab_plot <- (delta_plot + beta_plot[1]) +
+  patchwork::plot_layout(byrow = TRUE, heights = c(1, 1), widths = c(1, 1),
+                         ncol = 1, nrow = 2, guides = "collect") +
+  patchwork::plot_annotation(tag_levels = "A")
+
+ggplot2::ggsave(filename = here::here("outputs", "alpha_beta_inter_variab.pdf"),
+                plot = all_intervariab_plot,
+                device = "pdf",
+                scale = 0.8,
+                height = 13000,
+                width = 14000,
+                units = "px",
+                dpi = 800)
+

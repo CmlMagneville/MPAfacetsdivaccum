@@ -609,7 +609,7 @@ plot.delta.alpha.inter.day.accum <- function(TD_accum_df,
                                         "15:00", "", "15:45", "", "16:30", "",
                                         "17:00", "", "17:30")) +
 
-    ggplot2::ylab("Delta (N'Gouja - Boueni)") +
+    ggplot2::ylab("Delta (Fully Protected - Poorly Protected)") +
 
     ggplot2::xlab("") +
 
@@ -632,3 +632,254 @@ plot.delta.alpha.inter.day.accum <- function(TD_accum_df,
 
 }
 
+
+
+
+#' Title
+#'
+#' @param TD_accum_df
+#' @param FD_accum_df
+#' @param PD_accum_df
+#'
+#' @return
+#' @export
+#'
+#' @examples
+
+
+compute.beta.accum <- function(TD_accum_df, PD_accum_df, sp_faxes_coord) {
+
+
+  # compute the new dataframe on which beta values will be saved:
+  beta_inter_accum_df <- as.data.frame(matrix(ncol = 8, nrow = 1, NA))
+  colnames(beta_inter_accum_df) <- c("day_nb", "vid_nb", "beta_TD",
+                                     "beta_PD", "beta_FD", "turn_TD",
+                                     "turn_PD", "turn_FD")
+
+
+  # compute phylo:
+  sp_nm_all <- colnames(PD_accum_df[, c(1:(ncol(PD_accum_df) - 7))])
+  phylo <- fishtree::fishtree_phylogeny(species = sp_nm_all)
+
+
+  # loop on day_nb:
+  for (i in (1:length(unique(TD_accum_df$day_nb)))) {
+
+    day_studied <- as.character(unique(TD_accum_df$day_nb)[i])
+
+    print(day_studied)
+
+    # filter the dataframes so only keep the day_nb studied:
+    TD_accum_df_day <- dplyr::filter(TD_accum_df, day_nb == day_studied)
+    PD_accum_df_day <- dplyr::filter(PD_accum_df, day_nb == day_studied)
+
+
+    # loop on the video_nb:
+    for (j in (1:length(unique(TD_accum_df_day$video_nb)))) {
+
+      video_studied <- as.character(unique(TD_accum_df_day$video_nb)[j])
+
+      print(video_studied)
+
+      # filter the dataframes so only keep the video studied (two rows):
+      TD_accum_df_day_vid <- dplyr::filter(TD_accum_df_day, video_nb == video_studied)
+      PD_accum_df_day_vid <- dplyr::filter(PD_accum_df_day, video_nb == video_studied)
+
+      # compute beta TD:
+      beta_TD <- betapart::beta.pair(TD_accum_df_day_vid[, c(1:(ncol(TD_accum_df_day_vid) - 7))],
+                                     index.family = "jaccard")
+
+      # compute beta PD (before put numerical format):
+      PD_accum_df_day_vid <- apply(PD_accum_df_day_vid[, c(1:(ncol(PD_accum_df_day_vid) - 7))],
+                                   2, as.numeric)
+      beta_PD <- betapart::phylo.beta.pair(PD_accum_df_day_vid[, c(1:(ncol(PD_accum_df_day_vid) - 7))],
+                                           phylo, index.family = "jaccard")
+
+      # compute beta FD (before remove species which are absent from the 2 rows):
+      FD_accum_df_day_vid <- TD_accum_df_day_vid[, c(1:(ncol(TD_accum_df_day_vid) - 7))]
+      FD_accum_df_day_vid[3, ] <- apply(FD_accum_df_day_vid, 2, sum)
+      FD_accum_df_day_vid <- FD_accum_df_day_vid[c(1,2),
+                                                 which(FD_accum_df_day_vid[3, ] != 0)]
+      rownames(FD_accum_df_day_vid) <- TD_accum_df_day_vid$video_id
+
+      beta_FD <- mFD::beta.fd.multidim(
+        sp_faxes_coord   = as.matrix(sp_faxes_coord[ , c("PC1", "PC2", "PC3", "PC4", "PC5")]),
+        asb_sp_occ       = FD_accum_df_day_vid,
+        check_input      = TRUE,
+        beta_family      = c("Jaccard"),
+        details_returned = TRUE)
+
+
+      # fill the df:
+      beta_tot_TD <- beta_TD$beta.jac
+      turn_TD <- beta_TD$beta.jtu
+      beta_tot_PD <- beta_PD$phylo.beta.jac
+      turn_PD <- beta_PD$phylo.beta.jtu
+      beta_tot_FD <- beta_FD$pairasb_fbd_indices$jac_diss
+      turn_FD <- beta_FD$pairasb_fbd_indices$jac_turn
+
+      beta_inter_accum_df <- dplyr::add_row(beta_inter_accum_df,
+                                            day_nb = day_studied,
+                                            vid_nb = video_studied,
+                                            beta_TD = beta_tot_TD[1],
+                                            beta_PD = beta_tot_PD[1],
+                                            beta_FD = beta_tot_FD[1],
+                                            turn_TD = turn_TD[1],
+                                            turn_PD = turn_PD[1],
+                                            turn_FD = turn_FD[1])
+
+
+    } # end loop on video_nb
+
+  } # end loop on day_nb
+
+  # remove first empty row:
+  beta_inter_accum_df <- beta_inter_accum_df[-1, ]
+  return(beta_inter_accum_df)
+
+}
+
+
+
+#' Title
+#'
+#' @param beta_accum
+#' @param facets_colors
+#' @param linewidth
+#'
+#' @return
+#' @export
+#'
+#' @examples
+
+
+plot.beta.inter.accum <- function(beta_accum, facets_colors, linewidth){
+
+
+  # Merge TD, FD and PD columns for total beta:
+  beta_plot_df <- reshape2::melt(beta_accum[, -c(6:9)],
+                                  id.vars = c("day_nb", "vid_nb"),
+                                  variable.name = 'metric', value.name = 'values')
+
+  # Merge TD, FD and PD columns for turnover beta:
+  turn_plot_df <- reshape2::melt(beta_accum[, -c(3:5)],
+                                 id.vars = c("day_nb", "vid_nb"),
+                                 variable.name = 'metric', value.name = 'values')
+
+  # Right classes for total beta:
+  beta_plot_df$day_nb <- as.factor(beta_plot_df$day_nb)
+  beta_plot_df$vid_nb <- ordered(beta_plot_df$vid_nb, levels = paste0(rep("video_", 33),
+                                                                            c(1:33)))
+  beta_plot_df$metric <- as.factor(beta_plot_df$metric)
+
+  # Right classes for turn beta:
+  turn_plot_df$day_nb <- as.factor(turn_plot_df$day_nb)
+  turn_plot_df$vid_nb <- ordered(turn_plot_df$vid_nb, levels = paste0(rep("video_", 33),
+                                                                      c(1:33)))
+  turn_plot_df$metric <- as.factor(turn_plot_df$metric)
+
+
+
+  # Create new names from facets day_1, day_2 and day_3:
+  day_labs <- c("Sampling day 1", "Sampling day 2", "Sampling day 3")
+  names(day_labs) <- c("day_1", "day_2", "day_3")
+
+  # plot :
+  plot_beta_tot <- ggplot2::ggplot(data = beta_plot_df) +
+
+    ggplot2::geom_line(ggplot2::aes(y = values, x = vid_nb, group = metric,
+                                    color = metric),
+                       size = 0.9) +
+
+    ggplot2::facet_grid(. ~ day_nb,
+                        labeller = ggplot2::labeller(day_nb = day_labs)) +
+
+
+    ggplot2::scale_colour_manual(values = facets_colors,
+                                 name = "Facets",
+                                 labels = c("Beta TD", "Beta PD", "Beta FD")) +
+
+    ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90),
+                   panel.background = ggplot2::element_rect(fill = "white",
+                                                            colour = "grey90"),
+                   panel.grid.major = ggplot2::element_line(colour = "grey90")) +
+
+
+    ggplot2::scale_x_discrete(labels= c("7:30", "", "8:00", "", "8:40", "",
+                                        "9:15", "", "9:45", "", "10:20", "",
+                                        "10:55", "", "11:40", "", "12:20", "",
+                                        "12:55", "", "13:40", "", "14:25", "",
+                                        "15:00", "", "15:45", "", "16:30", "",
+                                        "17:00", "", "17:30")) +
+
+    ggplot2::ylim(0, max(beta_plot_df$values)) +
+
+    ggplot2::ylab("Beta diversity") +
+
+    ggplot2::xlab("") +
+
+    ggplot2::guides(fill = "none")
+
+  # save:
+  ggplot2::ggsave(filename = here::here("outputs", "beta_tot_interday_variation.pdf"),
+                  plot = plot_beta_tot,
+                  device = "pdf",
+                  scale = 0.8,
+                  height = 10000,
+                  width = 14000,
+                  units = "px",
+                  dpi = 800)
+
+
+
+  plot_turn <- ggplot2::ggplot(data = turn_plot_df) +
+
+    ggplot2::geom_line(ggplot2::aes(y = values, x = vid_nb, group = metric,
+                                    color = metric),
+                       size = 0.9) +
+
+    ggplot2::facet_grid(. ~ day_nb,
+                        labeller = ggplot2::labeller(day_nb = day_labs)) +
+
+
+    ggplot2::scale_colour_manual(values = facets_colors,
+                                 name = "Facets",
+                                 labels = c("Turnover TD", "Turnover PD",
+                                            "Turnover FD")) +
+
+    ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90),
+                   panel.background = ggplot2::element_rect(fill = "white",
+                                                            colour = "grey90"),
+                   panel.grid.major = ggplot2::element_line(colour = "grey90")) +
+
+
+    ggplot2::scale_x_discrete(labels= c("7:30", "", "8:00", "", "8:40", "",
+                                        "9:15", "", "9:45", "", "10:20", "",
+                                        "10:55", "", "11:40", "", "12:20", "",
+                                        "12:55", "", "13:40", "", "14:25", "",
+                                        "15:00", "", "15:45", "", "16:30", "",
+                                        "17:00", "", "17:30")) +
+
+    ggplot2::ylim(0, max(beta_plot_df$values)) +
+
+    ggplot2::ylab("Turnover") +
+
+    ggplot2::xlab("") +
+
+    ggplot2::guides(fill = "none")
+
+
+  # save:
+  ggplot2::ggsave(filename = here::here("outputs", "turnover_interday_variation.pdf"),
+                  plot = plot_turn,
+                  device = "pdf",
+                  scale = 0.8,
+                  height = 10000,
+                  width = 14000,
+                  units = "px",
+                  dpi = 800)
+
+
+  return(list(plot_beta_tot, plot_turn))
+
+}
