@@ -88,7 +88,10 @@ plot.intra.day.accum <- function(TD_accum_df,
                    panel.background = ggplot2::element_rect(fill = "white",
                                                             colour = "grey90"),
                    panel.grid.major = ggplot2::element_line(colour = "grey90"),
-                   strip.text.y = ggplot2::element_text(size = 8),
+                   strip.text.y = ggplot2::element_text(size = 8,
+                                                        face = "bold"),
+                   strip.text.x = ggplot2::element_text(size = 8,
+                                                        face = "bold"),
                    panel.spacing = ggplot2::unit(2, "lines")) +
 
     ggplot2::scale_x_discrete(labels = c("7:30", "", "8:00", "", "8:40", "",
