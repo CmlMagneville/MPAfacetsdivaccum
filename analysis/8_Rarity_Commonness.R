@@ -59,6 +59,51 @@ nb_comm_bothsites <- nrow(comm) - length(unique(comm$species_nm))
 # compute proportion:
 (nb_comm_bothsites / length(unique(rarcom_df$species_nm)))*100
 
+# Percentage of rare species shared between sites:
+# NG:
+perc_shared_rare_NG <- (nrow(rarcom_df[which(rarcom_df$site_presence == "both" &
+                                     rarcom_df$rarity == "super rare" &
+                                     rarcom_df$site == "N'Gouja"), ])/
+                    nrow(rarcom_df[which(rarcom_df$site == "N'Gouja"), ]))*100
+# B:
+perc_shared_rare_B <- (nrow(rarcom_df[which(rarcom_df$site_presence == "both" &
+                                            rarcom_df$rarity == "super rare" &
+                                            rarcom_df$site == "Boueni"), ])/
+                       nrow(rarcom_df[which(rarcom_df$site == "Boueni"), ]))*100
+
+
+# Percentage of rare and super rare species being unique to each site:
+# the majority
+# NG:
+(nrow(rarcom_df[which(rarcom_df$site_presence == "N'Gouja only" &
+                        rarcom_df$rarity %in% c("super rare", "rare")), ])/
+ nrow(rarcom_df[which(rarcom_df$site_presence == "N'Gouja only"), ]))*100
+
+# B:
+(nrow(rarcom_df[which(rarcom_df$site_presence == "Boueni only" &
+                        rarcom_df$rarity %in% c("super rare", "rare")), ])/
+    nrow(rarcom_df[which(rarcom_df$site_presence == "Boueni only"), ]))*100
+
+
+# Percentage of temporally common species being shared between sites:
+# the majority
+# NG:
+(nrow(rarcom_df[which(rarcom_df$site_presence == "both" &
+                      rarcom_df$rarity %in% c("common") &
+                      rarcom_df$site == "N'Gouja"), ])/
+    nrow(rarcom_df[which(rarcom_df$rarity %in% c("common") &
+                           rarcom_df$site == "N'Gouja"), ]))*100
+
+# B:
+(nrow(rarcom_df[which(rarcom_df$site_presence == "both" &
+                        rarcom_df$rarity %in% c("common") &
+                        rarcom_df$site == "Boueni"), ])/
+    nrow(rarcom_df[which(rarcom_df$rarity %in% c("common") &
+                           rarcom_df$site == "Boueni"), ]))*100
+
+
+
+
 # Number of common species present in both sites (ie > 75 % of both sites):
 rare <- rarcom_df[which(rarcom_df$site_presence == "both" & rarcom_df$perc_vid_occ >= 75), ]
 # only count species which are in double:
