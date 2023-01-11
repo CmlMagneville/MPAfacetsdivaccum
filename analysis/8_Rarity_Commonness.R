@@ -518,7 +518,7 @@ plot_distinct_NG <- ggplot2::ggplot(data = rarspe_df[which(rarspe_df$site == "N'
                                name = "Site presence") +
     ggplot2::xlim(c(0, 101)) +
     ggplot2::xlab("Percentage of occurrence in videos") +
-    ggplot2::ylab("Relative distance to the gravity center of the global pool")
+    ggplot2::ylab("Relative distance to the gravity center of the species pool")
 
 plot_distinct_B <- ggplot2::ggplot(data = rarspe_df[which(rarspe_df$site == "Boueni"), ]) +
   ggplot2::geom_point(ggplot2::aes(x = perc_vid_occ, y = relat_dist_to_grav,
@@ -531,7 +531,7 @@ plot_distinct_B <- ggplot2::ggplot(data = rarspe_df[which(rarspe_df$site == "Bou
                                name = "Site presence") +
   ggplot2::xlim(c(0, 101)) +
   ggplot2::xlab("Percentage of occurrence in videos") +
-  ggplot2::ylab("Relative distance to the gravity center of the global pool")
+  ggplot2::ylab("Relative distance to the gravity center of the species pool")
 
 plot_distinct_both <- (plot_distinct_NG + plot_distinct_B) +
   patchwork::plot_layout(byrow = TRUE, heights = c(1, 1), widths = c(1, 1),
