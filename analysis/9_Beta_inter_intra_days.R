@@ -239,7 +239,7 @@ PD_permdisp <- permdisp.test(beta_facet_df = beta_PD_df)
 FD_permdisp <- permdisp.test(beta_facet_df = beta_FD_df)
 
 
-# dispersion significant for TD, FD, PD: no permanova
+# dispersion significant for TD, FD, PD: no permanova. Yet (graphs)
 
 
 # permanova TD:
