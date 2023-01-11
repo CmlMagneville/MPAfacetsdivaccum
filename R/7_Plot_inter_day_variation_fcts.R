@@ -580,6 +580,9 @@ plot.delta.alpha.inter.day.accum <- function(TD_accum_df,
   final_plot_df$video_nb <- ordered(final_plot_df$video_nb, levels = paste0(rep("video_", 33),
                                                                             c(1:33)))
   final_plot_df$metric <- as.factor(final_plot_df$metric)
+  final_plot_df$metric <- ordered(final_plot_df$metric, levels = c("delta_TD",
+                                                                   "delta_PD",
+                                                                   "delta_FRic"))
 
 
 
@@ -600,7 +603,8 @@ plot.delta.alpha.inter.day.accum <- function(TD_accum_df,
 
     ggplot2::scale_colour_manual(values = facets_colors,
                                  name = "Delta Metrics",
-                                 labels = c("Species richness", "FRic", "Faith's PD")) +
+                                 labels = c("Species richness", "Faith's PD",
+                                            "FRic")) +
 
     ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90),
                    panel.background = ggplot2::element_rect(fill = "white",
@@ -803,7 +807,8 @@ plot.beta.inter.accum <- function(beta_accum, facets_colors, linewidth){
 
     ggplot2::scale_colour_manual(values = facets_colors,
                                  name = "Facets",
-                                 labels = c("Beta TD", "Beta PD", "Beta FD")) +
+                                 labels = c("TD Dissimilarity", "PD Dissimilarity",
+                                            "FD Dissimilarity")) +
 
     ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90),
                    panel.background = ggplot2::element_rect(fill = "white",

@@ -186,7 +186,7 @@ TD_accum_df <- readRDS(here::here("transformed_data", "TD_interday_accum.rds"))
 FD_accum_df <- readRDS(here::here("transformed_data", "FD_interday_accum.rds"))
 PD_accum_df <- readRDS(here::here("transformed_data", "PD_interday_accum.rds"))
 
-facets_colors <- c("#fdae61", "#abdda4", "#2b83ba")
+facets_colors <- c("#fdae61", "#2b83ba", "#abdda4")
 linewidth <- 0.9
 
 delta_plot <- plot.delta.alpha.inter.day.accum(TD_accum_df,
@@ -213,7 +213,7 @@ saveRDS(beta_accum, here::here("transformed_data", "beta_interday_accum.rds"))
 
 
 # Plot the beta variation:
-facets_colors <- c("#fdae61", "#abdda4", "#2b83ba")
+facets_colors <- c("#fdae61", "#2b83ba", "#abdda4")
 linewidth <- 0.9
 
 beta_plot <- plot.beta.inter.accum(beta_accum, facets_colors, linewidth)
