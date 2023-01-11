@@ -825,7 +825,7 @@ plot.beta.inter.accum <- function(beta_accum, facets_colors, linewidth){
 
     ggplot2::ylim(0, max(beta_plot_df$values)) +
 
-    ggplot2::ylab("Beta diversity") +
+    ggplot2::ylab("Dissimilarity") +
 
     ggplot2::xlab("") +
 
