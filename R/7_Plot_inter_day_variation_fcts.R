@@ -221,8 +221,6 @@ plot.inter.day.accum <- function(TD_accum_df,
                                         "15:00", "", "", "", "16:30", "",
                                         "", "", "17:30")) +
 
-    ggplot2::expand_limits(y = 0) +
-
     ggplot2::ylab("FDis") +
 
     ggplot2::xlab("") +
@@ -264,8 +262,6 @@ plot.inter.day.accum <- function(TD_accum_df,
                                         "15:00", "", "", "", "16:30", "",
                                         "", "", "17:30")) +
 
-    ggplot2::expand_limits(y = 0) +
-
     ggplot2::ylab("FSpe") +
 
     ggplot2::xlab("") +
@@ -306,8 +302,6 @@ plot.inter.day.accum <- function(TD_accum_df,
                                         "", "", "13:40", "", "", "",
                                         "15:00", "", "", "", "16:30", "",
                                         "", "", "17:30")) +
-
-    ggplot2::expand_limits(y = 0) +
 
     ggplot2::ylab("FDiv") +
 
