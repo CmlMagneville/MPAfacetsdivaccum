@@ -162,12 +162,12 @@ hline_df <- as.data.frame(matrix(ncol = 3, nrow = 6))
 colnames(hline_df) <- c("site", "metric", "hline_value")
 
 # B - TD
-hline_df[1, ] <- c("Boueni", "Species richness", 75.38)
-hline_df[2, ] <- c("N'Gouja", "Species richness", 83.84)
-hline_df[3, ] <- c("Boueni", "FRic", 58.64)
-hline_df[4, ] <- c("N'Gouja", "FRic", 68.13)
-hline_df[5, ] <- c("N'Gouja", "Faith's PD", 89.25)
-hline_df[6, ] <- c("Boueni", "Faith's PD", 79.31)
+hline_df[1, ] <- c("Poorly Protected", "Species richness", 75.38)
+hline_df[2, ] <- c("Fully Protected", "Species richness", 83.84)
+hline_df[3, ] <- c("Poorly Protected", "FRic", 58.64)
+hline_df[4, ] <- c("Fully Protected", "FRic", 68.13)
+hline_df[5, ] <- c("Fully Protected", "Faith's PD", 89.25)
+hline_df[6, ] <- c("Poorly Protected", "Faith's PD", 79.31)
 hline_df$hline_value <- as.numeric(hline_df$hline_value)
 
 

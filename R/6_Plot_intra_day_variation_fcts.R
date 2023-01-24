@@ -53,14 +53,20 @@ plot.intra.day.accum <- function(TD_accum_df,
 
 
   # right class:
+  final_plot_df$site <- as.character(final_plot_df$site)
+  final_plot_df$site[which(final_plot_df$site == "N'Gouja")] <- "Fully Protected"
+  final_plot_df$site[which(final_plot_df$site == "Boueni")] <- "Poorly Protected"
   final_plot_df$site <- as.factor(final_plot_df$site)
+  final_plot_df$site <- ordered(final_plot_df$site,
+                                  levels = c("Fully Protected",
+                                             "Poorly Protected"))
   final_plot_df$day <- as.factor(final_plot_df$day)
   final_plot_df$video_nb <- ordered(final_plot_df$video_nb, levels = paste0(rep("video_", 33),
                                                                                  c(1:33)))
 
   # build labels for sites:
-  sites_labs <- c("Poorly Protected", "Fully Protected")
-  names(sites_labs) <- c("Boueni", "N'Gouja")
+  sites_labs <- c("Fully Protected", "Poorly Protected")
+  names(sites_labs) <- c("N'Gouja", "Boueni")
 
 
   # plot:
@@ -78,8 +84,9 @@ plot.intra.day.accum <- function(TD_accum_df,
     ggplot2::facet_grid(forcats::fct_relevel(metric,
                                             c("Species richness",
                                               "Faith's PD",
-                                              "FRic")) ~ site,
-                        labeller = ggplot2::labeller(site = sites_labs)) +
+                                              "FRic")) ~ forcats::fct_relevel(site,
+                                                                              c("Fully Protected",
+                                                                                "Poorly Protected"))) +
 
     ggplot2::scale_colour_manual(values = facets_colors,
                                  name = "Metric") +
