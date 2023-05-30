@@ -260,7 +260,7 @@ ggplot2::ggsave(filename = here::here("outputs/Correl_tr_faxes.pdf"),
 
 
 big_plot <- mFD::funct.space.plot(
-  sp_faxes_coord  = sp_faxes_coord[ , c("PC1", "PC2", "PC3", "PC4", "PC5")],
+  sp_faxes_coord  = fe_faxes_coord[ , c("PC1", "PC2", "PC3", "PC4", "PC5")],
   faxes           = c("PC1", "PC2", "PC3", "PC4"),
   name_file       = NULL,
   faxes_nm        = NULL,
@@ -349,6 +349,12 @@ site_asb_df <- site_asb_df[-c(2, 3, 5, 6), ]
 site_asb_df [site_asb_df  > 1] <- 1
 rownames(site_asb_df) <- c("N'Gouja", "Boueni")
 saveRDS(site_asb_df, here::here("transformed_data", "site_asb_df.rds"))
+
+sp_nm_NG <- colnames(site_asb_df[, which(site_asb_df[1, ] != 0)])
+sp_nm_B <- colnames(site_asb_df[, which(site_asb_df[1, ] != 0)])
+saveRDS(sp_nm_NG, file = here::here("transformed_data", "sp_nm_NG.rds"))
+saveRDS(sp_nm_B, file = here::here("transformed_data", "sp_nm_B.rds"))
+
 
 
 alpha_fd_indices_site <- mFD::alpha.fd.multidim(

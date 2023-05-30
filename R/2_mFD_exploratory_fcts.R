@@ -13,9 +13,19 @@
 
 
 
-# CREATE DOCUMENTATION
-# sp_fe_list from mFD sp.to.fe() output $sp_fe
-
+#' Build the assemblage-FEs (asb rows, FEs columns) df from the asb-species one
+#'
+#' @param fe_nm name of the FE to study
+#' @param sp_fe output of the mFD::sp.to.fe() function - $sp_fe
+#' @param asb_sp_w the assemblage * species df with asb being rows and sp
+#' columns
+#'
+#' @return a df with fe in columns and asb in rows
+#'
+#' @export
+#'
+#' @examples
+#'
 
 from.spfe.to.feasb <- function(fe_nm, sp_fe, asb_sp_w) {
 
@@ -59,6 +69,16 @@ from.spfe.to.feasb <- function(fe_nm, sp_fe, asb_sp_w) {
 ####
 
 
+#' Get the dataframe linking fe names and species names
+#'
+#' @param sp_to_fe result of the mFD::sp.to.fe() function
+#'
+#' @return
+#' @export
+#'
+#' @examples
+#'
+
 fe.sp.df.computation <- function(sp_to_fe) {
 
 
@@ -89,9 +109,16 @@ fe.sp.df.computation <- function(sp_to_fe) {
 #####
 
 
-## DOC TO DO
-
-# fct to search a species name given a fe name:
+#' Search a species name given a FE name
+#'
+#' @param sp_to_fe result of the mFD::sp.to.fe() function
+#' @param nm_fe name of the FE to study
+#'
+#' @return
+#' @export
+#'
+#' @examples
+#'
 
 
 search.sp.nm <- function(sp_to_fe, nm_fe) {
@@ -116,6 +143,18 @@ search.sp.nm <- function(sp_to_fe, nm_fe) {
 
 #####
 
+
+#' Convert the df with FEs coordinates to a species coordinates one
+#'
+#' @param fe_faxes_coord
+#' @param asb_sp_df
+#' @param sp_to_fe
+#'
+#' @return
+#' @export
+#'
+#' @examples
+#'
 
 from.fecoord.to.spcoord <- function(fe_faxes_coord, asb_sp_df,
                                     sp_to_fe) {
