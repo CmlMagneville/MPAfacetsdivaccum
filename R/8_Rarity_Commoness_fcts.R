@@ -179,39 +179,40 @@ plot.rarcom <- function(rarcom_df, sites_colors) {
   ## NG:
   rarcom_plot_NG <- ggplot2::ggplot(data = rarcom_df[which(rarcom_df$site == "N'Gouja"), ]) +
 
-    ggplot2::geom_bar(ggplot2::aes(y = reorder(species_nm, - vid_occ_nb), x = (vid_occ_nb/99)*100,
+    ggplot2::geom_bar(ggplot2::aes(x = reorder(species_nm, - vid_occ_nb), y = (vid_occ_nb/99)*100,
                                    fill = site_presence),
                       stat = "identity") +
 
-    ggplot2:: geom_vline(xintercept = 5, linetype = "dashed", color = "black") +
+    ggplot2:: geom_hline(yintercept = 5, linetype = "dashed", color = "black") +
 
-    ggplot2:: geom_vline(xintercept = 25, linetype = "dashed", color = "black") +
+    ggplot2:: geom_hline(yintercept = 25, linetype = "dashed", color = "black") +
 
     ggplot2::scale_fill_manual(values = c(sites_colors[1],
                                           sites_colors[3]),
                                name = "Site presence",
                                labels = c("Both", "Fully Protected")) +
 
-    ggplot2::theme(axis.text.y = ggplot2::element_text(size = 6,
-                                                       face = "italic"),
+    ggplot2::theme(axis.text.x = ggplot2::element_text(size = 7,
+                                                       face = "italic",
+                                                       angle = 90),
                    panel.background = ggplot2::element_rect(fill = "white",
                                                             colour = "grey90"),
                    panel.grid.major = ggplot2::element_line(colour = "grey90")) +
 
-    ggplot2::xlab("Temporal occurrence (%)") +
+    ggplot2::ylab("Temporal occurrence (%)") +
 
-    ggplot2::ylab("")
+    ggplot2::xlab("")
 
   # B:
   rarcom_plot_B <- ggplot2::ggplot(data = rarcom_df[which(rarcom_df$site == "Boueni"), ]) +
 
-    ggplot2::geom_bar(ggplot2::aes(y = reorder(species_nm, - vid_occ_nb), x = (vid_occ_nb/99)*100,
+    ggplot2::geom_bar(ggplot2::aes(x = reorder(species_nm, - vid_occ_nb), y = (vid_occ_nb/99)*100,
                                    fill = site_presence),
                       stat = "identity") +
 
-    ggplot2:: geom_vline(xintercept = 5, linetype = "dashed", color = "black") +
+    ggplot2:: geom_hline(yintercept = 5, linetype = "dashed", color = "black") +
 
-    ggplot2:: geom_vline(xintercept = 25, linetype = "dashed", color = "black") +
+    ggplot2:: geom_hline(yintercept = 25, linetype = "dashed", color = "black") +
 
 
     ggplot2::scale_fill_manual(values = c(sites_colors[1],
@@ -219,20 +220,21 @@ plot.rarcom <- function(rarcom_df, sites_colors) {
                                name = "Site presence",
                                labels = c("Both", "Poorly Protected")) +
 
-    ggplot2::theme(axis.text.y = ggplot2::element_text(size = 6,
-                                                       face = "italic"),
+    ggplot2::theme(axis.text.x = ggplot2::element_text(size = 7,
+                                                       face = "italic",
+                                                       angle = 90),
                    panel.background = ggplot2::element_rect(fill = "white",
                                                             colour = "grey90"),
                    panel.grid.major = ggplot2::element_line(colour = "grey90")) +
 
-    ggplot2::xlab("Temporal occurrence (%)") +
+    ggplot2::ylab("Temporal occurrence (%)") +
 
-    ggplot2::ylab("")
+    ggplot2::xlab("")
 
 
   plot_both <- (rarcom_plot_NG + rarcom_plot_B) +
     patchwork::plot_layout(byrow = TRUE, heights = c(1, 1), widths = c(1, 1),
-                           ncol = 2, nrow = 1, guides = "collect") +
+                           ncol = 1, nrow = 2, guides = "collect") +
     patchwork::plot_annotation(tag_levels = "A")
 
   ggplot2::ggsave(filename = here::here("outputs", "rar_comm_vid.pdf"),
@@ -259,8 +261,10 @@ plot.rarcom <- function(rarcom_df, sites_colors) {
 
     species_nm <- i
 
+    print(species_nm)
+
     # if species seen in NG and B:
-    if (rarcom_df[which(rarcom_df$species_nm == i), "site_presence"] == "both") {
+    if (unique(rarcom_df[which(rarcom_df$species_nm == i), "site_presence"]) == "both") {
 
       presence <- "both"
       NG <- rarcom_df[which(rarcom_df$species_nm == i & rarcom_df$site == "N'Gouja"), "perc_vid_occ"]
@@ -271,7 +275,7 @@ plot.rarcom <- function(rarcom_df, sites_colors) {
     }
 
     # if species only seen in NG:
-    if (rarcom_df[which(rarcom_df$species_nm == i), "site_presence"] == "N'Gouja only") {
+    if (unique(rarcom_df[which(rarcom_df$species_nm == i), "site_presence"]) == "N'Gouja only") {
 
       presence <- "N'Gouja only"
       NG <- rarcom_df[which(rarcom_df$species_nm == i & rarcom_df$site == "N'Gouja"), "perc_vid_occ"]
@@ -282,7 +286,7 @@ plot.rarcom <- function(rarcom_df, sites_colors) {
     }
 
     # if species only seen in B:
-    if (rarcom_df[which(rarcom_df$species_nm == i), "site_presence"] == "Boueni only") {
+    if (unique(rarcom_df[which(rarcom_df$species_nm == i), "site_presence"]) == "Boueni only") {
 
       presence <- "Boueni only"
       NG <- 0
