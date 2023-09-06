@@ -687,3 +687,180 @@ levwater_unique_B <- sp_tr_final[which(rownames(sp_tr_final) %in% unique_sp_B), 
 levwater_unique_B$nb <- (levwater_unique_B$nb/length(unique_sp_B))*100
 
 
+# Step 9: What FRic proportion in each site represented by super rare and rare species? ####
+
+
+# Call data on rarity for each site:
+rarcom_df <- readRDS(here::here("transformed_data/rarcom_df.rds"))
+# create one subset for N'Gouja:
+rarcom_df_NG <- rarcom_df[which(rarcom_df$site == "N'Gouja"), c(2, 6)]
+# create one subset for Boueni:
+rarcom_df_B <- rarcom_df[which(rarcom_df$site == "Boueni"), c(2, 6)]
+
+# Create a new df which can be used for fctional analyses:
+
+# NG:
+rar_sp_asb_df_NG <- tidyr::pivot_wider(rarcom_df_NG, names_from = species_nm,
+                                       values_from = rarity)
+rar_sp_asb_df_NG <- as.data.frame(rar_sp_asb_df_NG)
+to_add <- as.data.frame(matrix(data = 0, nrow = 1, ncol = ncol(rar_sp_asb_df_NG)))
+colnames(to_add) <- colnames(rar_sp_asb_df_NG)
+rar_sp_asb_df_NG <- rbind(rar_sp_asb_df_NG, to_add)
+rar_sp_asb_df_NG <- as.data.frame(rar_sp_asb_df_NG)
+rownames(rar_sp_asb_df_NG) <- c("common", "rare")
+
+# fill it:
+for (i in c(1:ncol(rar_sp_asb_df_NG))) {
+  if (rar_sp_asb_df_NG[1, i] == "common") {
+    rar_sp_asb_df_NG[1, i] <- 1
+    rar_sp_asb_df_NG[2, i] <- 0
+  }
+
+  if (rar_sp_asb_df_NG[1, i] %in% c("rare", "super rare")) {
+    rar_sp_asb_df_NG[1, i] <- 0
+    rar_sp_asb_df_NG[2, i] <- 1
+  }
+}
+
+for (i in (1:ncol(rar_sp_asb_df_NG))) {
+  rar_sp_asb_df_NG[, i] <- as.numeric(rar_sp_asb_df_NG[, i])
+}
+
+
+# B:
+rar_sp_asb_df_B <- tidyr::pivot_wider(rarcom_df_B, names_from = species_nm,
+                                       values_from = rarity)
+rar_sp_asb_df_B <- as.data.frame(rar_sp_asb_df_B)
+to_add <- as.data.frame(matrix(data = 0, nrow = 1, ncol = ncol(rar_sp_asb_df_B)))
+colnames(to_add) <- colnames(rar_sp_asb_df_B)
+rar_sp_asb_df_B <- rbind(rar_sp_asb_df_B, to_add)
+rar_sp_asb_df_B <- as.data.frame(rar_sp_asb_df_B)
+rownames(rar_sp_asb_df_B) <- c("common", "rare")
+
+# fill it:
+for (i in c(1:ncol(rar_sp_asb_df_B))) {
+  if (rar_sp_asb_df_B[1, i] == "common") {
+    rar_sp_asb_df_B[1, i] <- 1
+    rar_sp_asb_df_B[2, i] <- 0
+  }
+
+  if (rar_sp_asb_df_B[1, i] %in% c("rare", "super rare")) {
+    rar_sp_asb_df_B[1, i] <- 0
+    rar_sp_asb_df_B[2, i] <- 1
+  }
+}
+
+for (i in (1:ncol(rar_sp_asb_df_B))) {
+  rar_sp_asb_df_B[, i] <- as.numeric(rar_sp_asb_df_B[, i])
+}
+
+
+
+# NG: functional distances, functional space and FRic:
+sp_tr <- readRDS(here::here("transformed_data", "sp_tr_final.rds"))
+sp_tr_NG <- sp_tr[which(rownames(sp_tr) %in% colnames(rar_sp_asb_df_NG)), ]
+sp_dist_NG <- mFD::funct.dist(
+  sp_tr         = sp_tr_NG,
+  tr_cat        = tr_cat,
+  metric        = "gower",
+  scale_euclid  = "scale_center",
+  ordinal_var   = "classic",
+  weight_type   = "equal",
+  stop_if_NA    = TRUE)
+
+# compute functional spaces quality with spaces with up to 10 PCs:
+fspaces_quality_NG <- mFD::quality.fspaces(
+  sp_dist             = sp_dist_NG,
+  maxdim_pcoa         = 10,
+  deviation_weighting = "absolute",
+  fdist_scaling       = FALSE,
+  fdendro             = "average")
+
+
+fspaces_quality_NG$quality_fspaces
+# The best space has 5 dimensions
+
+# Plot the quality of functional spaces:
+mFD::quality.fspaces.plot(
+  fspaces_quality            = fspaces_quality_NG,
+  quality_metric             = "mad",
+  fspaces_plot               = c("tree_average", "pcoa_2d", "pcoa_3d",
+                                 "pcoa_4d", "pcoa_5d", "pcoa_6d"),
+  name_file                  = NULL,
+  range_dist                 = NULL,
+  range_dev                  = NULL,
+  range_qdev                 = NULL,
+  gradient_deviation         = c(neg = "darkblue", nul = "grey80", pos = "darkred"),
+  gradient_deviation_quality = c(low = "yellow", high = "red"),
+  x_lab                      = "Trait-based distance")
+
+
+# Get FEs coordinates along the 5 first PCS:
+sp_faxes_coord_NG <- fspaces_quality_NG$"details_fspaces"$"sp_pc_coord"
+
+# Compute FRic:
+NG_fd_indices <- mFD::alpha.fd.multidim(
+  sp_faxes_coord   = sp_faxes_coord_NG[ , c("PC1", "PC2", "PC3", "PC4", "PC5")],
+  asb_sp_w         = as.matrix(rar_sp_asb_df_NG),
+  ind_vect         = c("fric"),
+  scaling          = TRUE,
+  check_input      = TRUE,
+  details_returned = TRUE)
+
+NG_fd_indices$functional_diversity_indices
+
+
+
+# B: functional distances, functional space and FRic:
+sp_tr <- readRDS(here::here("transformed_data", "sp_tr_final.rds"))
+sp_tr_B <- sp_tr[which(rownames(sp_tr) %in% colnames(rar_sp_asb_df_B)), ]
+sp_dist_B <- mFD::funct.dist(
+  sp_tr         = sp_tr_B,
+  tr_cat        = tr_cat,
+  metric        = "gower",
+  scale_euclid  = "scale_center",
+  ordinal_var   = "classic",
+  weight_type   = "equal",
+  stop_if_NA    = TRUE)
+
+# compute functional spaces quality with spaces with up to 10 PCs:
+fspaces_quality_B <- mFD::quality.fspaces(
+  sp_dist             = sp_dist_B,
+  maxdim_pcoa         = 10,
+  deviation_weighting = "absolute",
+  fdist_scaling       = FALSE,
+  fdendro             = "average")
+
+
+fspaces_quality_B$quality_fspaces
+# The best space has 5 dimensions
+
+# Plot the quality of functional spaces:
+mFD::quality.fspaces.plot(
+  fspaces_quality            = fspaces_quality_B,
+  quality_metric             = "mad",
+  fspaces_plot               = c("tree_average", "pcoa_2d", "pcoa_3d",
+                                 "pcoa_4d", "pcoa_5d", "pcoa_6d"),
+  name_file                  = NULL,
+  range_dist                 = NULL,
+  range_dev                  = NULL,
+  range_qdev                 = NULL,
+  gradient_deviation         = c(neg = "darkblue", nul = "grey80", pos = "darkred"),
+  gradient_deviation_quality = c(low = "yellow", high = "red"),
+  x_lab                      = "Trait-based distance")
+
+
+# Get FEs coordinates along the 5 first PCS:
+sp_faxes_coord_B <- fspaces_quality_B$"details_fspaces"$"sp_pc_coord"
+
+# Compute FRic:
+B_fd_indices <- mFD::alpha.fd.multidim(
+  sp_faxes_coord   = sp_faxes_coord_B[ , c("PC1", "PC2", "PC3", "PC4", "PC5")],
+  asb_sp_w         = as.matrix(rar_sp_asb_df_B),
+  ind_vect         = c("fric"),
+  scaling          = TRUE,
+  check_input      = TRUE,
+  details_returned = TRUE)
+
+B_fd_indices$functional_diversity_indices
+
