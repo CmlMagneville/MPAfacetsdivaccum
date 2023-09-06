@@ -587,7 +587,7 @@ plot.delta.alpha.inter.day.accum <- function(TD_accum_df,
 
 
   # Create new names from facets day_1, day_2 and day_3:
-  day_labs <- c("Sampling day 1", "Sampling day 2", "Sampling day 3")
+  day_labs <- c("Survey day 1", "Survey day 2", "Survey day 3")
   names(day_labs) <- c("day_1", "day_2", "day_3")
 
   # plot :
@@ -791,7 +791,7 @@ plot.beta.inter.accum <- function(beta_accum, facets_colors, linewidth){
 
 
   # Create new names from facets day_1, day_2 and day_3:
-  day_labs <- c("Sampling day 1", "Sampling day 2", "Sampling day 3")
+  day_labs <- c("Survey day 1", "Survey day 2", "Survey day 3")
   names(day_labs) <- c("day_1", "day_2", "day_3")
 
   # plot :
