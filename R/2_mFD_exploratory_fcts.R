@@ -146,9 +146,10 @@ search.sp.nm <- function(sp_to_fe, nm_fe) {
 
 #' Convert the df with FEs coordinates to a species coordinates one
 #'
-#' @param fe_faxes_coord
-#' @param asb_sp_df
-#' @param sp_to_fe
+#' @param fe_faxes_coord the dataframe gathering FEs coordinates along
+#' functional axes
+#' @param asb_sp_df the dataframe gathering species*assemblages
+#' @param sp_to_fe the output of the mFD::sp.to.fe() function
 #'
 #' @return
 #' @export
